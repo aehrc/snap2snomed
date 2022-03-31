@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 import java.time.Instant;
 import java.util.List;
+import org.snomed.snap2snomed.repository.dto.MapRowTargetsForMapRowDto;
 import java.util.Optional;
 import java.util.function.Function;
 import org.snomed.snap2snomed.model.ImportedCode;
@@ -26,6 +27,7 @@ import org.springframework.data.querydsl.binding.SingleValueBinding;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.access.prepost.PostFilter;
@@ -91,6 +93,10 @@ public interface MapRowTargetRepository
   // ---------------------------------
   // Exported in REST interface
   // ---------------------------------
+
+  @RestResource(exported = false)
+  @Query("select new org.snomed.snap2snomed.repository.dto.MapRowTargetsForMapRowDto(mr, mrt) from MapRowTarget mrt, MapRow mr where mr.map.id = :mapId and mr.id = mrt.row.id")
+  List<MapRowTargetsForMapRowDto> findTargetsByMapId(Long mapId);
 
   @Query(value = "insert into map_row_target (created, created_by, modified, modified_by, flagged, relationship, target_code, target_display, row_id) select :dateTime created, :user created_by, :dateTime modified, :user modified_by, false, s.relationship, s.target_code, s.target_display, tr.id row_id from map_row_target s, map_row sr, map_row tr where (s.row_id = sr.id) and (sr.map_id = :sourceMapId) and (tr.map_id = :mapId) and (sr.source_code_id = tr.source_code_id)", nativeQuery = true)
   @Modifying

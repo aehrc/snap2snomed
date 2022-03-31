@@ -307,6 +307,16 @@ public class MapRowTargetResourceIT extends IntegrationTestBase {
         .body("content[0].value", hasSize(0));
   }
 
+  @Test
+  public void testSearchTargetsByMapId() throws Exception {
+    long mapId = restClient.createMap("testSearchTargetsByMapId", "http://snomed.info/sct/32506021000036107/version/20210531",
+        "http://map.test.toscope", projectId, codesetId);
+
+    restClient.givenUser(MEMBER_TEST_USER).queryParam("mapId", mapId)
+        .get("/mapRowTargets/search/findTargetsByMapId")
+        .then().statusCode(403);
+  }
+
   private void validateMapViewRowCountForFilter(long mapId, int expectedRowCount, Pair<String, String>... param) {
     RequestSpecification requestSpecification = restClient.givenDefaultUser();
     for (int j = 0; j < param.length; j++) {

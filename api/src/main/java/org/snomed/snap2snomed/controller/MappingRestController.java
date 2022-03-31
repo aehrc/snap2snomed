@@ -1,8 +1,10 @@
 package org.snomed.snap2snomed.controller;
 
+import org.apache.commons.lang3.time.StopWatch;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import javax.validation.Valid;
 import org.snomed.snap2snomed.controller.dto.MapCloneDto;
@@ -21,7 +23,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Validated
 @RestController
 public class MappingRestController {
@@ -42,7 +46,11 @@ public class MappingRestController {
       throw new NoSuchUserProblem();
     }
     // Associated Project role checking happens in the service
-    return mappingService.updateMapping(mappings);
+    StopWatch watch = StopWatch.createStarted();
+    MappingResponse retVal = mappingService.updateMapping(mappings);
+    watch.stop();
+    log.info("Bulk Edit took " + watch.getTime() + " ms for " + retVal.getRowCount() + " rows");
+    return retVal;
   }
 
   @Operation(description = "Applies a bulk change to a map specified by a MappingDto, "
@@ -59,7 +67,11 @@ public class MappingRestController {
     if (!(webSecurity.isAdminUser() || webSecurity.hasAnyProjectRoleForMapId(mapId))) {
       throw new NotAuthorisedProblem("Not authorised to bulk update mapping if the user is not admin or member of an associated project!");
     }
-    return mappingService.updateMappingForMap(mapId, mappingUpdates);
+    StopWatch watch = StopWatch.createStarted();
+    MappingResponse retVal = mappingService.updateMappingForMap(mapId, mappingUpdates);
+    watch.stop();
+    log.info("Bulk Edit took " + watch.getTime() + " ms for " + retVal.getRowCount() + " rows");
+    return retVal;    
   }
 
   @Operation(description = "Applies a bulk change to a task specified by a MappingDto, "
@@ -77,7 +89,11 @@ public class MappingRestController {
       throw new NotAuthorisedProblem("Not authorised to bulk update mapping if the user is not admin or not a taask assignee");
     }
     // Associated Project role checking happens in the service
-    return mappingService.updateMappingForTask(taskId, mappingUpdates);
+    StopWatch watch = StopWatch.createStarted();
+    MappingResponse retVal = mappingService.updateMappingForTask(taskId, mappingUpdates);
+    watch.stop();
+    log.info("Bulk Edit took " + watch.getTime() + " ms for " + retVal.getRowCount() + " rows");
+    return retVal;
   }
 
   @Operation(description = "Applies a series of bulk changes to a map, each specified by a MappingUpdateDto, "
@@ -91,7 +107,11 @@ public class MappingRestController {
       throw new NoSuchUserProblem();
     }
     // Associated Project role checking happens in the service
-    return mappingService.updateMappingForSelection(mappings);
+    StopWatch watch = StopWatch.createStarted();
+    MappingResponse retVal = mappingService.updateMappingForSelection(mappings);
+    watch.stop();
+    log.info("Bulk Edit took " + watch.getTime() + " ms for " + retVal.getRowCount() + " rows");
+    return retVal;
   }
 
   @Operation(description = "Creates a new Map version by cloning the specified map with specified updates")

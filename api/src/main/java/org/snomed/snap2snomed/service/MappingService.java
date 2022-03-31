@@ -1,5 +1,7 @@
 package org.snomed.snap2snomed.service;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.snomed.snap2snomed.controller.dto.*;
 import org.snomed.snap2snomed.model.Map;
@@ -12,6 +14,7 @@ import org.snomed.snap2snomed.problem.mapping.InvalidBulkChangeProblem;
 import org.snomed.snap2snomed.problem.mapping.InvalidMappingProblem;
 import org.snomed.snap2snomed.problem.mapping.UnauthorisedMappingProblem;
 import org.snomed.snap2snomed.repository.*;
+import org.snomed.snap2snomed.repository.dto.MapRowTargetsForMapRowDto;
 import org.snomed.snap2snomed.repository.handler.MapRowEventHandler;
 import org.snomed.snap2snomed.repository.handler.MapRowTargetEventHandler;
 import org.snomed.snap2snomed.security.AuthenticationFacade;
@@ -78,6 +81,15 @@ public class MappingService {
     STATUS_CHANGED, ROW_CHANGED, NO_CHANGE
   }
 
+  @Data
+  @NoArgsConstructor
+  private class RowChanges {
+    private RowChange rowChange;
+    private Set<MapRow> mapRowsToSave = new HashSet<MapRow>();
+    private Set<MapRowTarget> mapRowTargetsToSave = new HashSet<MapRowTarget>();
+    private Set<MapRowTarget> mapRowTargetsToDelete = new HashSet<MapRowTarget>();
+  }
+
   @Transactional
   public MappingResponse updateMapping(MappingUpdateDto mappings) {
     if (mappings.getMappingDetails() == null || mappings.getMappingDetails().isEmpty()) {
@@ -86,6 +98,7 @@ public class MappingService {
     AtomicLong rowCount = new AtomicLong(0L);
     AtomicLong updatedRowCount = new AtomicLong(0L);
     User currentUser = authenticationFacade.getAuthenticatedUser();
+    RowChanges rowChanges = new RowChanges();
 
     final Task task = getTask(mappings);
     if (task != null && !EntityUtils.isTaskAssignee(currentUser, task)) {
@@ -122,7 +135,7 @@ public class MappingService {
         }
       }
 
-      List<MapRowTarget> mapRowTargets = new ArrayList<>();
+      Set<MapRowTarget> mapRowTargets = new HashSet<>();
       if (mappingDetails.getMappingUpdate().getTargetId() != null && mappingDetails.getMappingUpdate().getNoMap() == null) {
         MapRowTarget mapRowTarget = mapRowTargetRepository
             .findById(mappingDetails.getMappingUpdate().getTargetId())
@@ -130,7 +143,7 @@ public class MappingService {
         if (!mapRowTarget.getRow().getId().equals(mapRow.getId())) {
           throw new InvalidBulkChangeProblem("Map row target " + mapRowTarget.getId() + " does not belong to map row " + mapRow.getId());
         }
-        mapRowTargets = List.of(mapRowTarget);
+        mapRowTargets = Set.of(mapRowTarget);
       }
       // Clear Status if NO MAP is set or unset as it will be set automatically
       if (mappingDetails.getMappingUpdate().getNoMap() != null) {
@@ -138,17 +151,28 @@ public class MappingService {
       }
 
       rowCount.incrementAndGet(); // Increment row count for Row
-      RowChange change = applyMapRowChanges(mapRow, mappingDetails.getMappingUpdate(), mapRowTargets, task);
-      if ( change != RowChange.NO_CHANGE && (mapRowTargets.size() == 0
+      RowChanges mapRowChanges = applyMapRowChanges(mapRow, mappingDetails.getMappingUpdate(), mapRowTargets.size(), task, currentUser);
+      if ( mapRowChanges.getRowChange() != RowChange.NO_CHANGE && (mapRowTargets.size() == 0
           || (mapRowTargets.size() == 0 && mappingDetails.getMappingUpdate().getStatus() != null))) {
+        rowChanges.getMapRowsToSave().addAll(mapRowChanges.getMapRowsToSave());
         updatedRowCount.incrementAndGet(); // Only add updated count if there is not MapRowTargets
       }
       if (mapRowTargets.size() > 0) {
-        if (applyMapRowTargetChanges(mapRowTargets.get(0), mappingDetails.getMappingUpdate(), task, change)) {
+        RowChanges mapRowTargetChanges = applyMapRowTargetChanges(mapRowTargets.iterator().next(), mappingDetails.getMappingUpdate(), task,
+          mapRowChanges.getRowChange(), currentUser);
+        if (mapRowTargetChanges.getRowChange() == RowChange.ROW_CHANGED) {
+          rowChanges.getMapRowTargetsToSave().addAll(mapRowTargetChanges.getMapRowTargetsToSave());
+          rowChanges.getMapRowTargetsToDelete().addAll(mapRowTargetChanges.getMapRowTargetsToDelete());
           updatedRowCount.incrementAndGet();
         }
       }
     });
+    // Save everything in one go not resource by resource
+    mapRowRepository.saveAll(rowChanges.getMapRowsToSave());
+    mapRowTargetRepository.saveAll(rowChanges.getMapRowTargetsToSave());
+    mapRowTargetRepository.deleteAll(rowChanges.getMapRowTargetsToDelete());
+    em.flush();
+    em.clear();
 
     return MappingResponse.builder()
         .rowCount(rowCount.get())
@@ -158,6 +182,7 @@ public class MappingService {
 
   @Transactional
   public MappingResponse updateMappingForSelection(MappingUpdateDto mappings) {
+    log.info("Start Bulk edit for selection");
     MappingUpdateDto mapUpdate = new MappingUpdateDto();
     List<MappingDetails> mappingDetails = new ArrayList<MappingDetails>();
     mappings.getMappingDetails().forEach(mappingDetail -> {
@@ -183,6 +208,7 @@ public class MappingService {
 
   @Transactional
   public MappingResponse updateMappingForTask(Long taskId, MappingDto mappingUpdate) {
+    log.info("Start Bulk edit for task " + taskId);
     validateMappingUpdates(mappingUpdate);
     Task task = taskRepository
         .findById(taskId)
@@ -190,19 +216,17 @@ public class MappingService {
     if (!webSecurity.isAdminUser() && !webSecurity.hasAnyProjectRoleForMapId(task.getMap().getId())) {
       throw new NotAuthorisedProblem("Not authorised to view map if the user is not admin or member of an associated project!");
     }
-    Collection<MapRow> mapRows = mapRowRepository.findMapRowsByTaskId(taskId);
 
-    return updateMapRowsForMappingDto(mappingUpdate, task, mapRows);
+    return updateMapRowsForMappingDto(mappingUpdate, task, null);
 
   }
 
   @Transactional
   public MappingResponse updateMappingForMap(Long mapId, MappingDto mappingUpdates) {
+    log.info("Start Bulk edit for map " + mapId);
     validateMappingUpdates(mappingUpdates);
-
-    Collection<MapRow> mapRows = mapRowRepository.findMapRowsByMapId(mapId);
-
-    return updateMapRowsForMappingDto(mappingUpdates, null, mapRows);
+    MappingResponse retVal = updateMapRowsForMappingDto(mappingUpdates, null, mapId);
+    return retVal;
   }
 
   private void validateMappingUpdates(MappingDto mappingUpdates) {
@@ -217,45 +241,92 @@ public class MappingService {
     }
   }
 
-  private MappingResponse updateMapRowsForMappingDto(MappingDto mappingUpdate, Task task, Collection<MapRow> mapRows) {
+  private MappingResponse updateMapRowsForMappingDto(MappingDto mappingUpdate, Task task, Long id) {
+    Long mapId = 0l;
+    List<MapRow> mapRows = new ArrayList<MapRow>();
+    if (task == null) {
+      mapRows = mapRowRepository.findMapRowsByMapId(id);
+      mapId = id;
+
+    } else {
+      mapRows = mapRowRepository.findMapRowsByTaskId(task.getId());
+      mapId = task.getMap().getId();
+    }
     // Clear Status if NO MAP is set or unset as it will be set automatically
     if (mappingUpdate.getNoMap() != null) {
       mappingUpdate.setStatus(null);
     }
+    // Only call getAuthenticatedUser once
+    User currentUser = authenticationFacade.getAuthenticatedUser();
     AtomicLong rowCount = new AtomicLong(0L);
     AtomicLong updatedRowCount = new AtomicLong(0L);
-    mapRows.forEach(mapRow -> {
+    RowChanges rowChanges = new RowChanges();
 
+    // Create a map of MapRow and associated MapRowTargets that we can iterate through.
+    // We can get the MapRowTargets with a fast JPQL query and creating the java map from
+    // the results is fast too.
+    // This way we only query the database once instead of querying it for every MapRow
+    List<MapRowTargetsForMapRowDto> allMapRowTargets =
+        new ArrayList<MapRowTargetsForMapRowDto>(mapRowTargetRepository.findTargetsByMapId(mapId));
+    HashMap<MapRow,  List<MapRowTarget>> mapRowTargetsMap = new HashMap<MapRow,  List<MapRowTarget>>();
+    allMapRowTargets.forEach(mapRowTargetsForMapRowDto ->{
+      if (mapRowTargetsMap.get(mapRowTargetsForMapRowDto.getMapRow()) != null) {
+        mapRowTargetsMap.get(mapRowTargetsForMapRowDto.getMapRow()).add(mapRowTargetsForMapRowDto.getMapRowTarget());
+      } else {
+        List<MapRowTarget> mpRowTarget = new ArrayList<MapRowTarget>();
+        if (mapRowTargetsForMapRowDto.getMapRowTarget() != null) {
+          mpRowTarget = new ArrayList<>(Arrays.asList(mapRowTargetsForMapRowDto.getMapRowTarget()));
+        }
+        mapRowTargetsMap.put(mapRowTargetsForMapRowDto.getMapRow(), mpRowTarget);
+      }
+    });
+    mapRows.forEach(row -> {
       rowCount.incrementAndGet();
-      List<MapRowTarget> mapRowTargets = mapRowTargetRepository.findByRow(mapRow);
-      RowChange change = applyMapRowChanges(mapRow, mappingUpdate, mapRowTargets, task);
-      if (change != RowChange.NO_CHANGE && (mapRowTargets.size() == 0 || mappingUpdate.getStatus() != null)) {
+      List<MapRowTarget> mapRowTargets = new ArrayList<MapRowTarget>();
+      if (mapRowTargetsMap.get(row) != null) {
+        mapRowTargets = mapRowTargetsMap.get(row);
+      }
+      int mapRowTargetCount = mapRowTargets.size();
+      RowChanges mapRowChanges = applyMapRowChanges(row, mappingUpdate, mapRowTargetCount, task, currentUser);
+      RowChange mapRowChanged = mapRowChanges.getRowChange();
+      if (mapRowChanged != RowChange.NO_CHANGE && (mapRowTargetCount == 0 || mappingUpdate.getStatus() != null)) {
         // We will calculate maprows in the update result
+        rowChanges.getMapRowsToSave().addAll(mapRowChanges.getMapRowsToSave());
         updatedRowCount.incrementAndGet();
       }
-      if (mapRowTargets.size() > 0) {
+      if (mapRowTargetCount > 0) {
         rowCount.decrementAndGet(); // We will be adding the MapRowTarget count as row counts
-        if (change == RowChange.STATUS_CHANGED) {
+        if (mapRowChanged == RowChange.STATUS_CHANGED) {
           updatedRowCount.decrementAndGet(); // Will calculate updatedRowCount with the mapRowTargets as there could be 1 to many mappings
         }
       }
       mapRowTargets.forEach(mapRowTarget -> {
         rowCount.incrementAndGet();
-        if (applyMapRowTargetChanges(mapRowTarget, mappingUpdate, task, change)) {
+        RowChanges mapRowTargetChanges = applyMapRowTargetChanges(mapRowTarget, mappingUpdate, task, mapRowChanged, currentUser);
+        if (mapRowTargetChanges.getRowChange() == RowChange.ROW_CHANGED) {
           updatedRowCount.incrementAndGet();
+          rowChanges.getMapRowTargetsToSave().addAll(mapRowTargetChanges.getMapRowTargetsToSave());
+          rowChanges.getMapRowTargetsToDelete().addAll(mapRowTargetChanges.getMapRowTargetsToDelete());
         }
       });
-
     });
-
+    // Save everything in one go not resource by resource
+    mapRowRepository.saveAll(rowChanges.getMapRowsToSave());
+    mapRowTargetRepository.saveAll(rowChanges.getMapRowTargetsToSave());
+    mapRowTargetRepository.deleteAll(rowChanges.getMapRowTargetsToDelete());
+    em.flush();
+    em.clear();
     return MappingResponse.builder()
         .rowCount(rowCount.get())
         .updatedRowCount(updatedRowCount.get())
         .build();
   }
 
-  private RowChange applyMapRowChanges(@NotNull MapRow mapRow, MappingDto mappingUpd, List<MapRowTarget> mapRowTargets, Task task) {
+  private RowChanges applyMapRowChanges(@NotNull MapRow mapRow, MappingDto mappingUpd,
+    int mapRowCount, Task task, User currentUser) {
     MappingDto mappingUpdate = mappingUpd.toBuilder().build();
+    RowChanges mapRowChanges = new RowChanges();
+    mapRowChanges.setRowChange(RowChange.NO_CHANGE);
     boolean updated = false;
     boolean statusChanged = false;
     boolean statusChange = (mappingUpdate.getStatus() != null);
@@ -273,7 +344,7 @@ public class MappingService {
       // Deal with status on MapRow
       if (mappingUpdate.getStatus() != null &&
           (mappingUpdate.getClearTarget() == null || !mappingUpdate.getClearTarget()) &&
-          canUpdateStatus(mappingUpdate, mapRowTargets, mapRow)) {
+          canUpdateStatus(mappingUpdate, mapRowCount, mapRow)) {
         mapRow.setStatus(mappingUpdate.getStatus());
         updated = true;
         // Originally it was a status change and it happened so report it back
@@ -283,33 +354,37 @@ public class MappingService {
       }
       // Clear target requested
       if (mappingUpdate.getClearTarget() != null && mappingUpdate.getClearTarget() && !mappingUpdate.isNoMap()) {
-        if (!mapRow.isNoMap() && mapRowTargets.size() > 0) {
+        if (!mapRow.isNoMap() && mapRowCount > 0) {
           // Set status to UNMAPPED on the MapRowTarget update will be calculated there
           mapRow.setStatus(MapStatus.UNMAPPED);
         }
       }
-      // Repository.save doesn't fire MapRowEventHandler
-      mapRowEventHandler.performAutomaticUpdates(mapRow);
-      mapRowRepository.save(mapRow);
-      em.flush();
-      em.clear();
+      // Rel change requested
+      if (mappingUpd.getRelationship() != null) {
+        mapRow.setStatus(MapStatus.DRAFT);
+      }
+      // We don't call the repository event handler to do changes we only need a handful for the bulk edits
+      applyAutomaticMapRowUpdates(mapRow, currentUser);
+      mapRowChanges.getMapRowsToSave().add(mapRow);
+
     }
     if (statusChanged) {
-      return RowChange.STATUS_CHANGED;
+      mapRowChanges.setRowChange(RowChange.STATUS_CHANGED);
+      return mapRowChanges;
     } else if (updated) {
-      return RowChange.ROW_CHANGED;
+      mapRowChanges.setRowChange(RowChange.ROW_CHANGED);
     }
-    return RowChange.NO_CHANGE;
+    return mapRowChanges;
   }
 
-  private boolean canUpdateStatus(MappingDto mappingUpdate, List<MapRowTarget> mapRowTargets, MapRow mapRow) {
-    if (mappingUpdate.getStatus() == MapStatus.UNMAPPED && mapRowTargets.size() > 0) {
+  private boolean canUpdateStatus(MappingDto mappingUpdate, int mapRowTargetCount, MapRow mapRow) {
+    if (mappingUpdate.getStatus() == MapStatus.UNMAPPED && mapRowTargetCount > 0) {
       return false;
     }
-    if (mappingUpdate.getStatus() == MapStatus.MAPPED && !mapRow.isNoMap() && mapRowTargets.size() == 0) {
+    if (mappingUpdate.getStatus() == MapStatus.MAPPED && !mapRow.isNoMap() && mapRowTargetCount == 0) {
       return false;
     }
-    if (mappingUpdate.getStatus() == MapStatus.DRAFT && !mapRow.isNoMap() && mapRowTargets.size() == 0) {
+    if (mappingUpdate.getStatus() == MapStatus.DRAFT && !mapRow.isNoMap() && mapRowTargetCount == 0) {
       return false;
     }
     return mapRow.getStatus().isValidTransition(mappingUpdate.getStatus());
@@ -348,13 +423,16 @@ public class MappingService {
     }
   }
 
-  private boolean applyMapRowTargetChanges(MapRowTarget mapRowTarget, MappingDto mappingUpd, Task task, RowChange rowChange) {
-
+  private RowChanges applyMapRowTargetChanges(MapRowTarget mapRowTarget, MappingDto mappingUpd,
+    Task task, RowChange mapRowChange, User currentUser) {
+    RowChanges mapRowTargetChanges = new RowChanges();
+    mapRowTargetChanges.setRowChange(RowChange.NO_CHANGE);
     if (validChange(mapRowTarget.getRow().getStatus(), mappingUpd, task)) {
       // Clear the target status was already set to UNMAPPED above
       if ((mappingUpd.getClearTarget() != null && mappingUpd.getClearTarget()) || mappingUpd.isNoMap()) {
-        mapRowTargetRepository.delete(mapRowTarget);
-        return true;
+        mapRowTargetChanges.getMapRowTargetsToDelete().add(mapRowTarget);
+        mapRowTargetChanges.setRowChange(RowChange.ROW_CHANGED);
+        return mapRowTargetChanges;
       }
       // Changed a relationship
       if (mappingUpd.getRelationship() != null) {
@@ -365,23 +443,23 @@ public class MappingService {
         mapRowTarget.setRelationship(mappingUpd.getRelationship());
         mapRowTarget.getRow().setStatus(MapStatus.DRAFT);
 
-        // Repository.save doesn't fire MapRowTargetEventHandler
-        mapRowEventHandler.performAutomaticUpdates(mapRowTarget.getRow());
-        mapRowRepository.save(mapRowTarget.getRow());
-        mapRowTargetEventHandler.performAutomaticUpdates(mapRowTarget);
-        mapRowTargetRepository.save(mapRowTarget);
-        em.flush();
-        em.clear();
-        return true;
+        // Author is set on maprow already and we don't care about status change so
+        // We don't need to call the event handler
+        mapRowTargetChanges.getMapRowTargetsToSave().add(mapRowTarget);
+        mapRowTargetChanges.setRowChange(RowChange.ROW_CHANGED);
       }
     }
     // Status change happened on mapRow - MapRow Status change nootification happens here as we can have
     // 1 to many mappings and we need a correct updated row count sent back to the user
-    if (rowChange == RowChange.STATUS_CHANGED) {
-      return true;
+    if (mapRowChange == RowChange.STATUS_CHANGED) {
+      mapRowTargetChanges.setRowChange(RowChange.ROW_CHANGED);
     }
+    return mapRowTargetChanges;
+  }
 
-    return false;
+  private void applyAutomaticMapRowUpdates(MapRow mapRow, User currentUser) {
+    mapRow.setNoMapPrevious(mapRow.isNoMap());
+    mapRow.setLastAuthor(currentUser);
   }
 
   private Task getTask(MappingUpdateDto mappings) {
