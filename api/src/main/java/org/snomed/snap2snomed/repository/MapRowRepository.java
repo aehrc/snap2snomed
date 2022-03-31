@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import javax.transaction.Transactional;
 import org.snomed.snap2snomed.controller.dto.AutomapRowDto;
 import org.snomed.snap2snomed.model.MapRow;
 import org.snomed.snap2snomed.model.Task;
@@ -135,6 +136,7 @@ public interface MapRowRepository
   @RestResource(exported = false)
   List<MapRow> findMapRowsByTaskId(Long taskId);
 
+  @Transactional
   @Query(value = "insert into map_row (status, map_id, source_code_id, created, created_by) select 0, :mapId, ic.id, :date, :user from imported_code ic where ic.imported_codeset_id = :sourceCodeSetId order by ic._index", nativeQuery = true)
   @Modifying
   @RestResource(exported = false)

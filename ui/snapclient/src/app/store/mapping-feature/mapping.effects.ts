@@ -39,57 +39,14 @@ export class MappingEffects {
     ofType(MappingActionTypes.ADD_MAPPING),
     map(action => action.payload),
     switchMap((new_mapping) => {
-      if (!new_mapping.mapping.source.id) {
+      if (!new_mapping.map.source.id) {
         return of(new AddMappingFailure({error: 'MAP.SOURCE_REQUIRED'}));
       }
-      const sid = of(new_mapping.mapping.source.id);
-      let pid: Observable<string>;
-      if (new_mapping.mapping.project.id) {
-        pid = of(new_mapping.mapping.project.id);
-      } else {
-        pid = this.mapService.createProject(new_mapping.mapping.project).pipe(
-          map(p => ServiceUtils.extractIdFromHref(p._links.self.href, null)));
-      }
-
-      return forkJoin([pid, sid]).pipe(
-        switchMap(([projectid, sourceid]) => {
-          return this.mapService.createMapping(new_mapping.mapping, projectid, sourceid).pipe(
-            map((m) => {
-              new_mapping.mapping.id = ServiceUtils.extractIdFromHref(m._links.self.href, null);
-              new_mapping.mapping.source = m.source as Source;
-              if (new_mapping.mapping.project) {
-                new_mapping.mapping.project.mapcount = 1;
-              }
-              return new_mapping.mapping;
-            }),
-            switchMap((mapping: Mapping) => of(new AddMappingSuccess(mapping))),
-            catchError((err: any) => of(new AddMappingFailure(err))),
-          ).pipe(
-            map((result) => result.payload),
-            switchMap((createResult) => {
-              if (new_mapping.importFile && createResult instanceof Mapping) {
-                new_mapping.importFile.source.mapId = createResult.id;
-              }
-              return this.sourceService.importMap(
-                new_mapping.importFile?.source, new_mapping.importFile?.sourceType).pipe(
-                map((m) => {
-                  return m;
-                }),
-                switchMap((result: ImportMappingFileResult) => [
-                  new ImportMappingFileSuccess(result),
-                  new AddMappingSuccess(new_mapping.mapping)
-                ]),
-                catchError((err, mapping) => [
-                  new ImportMappingFileFailure(err),
-                  new AddMappingSuccess(new_mapping.mapping)
-                ])
-              );
-            })
-          );
-        })
+      return this.mapService.createProject(new_mapping).pipe(
+        switchMap((mapping: Mapping) => of(new AddMappingSuccess(mapping))),
+        catchError((error: any) => of(new AddMappingFailure({error}))),
       );
     }),
-    catchError((err: any) => of(new AddMappingFailure(err)))
   ), {dispatch: true});
 
   addMappingSuccess$ = createEffect(() => this.actions$.pipe(

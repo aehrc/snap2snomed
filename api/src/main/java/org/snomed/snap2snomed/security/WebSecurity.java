@@ -64,6 +64,9 @@ public class WebSecurity {
   }
 
   public boolean isProjectOwnerForId(Long projectId) {
+    if (projectId == null) {
+      return false;
+    }
     Project project = projectRepository.findById(projectId).orElse(null);
     return project != null && isInRoles(project.getOwners());
   }

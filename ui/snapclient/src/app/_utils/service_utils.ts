@@ -6,6 +6,12 @@ import {TableParams} from '../mapping/mapping-table/mapping-table.component';
 import {Source} from '../_models/source';
 import {MappingImportSource} from '../_models/mapping_import_source';
 
+export interface ApiCallParams {
+  contentType: string;
+  url: string;
+  header: { headers: HttpHeaders, params?: any };
+}
+
 export class ServiceUtils {
 
   static extractIdFromHref(href: string, suffix: string | null): string {
@@ -355,6 +361,14 @@ export class ServiceUtils {
 
   public static getEOL(): string {
     return window.navigator.platform.startsWith('Win') ? '\r\n' : '\n';
+  }
+
+  public static getApiParams(theUrl: string, sourceType: string): ApiCallParams {
+    return {
+      contentType: ServiceUtils.toMime(sourceType) ?? '',
+      url: theUrl,
+      header: ServiceUtils.getHTTPUploadHeaders()
+    };
   }
 
 }

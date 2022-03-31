@@ -1,7 +1,7 @@
 import {HttpParams} from '@angular/common/http';
 import {Action} from '@ngrx/store';
 import {MappedRowDetailsDto, Page} from 'src/app/_models/map_row';
-import {CreateMappingParams, MapViewResults} from 'src/app/_services/map.service';
+import {CreateProjectDto, MapViewResults} from 'src/app/_services/map.service';
 import {Mapping} from '../../_models/mapping';
 import {Project, ProjectPage} from '../../_models/project';
 
@@ -69,7 +69,7 @@ export class LoadProjectsFailure implements Action {
 export class AddMapping implements Action {
   readonly type = MappingActionTypes.ADD_MAPPING;
 
-  constructor(public payload: CreateMappingParams) {
+  constructor(public payload: CreateProjectDto) {
 
   }
 }

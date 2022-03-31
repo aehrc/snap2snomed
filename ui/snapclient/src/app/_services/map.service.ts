@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {Mapping} from '../_models/mapping';
 import {Project} from '../_models/project';
 import {Task} from '../_models/task';
-import {ServiceUtils} from '../_utils/service_utils';
+import {ServiceUtils, ApiCallParams} from '../_utils/service_utils';
 import {MappedRowDetailsDto, MapRow, MapRowRelationship, MapRowStatus, MapView} from '../_models/map_row';
 import {JSONTargetRow, TargetRow} from '../_models/target_row';
 import {Note} from '../_models/note';
@@ -12,6 +12,8 @@ import {APP_CONFIG, AppConfig} from '../app.config';
 import {map} from 'rxjs/operators';
 import {ImportMappingFileParams} from '../store/source-feature/source.actions';
 import {ValidationResult} from "../_models/validation_result";
+import { MappingImportSource } from '../_models/mapping_import_source';
+import { cloneDeep } from 'lodash';
 
 export interface Results {
   _embedded: any;
@@ -98,6 +100,12 @@ export interface CreateMappingParams {
   importFile: ImportMappingFileParams | undefined | null;
 }
 
+export interface CreateProjectDto {
+  project: Project;
+  map: Mapping;
+  mappingFileDetails: ImportMappingFileParams | undefined | null;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -107,7 +115,49 @@ export class MapService {
               private http: HttpClient) {
   }
 
-  createProject(project: Project): Observable<any> {
+  // This is the one shot implementation of creating a project
+  // CreateProjectDto contains all info for creating a Project
+  // and a Map resource and if set, the details for importing a
+  // mapping into the new Map.
+  // This happens in one transaction in the backend so if any
+  // of the steps of creating a Project fails it's all rolled back.
+  createProject(projectDto: CreateProjectDto): Observable<any> {
+    const header = ServiceUtils.getHTTPHeaders();
+    const sourceType = projectDto.mappingFileDetails?.sourceType ?? '';
+    const apiParams: ApiCallParams = ServiceUtils.getApiParams (
+      `${this.config.apiBaseUrl}/project/create`,
+      sourceType
+    );
+    const body = this.createProjectBody(projectDto, apiParams.contentType);
+
+    return this.http.post(apiParams.url, body, apiParams.header);
+  }
+
+  createProjectBody(projectDto: CreateProjectDto, contentType: string ): FormData {
+    const projectDtoToChange = cloneDeep(projectDto);
+    const formData = new FormData();
+    if (projectDtoToChange) {
+      if (projectDtoToChange.mappingFileDetails?.source.source_file) {
+        const blob = new Blob([projectDtoToChange.mappingFileDetails?.source.source_file],
+          {type: contentType});
+        formData.append('file', blob);
+        projectDtoToChange.mappingFileDetails.source.source_file = undefined;
+        const jsonImportDetails = new Blob([JSON.stringify(projectDtoToChange.mappingFileDetails.source)], {type: 'application/json'});
+        formData.append('mappingFileDetails', jsonImportDetails);
+      }
+      const jsonMap = new Blob([JSON.stringify(projectDtoToChange.map)], {type: 'application/json'});
+      formData.append('map', jsonMap);
+      const jsonProject = new Blob([JSON.stringify(projectDtoToChange.project)], {type: 'application/json'});
+      formData.append('project', jsonProject);
+    }
+    return formData;
+  }
+
+  // Old implementation of creating a project that used
+  // multiple backend calls for creating a Project and
+  // a Map resource, then imported a mapping file if it
+  // was requested.
+  addProject(project: Project): Observable<any> {
     const url = `${this.config.apiBaseUrl}/projects`;
     const header = ServiceUtils.getHTTPHeaders();
     const body = JSON.stringify(project, Project.replacer);

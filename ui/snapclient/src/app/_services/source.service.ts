@@ -46,7 +46,7 @@ export class SourceService {
     if (source === undefined || sourceType === undefined || !source.source_file) {
       return of(null);
     }
-    const apiParams: ApiCallParams = this.getApiParams(
+    const apiParams: ApiCallParams = ServiceUtils.getApiParams (
       `${this.config.apiBaseUrl}/importedCodeSets/import`,
       sourceType
     );
@@ -58,7 +58,7 @@ export class SourceService {
     if (source === undefined || sourceType === undefined || !source.source_file) {
       return of(null);
     }
-    const apiParams: ApiCallParams = this.getApiParams(
+    const apiParams: ApiCallParams = ServiceUtils.getApiParams (
       `${this.config.apiBaseUrl}/importedMappings/import`,
       sourceType
     );
@@ -79,14 +79,6 @@ export class SourceService {
       formData.append('importDetails', json);
     }
     return formData;
-  }
-
-  getApiParams(theUrl: string, sourceType: string): ApiCallParams {
-    return {
-      contentType: ServiceUtils.toMime(sourceType) ?? '',
-      url: theUrl,
-      header: ServiceUtils.getHTTPUploadHeaders()
-    };
   }
 
 }

@@ -18,7 +18,6 @@ public class ImportMappingFileDetails {
   @NotNull(message = "An index for the relationship column in a mapping import file must be specified")
   Integer relationshipColumnIndex;
 
-  @NotNull(message = "ID of the map for the targets")
   String mapId;
 
   Character delimiter;
