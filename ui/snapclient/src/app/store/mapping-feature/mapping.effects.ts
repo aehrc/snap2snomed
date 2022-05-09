@@ -211,7 +211,6 @@ export class MappingEffects {
   ), {dispatch: true});
 
   loadTaskView$ = createEffect(() => this.actions$.pipe(
-    debounceTime(50),
     ofType(MappingActionTypes.LOAD_TASK_VIEW),
     map((action) => action.payload),
     switchMap((payload) => {
