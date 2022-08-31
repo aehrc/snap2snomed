@@ -22,9 +22,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
 import org.snomed.snap2snomed.model.enumeration.MapStatus;
 import org.snomed.snap2snomed.model.enumeration.MappingRelationship;
 
+@Slf4j
 @Data
 @Builder
 @AllArgsConstructor
@@ -32,12 +36,23 @@ import org.snomed.snap2snomed.model.enumeration.MappingRelationship;
 public class MapView {
 
   public MapView(MapRow row, MapRowTarget target, Instant latestNote) {
+    // log.info("row="+ row);
+    // log.info("row.getNotes="+ row.getNotes());
+    // if (!row.getNotes().isEmpty()) {
+    //   log.info("row.getNotes.last()="+ row.getNotes().last());
+    //   log.info("row.getNotes.last().getNoteText()="+ row.getNotes().last().getNoteText());
+    // }
+
     this.rowId = row.getId();
     this.sourceIndex = row.getSourceCode().getIndex();
     this.sourceCode = row.getSourceCode().getCode();
     this.sourceDisplay = row.getSourceCode().getDisplay();
     this.noMap = row.isNoMap();
     this.latestNote = latestNote;
+    // if (!row.getNotes().isEmpty()) {
+    //   this.latestNoteText = row.getNotes().last().noteText;
+    // }
+    this.latestNoteText = "Hello World";
     this.status = row.getStatus();
     this.lastAuthor = row.getLastAuthor();
     this.lastReviewer = row.getLastReviewer();
@@ -81,6 +96,9 @@ public class MapView {
   private MapStatus status;
 
   private Instant latestNote;
+
+  // @ToString.Exclude
+  private String latestNoteText;
 
   private User assignedAuthor;
 

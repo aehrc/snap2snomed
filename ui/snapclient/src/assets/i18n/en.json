@@ -111,6 +111,7 @@
     "MAX_CHARS": "Maximum characters",
     "VIEW": "VIEW",
     "IMPORT_EXISTING_MAP": "Import existing map",
+    "EXPORT_MAP": "Export map",
     "SELECT_FILE": "Select file",
     "CLEAR_SELECTED_FILE": "Clear selected file"
   },
@@ -187,6 +188,7 @@
     "EXPORT_CSV": "Comma separated",
     "EXPORT_TSV": "Tab separated",
     "EXPORT_XLSX": "Excel (xlsx)",
+    "EXPORT_CONFIGURE": "Configure Export ...",
     "CODE_SYSTEMS": "Code systems",
     "LAST_UPDATED": "Last updated",
     "UNSAVED_CHANGES": "Warning: you have unsaved changes",

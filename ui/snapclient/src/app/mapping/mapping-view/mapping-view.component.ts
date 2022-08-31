@@ -65,6 +65,7 @@ import {AuthService} from '../../_services/auth.service';
 import {MappingImportSource} from 'src/app/_models/mapping_import_source';
 import {ImportMappingFile, ImportMappingFileParams, InitSelectedMappingFile} from 'src/app/store/source-feature/source.actions';
 import {MappingImportComponent} from '../mapping-import/mapping-import.component';
+import { MappingExportComponent } from '../mapping-export/mapping-export.component';
 
 @Component({
   selector: 'app-mapping-view',
@@ -78,6 +79,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private mapping_id: string | null = null;
 
   private import_dialog_width = '1000px';
+  private export_dialog_width = '600px';
 
   mapping: Mapping | null | undefined;
   error: ErrorInfo = {};
@@ -401,7 +403,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.opened = false;
   }
 
-  exportMapView(type: string): void {
+  exportMapView(type: string, includeLatestNote: boolean, includeLastAuthor: boolean, includeLastReviewer: boolean): void {
     this.setLoading();
     let contentType: string;
     let extension: string;
@@ -424,7 +426,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if (this.mapping && this.mapping.id) {
-      this.mapService.exportMapView(this.mapping.id, contentType)
+      this.mapService.exportMapView(this.mapping.id, contentType, includeLatestNote, includeLastAuthor, includeLastReviewer)
         .subscribe(blob => saveAs(blob, this.mapping?.project.title + '_' + this.mapping?.mapVersion + extension),
           (error) => {
             console.log(error);
@@ -588,6 +590,26 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.selectedMappingFile && this.mapping) {
           this.selectedMappingFile.source.mapId = this.mapping.id;
           this.store.dispatch(new ImportMappingFile(this.selectedMappingFile));
+        }
+    });
+  }
+
+  clickExport(): void {
+    const dialogRef = this.dialog.open(MappingExportComponent, {
+      width: this.export_dialog_width, data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(
+
+      (result: any) => {
+        if (result) {
+          console.log("result", result);
+
+console.log("result.includeLatestNote", result["includeLatestNote"]);
+console.log("result.includeLastAuthor", result["includeLatestAuthor"]);
+console.log("result.includeLastReviewer", result["includeLatestAuthor"]);
+
+          this.exportMapView('csv', result["includeLatestNote"], result["includeLatestAuthor"], result["includeLatestAuthor"]);
         }
     });
   }

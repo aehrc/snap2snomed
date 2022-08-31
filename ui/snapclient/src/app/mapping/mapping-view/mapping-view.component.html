@@ -21,9 +21,10 @@
               <button class="mat-primary" mat-stroked-button
                       [matMenuTriggerFor]="exportMenu">{{'MAP.EXPORT' | translate}}</button>
               <mat-menu #exportMenu="matMenu">
-                <a mat-menu-item (click)="exportMapView('csv')">{{'MAP.EXPORT_CSV' | translate}}</a>
-                <a mat-menu-item (click)="exportMapView('tsv')">{{'MAP.EXPORT_TSV' | translate}}</a>
-                <a mat-menu-item (click)="exportMapView('xlsx')">{{'MAP.EXPORT_XLSX' | translate}}</a>
+                <a mat-menu-item (click)="exportMapView('csv', false, false, false)">{{'MAP.EXPORT_CSV' | translate}}</a>
+                <a mat-menu-item (click)="exportMapView('tsv', false, false, false)">{{'MAP.EXPORT_TSV' | translate}}</a>
+                <a mat-menu-item (click)="exportMapView('xlsx', false, false, false)">{{'MAP.EXPORT_XLSX' | translate}}</a>
+                <a mat-menu-item (click)="clickExport()">{{'MAP.EXPORT_CONFIGURE' | translate}}</a>
               </mat-menu>
             </span>
             <button class="mat-primary" mat-stroked-button *ngIf="isOwner()"

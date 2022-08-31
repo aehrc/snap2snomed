@@ -21,9 +21,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.csv.CSVFormat;
@@ -56,6 +60,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+@Slf4j
 @RestController
 @RequestMapping("/mapView")
 // Removed @RepositoryRestController annotation as per 
@@ -70,7 +75,6 @@ public class MapViewRestController {
 
   public static final String[] EXPORT_HEADER = {"\ufeff" + "Source code", "Source display", "Target code", "Target display", "Relationship type code",
       "Relationship type display", "No map flag", "Status"};
-
   @Autowired
   MapViewService mapViewService;
 
@@ -221,16 +225,41 @@ public class MapViewRestController {
   @Parameter(name = "sort", in = ParameterIn.QUERY, required = false, allowEmptyValue = false,
       description = "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
       array = @ArraySchema(schema = @Schema(type = "string")))
+  @Parameter(name = "includeNote", in = ParameterIn.QUERY, required = false, allowEmptyValue = false,
+      description = "if true, the latest note is included in the export")
+  @Parameter(name = "includeLastAuthor", in = ParameterIn.QUERY, required = false, allowEmptyValue = false,
+      description = "if true, the latest author is included in the export")
+  @Parameter(name = "includeLastReviewer", in = ParameterIn.QUERY, required = false, allowEmptyValue = false,
+      description = "if true, the latest reviewer is included in the export")
   @GetMapping(path = "/{mapId}", produces = {TEXT_CSV, TEXT_TSV})
   public void getMapViewCsv(HttpServletResponse response, @RequestHeader(name = "Accept", required = false) String contentType,
-      @PathVariable("mapId") Long mapId) {
+      @PathVariable("mapId") Long mapId,
+      @RequestParam(required = false) Boolean includeNote,
+      @RequestParam(required = false) Boolean includeLastAuthor,
+      @RequestParam(required = false) Boolean includeLastReviewer) {
+
+        log.info("getMapView3 called");
 
     if (!webSecurity.isValidUser()) {
       throw new NoSuchUserProblem();
     }
     if (!webSecurity.isAdminUser() && !webSecurity.hasAnyProjectRoleForMapId(mapId)) {
       throw new NotAuthorisedProblem("Not authorised to view map if the user is not admin or member of an associated project!");
-    }        
+    }      
+     
+    List<String> exportHeader = new ArrayList<String>();
+    Collections.addAll(exportHeader, EXPORT_HEADER);
+    if (includeNote) {
+        exportHeader.add("Latest note");
+    }
+    if (includeLastAuthor) {
+        exportHeader.add("Latest author");
+    }
+    if (includeLastReviewer) {
+        exportHeader.add("Latest reviewer");
+    }
+    String[] exportHeaderStringArray = new String[exportHeader.size()];
+    exportHeaderStringArray = exportHeader.toArray(exportHeaderStringArray);
 
     CSVFormat format;
     switch (contentType) {
@@ -254,18 +283,36 @@ public class MapViewRestController {
         "attachment; filename=\"" + mapViewService.getFileNameForMapExport(mapId, contentType)
             + "\"");
 
+            log.info("includeNote" + includeNote);
+            if (includeNote) {
+                log.info("includeNote is true");
+            }
+            else {
+                log.info("includeNote is false");
+            }
+            log.info("includeLastAuthor" + includeLastAuthor);
+            log.info("includeLastReviewer" + includeLastReviewer);
+
     try (BufferedWriter writer = new BufferedWriter(
         new OutputStreamWriter(response.getOutputStream()));
 
         CSVPrinter csvPrinter = new CSVPrinter(writer,
-            format.builder().setHeader(EXPORT_HEADER).build());) {
+            format.builder().setHeader(exportHeaderStringArray).build());) {
       for (MapView mapView : mapViewService.getAllMapViewForMap(mapId)) {
+        log.info("mapView=" + mapView);
+        log.info("mapView.getlastauthor()=" + mapView.getLastAuthor());
+        if (mapView.getLastAuthor() != null) {
+            log.info("mapView.getlastauthor().getFullName()=" + mapView.getLastAuthor().getFullName());
+        }
         csvPrinter.printRecord(
             mapView.getSourceCode(), mapView.getSourceDisplay(),
             mapView.getTargetCode(), mapView.getTargetDisplay(),
             mapView.getRelationship(), mapView.getRelationship() == null ? "" : mapView.getRelationship().getLabel(),
             mapView.getNoMap() == null ? "" : mapView.getNoMap(),
-            mapView.getStatus());
+            mapView.getStatus(),
+            includeNote ? (mapView.getLatestNoteText() == null ? "" : mapView.getLatestNoteText()) : "",
+            includeLastAuthor ? (mapView.getLastAuthor() == null ? "" : mapView.getLastAuthor().getFullName()) : "",
+            includeLastReviewer ? (mapView.getLastReviewer() == null ? "" : mapView.getLastReviewer().getFullName()) : "");
       }
       csvPrinter.flush();
       writer.flush();
@@ -281,14 +328,24 @@ public class MapViewRestController {
   @Parameter(name = "sort", in = ParameterIn.QUERY, required = false, allowEmptyValue = false,
       description = "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
       array = @ArraySchema(schema = @Schema(type = "string")))
+  @Parameter(name = "includeNote", in = ParameterIn.QUERY, required = false, allowEmptyValue = false,
+      description = "if true, the latest note is included in the export")
+  @Parameter(name = "includeLastAuthor", in = ParameterIn.QUERY, required = false, allowEmptyValue = false,
+      description = "if true, the latest author is included in the export")
+  @Parameter(name = "includeLastReviewer", in = ParameterIn.QUERY, required = false, allowEmptyValue = false,
+      description = "if true, the latest reviewer is included in the export")
   @GetMapping(path = "/{mapId}", produces = APPLICATION_XSLX)
-  public void getMapViewExcel(HttpServletResponse response, @PathVariable("mapId") Long mapId) throws IOException {
+  public void getMapViewExcel(HttpServletResponse response, @PathVariable("mapId") Long mapId,
+    @RequestParam(required = false) Boolean includeNote,
+    @RequestParam(required = false) Boolean includeLastAuthor,
+    @RequestParam(required = false) Boolean includeLastReviewer) throws IOException {
     if (!webSecurity.isValidUser()) {
       throw new NoSuchUserProblem();
     }
     if (!webSecurity.isAdminUser() && !webSecurity.hasAnyProjectRoleForMapId(mapId)) {
       throw new NotAuthorisedProblem("Not authorised to view map if the user is not admin or member of an associated project!");
     }
+    log.info("getMapView4 called");
 
     response.setContentType(APPLICATION_XSLX);
     response.setHeader("Content-Disposition",
@@ -336,6 +393,25 @@ public class MapViewRestController {
 
         cell = row.createCell(7);
         cell.setCellValue(mapView.getStatus() == null ? "" : mapView.getStatus().toString());
+
+        int nextColNum = 8;
+        if (includeNote) {
+            cell = row.createCell(nextColNum);
+            cell.setCellValue(mapView.getLatestNote() == null ? "" : mapView.getLatestNote().toString());
+            nextColNum++;
+        }
+
+        if (includeLastAuthor) {
+            cell = row.createCell(nextColNum);
+            cell.setCellValue(mapView.getLastAuthor() == null ? "" : mapView.getLastAuthor().toString());
+            nextColNum++;
+        }
+
+        if (includeLastReviewer) {
+            cell = row.createCell(nextColNum);
+            cell.setCellValue(mapView.getLastReviewer() == null ? "" : mapView.getLastReviewer().toString());
+            nextColNum++;
+        }
 
       }
       wb.write(response.getOutputStream());

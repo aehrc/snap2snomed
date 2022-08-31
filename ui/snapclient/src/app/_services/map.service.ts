@@ -381,11 +381,18 @@ export class MapService {
     return this.http.patch<any>(url, body, header);
   }
 
-  exportMapView(mapping: string, contentType: string): Observable<Blob> {
+  exportMapView(mapping: string, contentType: string, includeNote: boolean, includeLastAuthor: boolean, includeLastReviewer: boolean): Observable<Blob> {
+    
+    const params = new HttpParams()
+      .set('includeNote', Boolean(includeNote).toString())
+      .set('includeLastAuthor', Boolean(includeLastAuthor).toString())
+      .set('includeLastReviewer', Boolean(includeLastReviewer).toString());
+      
     return this.http.get(`${this.config.apiBaseUrl}/mapView/${mapping}`,
       {
         headers: {Accept: contentType},
-        responseType: 'blob'
+        responseType: 'blob',
+        params: params
       });
   }
 

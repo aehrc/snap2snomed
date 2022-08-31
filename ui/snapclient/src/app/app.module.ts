@@ -130,6 +130,7 @@ import { MappingImportComponent } from './mapping/mapping-import/mapping-import.
 import { FooterComponent } from './footer/footer.component';
 import { FeedbackWidgetComponent } from './feedback-widget/feedback-widget.component';
 import { AcceptTermsComponent } from './accept-terms/accept-terms.component';
+import { MappingExportComponent } from './mapping/mapping-export/mapping-export.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient): TranslateHttpLoader {
@@ -186,6 +187,7 @@ export function HttpLoaderFactory(httpClient: HttpClient): TranslateHttpLoader {
     NotauthorizedComponent,
     LogoutComponent,
     MappingImportComponent,
+    MappingExportComponent,
     FooterComponent,
     FeedbackWidgetComponent,
     AcceptTermsComponent

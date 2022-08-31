@@ -1,0 +1,34 @@
+<mat-dialog-content>
+  <h4>Select the type of export file:</h4>    
+  <!-- <mat-form-field class="field-full-width">
+    <mat-label>{{ 'SOURCE.CODE_COL_HEADER' | translate }}</mat-label>
+    <mat-select [(ngModel)]="data.source.codeColumnIndex"
+                (selectionChange)="fileTypeChanged($event)">
+      <mat-option *ngFor="let col of csvHeaders; let idx = index" [value]="idx">
+        {{col}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+
+  <section [formGroup]="columns">
+    <h4>Select additional columns for export:</h4>    
+    <p><mat-checkbox formControlName="all">Select / Unselect All</mat-checkbox></p>
+    <p><mat-checkbox formControlName="notes">Notes</mat-checkbox></p>
+    <p><mat-checkbox formControlName="author">Map Author</mat-checkbox></p>
+    <p><mat-checkbox formControlName="reviewer">Reviewer</mat-checkbox></p>
+  </section>
+
+  <!-- <div *ngFor="let choice of checks; let i=index" class="col-md-2">
+    <label>
+      <input type="checkbox" [value]="choice.value" (change)="onCheckChange($event)">
+      {{choice.description}}
+    </label>
+  </div> -->
+  <mat-error>{{error.message}}</mat-error>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" type="submit" [disabled]="disableSubmit()" (click)="onSubmit()">{{
+      ('FORM.EXPORT_MAP' | translate) }}</button>
+    <button mat-raised-button color="default" type="cancel" (click)="onClose()">{{ 'FORM.CLOSE' | translate }}</button>
+  </mat-card-actions>
+</mat-dialog-content>
