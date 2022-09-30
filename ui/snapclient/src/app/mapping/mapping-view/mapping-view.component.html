@@ -64,7 +64,7 @@
         <div class="container-table">
           <table id="table-mapping" mat-table matTableFilter class="compact-table"
                  [exampleEntity]="filterEntity" [filterType]="filterType"
-                 [dataSource]="page.data" matSort fixedLayout="false">
+                 [dataSource]="datasource" matSort fixedLayout="false">
             <!-- ID Column -->
             <app-mapping-table-selector
               name="id"

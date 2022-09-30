@@ -5,7 +5,7 @@
   <table id="table-mapping" #maptable mat-table matTableFilter class="compact-table full-width-table show-borders"
        [exampleEntity]="filterEntity"
        [filterType]="filterType"
-       [dataSource]="page.data" matSort fixedLayout="false">
+       [dataSource]="datasource" matSort fixedLayout="false">
 
   <!-- ID Column -->
   <app-mapping-table-selector

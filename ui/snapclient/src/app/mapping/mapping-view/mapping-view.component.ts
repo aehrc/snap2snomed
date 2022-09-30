@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Mapping} from '../../_models/mapping';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IAppState} from '../../store/app.state';
@@ -24,7 +24,7 @@ import {
   selectCurrentView,
   selectMappingLoading
 } from '../../store/mapping-feature/mapping.selectors';
-import {MatTable} from '@angular/material/table';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {
   MappedRowDetailsDto,
@@ -61,13 +61,11 @@ import {ResultsdialogComponent} from 'src/app/resultsdialog/resultsdialog.compon
 import {MappingTableSelectorComponent} from '../mapping-table-selector/mapping-table-selector.component';
 import {selectMappingFile, selectMappingFileError, selectMappingFileLoading, selectMappingFileSuccess} from 'src/app/store/source-feature/source.selectors';
 import {ErrorDetail} from 'src/app/_models/error_detail';
-import {FhirService} from 'src/app/_services/fhir.service';
 import {AuthService} from '../../_services/auth.service';
 import {MappingImportSource} from 'src/app/_models/mapping_import_source';
 import {ImportMappingFile, ImportMappingFileParams, InitSelectedMappingFile} from 'src/app/store/source-feature/source.actions';
 import {MappingImportComponent} from '../mapping-import/mapping-import.component';
 import { MappingNotesComponent } from '../mapping-table-notes/mapping-notes.component';
-import { SourceNavigationService } from 'src/app/_services/source-navigation.service';
 
 @Component({
   selector: 'app-mapping-view',
@@ -108,6 +106,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mappingTableSelector = selector;
   }
 
+  datasource: any;
   page: Page = new Page();
   allSourceDetails: MappedRowDetailsDto[] = [];
 
@@ -195,9 +194,8 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
               private store: Store<IAppState>,
               private translate: TranslateService,
               private mapService: MapService,
-              private fhirService: FhirService,
               private authService: AuthService,
-              private sourceNavigation: SourceNavigationService,) {
+              private changeDetectorRef: ChangeDetectorRef) {
     this.translate.get('TASK.SELECT_A_TASK').subscribe((res) => this.selectedLabel = res);
 
     this.paging = new MapViewPaging();
@@ -365,6 +363,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
       (mapping) => {
         if (this.mapping_id === mapping?.id) {
           self.mapping = mapping;
+          this.changeDetectorRef.detectChanges();
           if (self.mapping && self.mapping.id && self.mapping_id === self.mapping.id) {
             self.store.dispatch(new LoadTasksForMap({id: self.mapping.id, authPageSize: self.authPageSize,
               authCurrentPage: self.authCurrentPage, reviewPageSize: self.reviewPageSize, reviewCurrentPage: self.reviewCurrentPage}));
@@ -376,6 +375,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
     self.subscription.add(this.store.select(selectCurrentView).subscribe(
       (page) => {
         self.page = page ?? new Page();
+        this.datasource = new MatTableDataSource(self.page.data);
         if (page?.sourceDetails) {
           self.allSourceDetails = page.sourceDetails;
         }

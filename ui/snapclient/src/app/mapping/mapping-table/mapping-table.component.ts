@@ -48,7 +48,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ConfirmDialogComponent, DialogData, DialogType} from 'src/app/dialog/confirm-dialog/confirm-dialog.component';
 import {StatusUtils} from '../../_utils/status_utils';
 import {MappingTableSelectorComponent} from '../mapping-table-selector/mapping-table-selector.component';
-import {MatTable} from '@angular/material/table';
+import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {WriteDisableUtils} from '../../_utils/write_disable_utils';
 import {FhirService} from "../../_services/fhir.service";
 import { MappingNotesComponent } from '../mapping-table-notes/mapping-notes.component';
@@ -124,6 +124,7 @@ export class MappingTableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mappingTableSelector = selector;
   }
 
+  datasource: any;
   page: Page = new Page();
   allSourceDetails: MappedRowDetailsDto[] = [];
   writeDisableUtils = WriteDisableUtils;
@@ -185,7 +186,8 @@ export class MappingTableComponent implements OnInit, AfterViewInit, OnDestroy {
     const self = this;
     this.subscription.add(this.store.select(selectCurrentView).subscribe(
       (page) => {
-        this.page = page ?? new Page();
+        self.page = page ?? new Page();
+        this.datasource = new MatTableDataSource(self.page.data);
         if (page?.sourceDetails) {
           self.allSourceDetails = page.sourceDetails;
         }
