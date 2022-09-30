@@ -150,7 +150,7 @@ export class ServiceUtils {
   }
 
   static filtersToParam(filterEntity: MapViewFilter): HttpParams {
-    let params = new HttpParams();
+    let params = new HttpParams({fromObject: {}});
     if (filterEntity.sourceCode && filterEntity.sourceCode.length > 0) {
       filterEntity.sourceCode.toString().match(/\S+/g)?.forEach(value => {
         params = params.append('sourceCode', value);
