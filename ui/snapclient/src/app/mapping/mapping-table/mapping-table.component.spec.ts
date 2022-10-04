@@ -45,7 +45,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MapService} from 'src/app/_services/map.service';
 import {Task, TaskType} from 'src/app/_models/task';
 import {User} from 'src/app/_models/user';
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -180,6 +180,7 @@ describe('MappingTableComponent', () => {
     component.mappingTableSelector.cdRef.detectChanges();
     fixture.detectChanges();
     component.page = page;
+    component.datasource = new MatTableDataSource(page.data);
   });
 
   it('should create', () => {
