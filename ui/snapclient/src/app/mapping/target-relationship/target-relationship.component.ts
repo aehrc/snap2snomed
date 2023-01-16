@@ -27,6 +27,19 @@ import {StatusUtils} from '../../_utils/status_utils';
 import {SourceRow} from '../mapping-detail/mapping-detail.component';
 import {WriteDisableUtils} from "../../_utils/write_disable_utils";
 import {FhirService} from "../../_services/fhir.service";
+import { IAppState } from 'src/app/store/app.state';
+import { Store } from '@ngrx/store';
+import { FindSuggestedReplacementConcepts } from 'src/app/store/fhir-feature/fhir.actions';
+import { Subscription } from 'rxjs';
+import { selectReplacementConceptsList } from 'src/app/store/fhir-feature/fhir.selectors';
+import { IParameters } from '@ahryman40k/ts-fhir-types/lib/R4';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
+
+export interface Coding { //import from reducer?
+  code: string;
+  display: string;
+}
 
 @Component({
   selector: 'app-target-relationship',
@@ -50,12 +63,22 @@ export class TargetRelationshipComponent implements OnInit {
   writeDisableUtils = WriteDisableUtils;
   toMapRowStatus = toMapRowStatus;
 
-  constructor(private mapService: MapService,
-              private fhirService: FhirService,
-              private router: Router,
+  sameAsConcepts : Coding[] = [];
+  replacedByConcepts : Coding[] = [];
+  alternativeConcepts : Coding[] = [];
+  possiblyEquivalentToConcepts : Coding[] = [];
+
+  formGroupArray : FormGroup[];
+
+  private subscription = new Subscription();
+
+  constructor(private fhirService: FhirService,
               private selectionService: SelectionService,
-              private translate: TranslateService) {
+              private translate: TranslateService,
+              private store: Store<IAppState>,
+              private fb: FormBuilder) {
     this.relationships = mapRowRelationships;
+    this.formGroupArray = [];
   }
 
   ngOnInit(): void {
@@ -63,8 +86,79 @@ export class TargetRelationshipComponent implements OnInit {
     self.selectionService.subscribe({
       next: (value: any) => {
         self.selectedSearchItem = value;
+
+        self.store.dispatch(new FindSuggestedReplacementConcepts({
+          code: "72940011000036107",//self.selectedSearchItem.code,
+          system: "",//self.selectedSearchItem.system,
+          version: ""//self.selectedSearchItem.version
+        }));
       }
     });
+
+    self.subscription.add(self.store.select(selectReplacementConceptsList).subscribe(
+      (parameters) => {
+
+        // guard against multiple notifications
+        this.sameAsConcepts = []; 
+        this.replacedByConcepts = [];
+        this.possiblyEquivalentToConcepts = [];
+        this.alternativeConcepts = [];
+
+        if (parameters){
+          console.log("results", parameters);
+          
+          if (parameters.sameAs) {
+            this.sameAsConcepts = this.updateReplacements(parameters.sameAs);
+          }
+          if (parameters.replacedBy) {
+            this.replacedByConcepts = this.updateReplacements(parameters.replacedBy);
+          }
+          if (parameters.possiblyEquivalentTo) {
+            this.possiblyEquivalentToConcepts = this.updateReplacements(parameters.possiblyEquivalentTo);
+          }
+          if (parameters.alternative) {
+            this.alternativeConcepts = this.updateReplacements(parameters.alternative);
+          }
+
+        }
+
+        this.formGroupArray.push(this.fb.group({
+          sameAs: this.fb.group({}),
+          replacedBy: this.fb.group({}),
+        }));
+
+        for (let i=0; i<this.replacedByConcepts.length; i++) {
+          let replacedByGroup = this.formGroupArray[0].controls.replacedBy as FormGroup;
+          this.formGroupArray[0].get('replacedBy')
+          replacedByGroup.addControl(this.replacedByConcepts[i].code, this.fb.control(false));
+          replacedByGroup.addControl(this.replacedByConcepts[i].code + '_relationship', this.fb.control('EQUIVALENT'));
+        }
+      },
+      //TODO change error message
+      error => this.translate.get('ERROR.CONCEPT_SEARCH').subscribe((res) => this.error.message = res)
+    ));
+  }
+
+  updateReplacements(parameters: IParameters) : Coding[] {
+    let conceptList: Coding[] = [];
+    if (parameters.parameter && parameters.parameter[0].name === "result"  && parameters.parameter[0].valueBoolean === true)  {
+      if (parameters.parameter[1].name === "match") {
+        let part = parameters.parameter[1].part;
+        part?.forEach(item => {
+          if (item.name === "concept") {
+            if (item.valueCoding && item.valueCoding.code && item.valueCoding.display) {
+              conceptList.push({
+                code: item.valueCoding.code,
+                display: item.valueCoding.display,
+
+              });
+            }
+          }
+        })
+
+      }
+    }
+    return conceptList;
   }
 
   click(row: MapView): void {
@@ -119,7 +213,7 @@ export class TargetRelationshipComponent implements OnInit {
       if (self.source) {
         const targetRow = new MapView('', '', self.source.index, self.source.code,
           self.source.display, code, displayTerm, relationship, MapRowStatus.DRAFT,
-          false, null, null, null, null, null, false, self.source.additionalColumnValues);
+          false, null, null, null, null, null, false, false, self.source.additionalColumnValues);
         const duplicate = self.targetRows.find((row: any) => row.targetCode === targetRow.targetCode);
         if (!duplicate) {
           self.newTargetEvent.emit(targetRow);
@@ -142,6 +236,42 @@ export class TargetRelationshipComponent implements OnInit {
   isNoMap(): boolean {
     return this.source?.noMap ?? false;
   }
+
+  hasReplacementSuggestions() {
+    return this.sameAsConcepts.length > 0 || this.replacedByConcepts.length > 0 || this.alternativeConcepts.length > 0 || this.possiblyEquivalentToConcepts.length > 0; 
+  }
+
+  isApplyChangesEnabled() : boolean {
+    return true;
+  }
+
+  applyChangesClicked(formGroup : FormGroup) {
+
+    //TODO work in progress
+
+    if (this.sameAsConcepts.length > 0) {
+
+    }
+    if (this.replacedByConcepts.length > 0) {
+      console.log("replacedby", formGroup.get("replacedBy")?.value); 
+      let innerFG = formGroup.get("replacedBy") as FormGroup;
+      console.log("innerFG", innerFG.controls.keys);  
+      Object.keys(innerFG.controls).forEach(key => {
+        console.log("value", innerFG.controls[key].value);
+        if (innerFG.controls[key].value) {
+          console.log("need to replace with", key);
+        }
+      });
+    }
+    if (this.alternativeConcepts.length > 0) {
+
+    }
+    if (this.possiblyEquivalentToConcepts.length > 0) {
+
+    }
+  }
+
+  fg(name : string, formGroup : FormGroup) { return formGroup.get(name) as FormGroup; }
 
   updateFlag(maprow: MapView): void {
     const self = this;

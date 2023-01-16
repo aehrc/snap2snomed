@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
 import { FhirService } from '../../_services/fhir.service';
 import { R4 } from '@ahryman40k/ts-fhir-types';
@@ -34,14 +34,15 @@ import {
   ConceptHierarchySuccess,
   ConceptHierarchyFailure,
   LookupModuleSuccess,
-  LookupModuleFailure
+  LookupModuleFailure,
+  FindSuggestedReplacementConceptsFailure,
+  FindSuggestedReplacementConceptsSuccess,
 } from './fhir.actions';
 
 import { Release } from '../../_services/fhir.service';
-import {Match} from './fhir.reducer';
 import {TranslateService} from '@ngx-translate/core';
 import {SnomedUtils} from 'src/app/_utils/snomed_utils';
-import { ObservableInput } from 'rxjs';
+import { forkJoin } from 'rxjs';
 
 export interface Properties {
   [key: string]: any[]
@@ -85,6 +86,20 @@ export class FhirEffects {
         return of(new LoadReleasesSuccess(groupedVersions));
       }),
       catchError((err) => of(new LoadReleasesFailure({ error: err })))
+    ))), { dispatch: true });
+
+
+  findSuggestedReplacementConcepts$ = createEffect(() => this.actions$.pipe(
+    ofType(FhirActionTypes.FIND_SUGGESTED_REPLACEMENT_CONCEPTS),
+    map(action => action.payload),
+    switchMap((action) => forkJoin({
+      sameAs: this.fhirService.findSameAsConcepts(action.code),
+      replacedBy: this.fhirService.findReplacedByConcepts(action.code),
+      possiblyEquivalentTo: this.fhirService.findPossiblyEquivalentTo(action.code),
+      alternative: this.fhirService.findAlternative(action.code),
+    }).pipe(
+      switchMap((map) => of(new FindSuggestedReplacementConceptsSuccess(map))),
+      catchError((err) => of(new FindSuggestedReplacementConceptsFailure({ error: err })))
     ))), { dispatch: true });
 
   findConcepts$ = createEffect(() => this.actions$.pipe(
