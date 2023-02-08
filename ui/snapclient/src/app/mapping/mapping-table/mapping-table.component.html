@@ -139,7 +139,7 @@
   </ng-container>
   <!-- Filter SourceIndex -->
   <ng-container matColumnDef="filter-sourceIndex">
-    <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"></th>
+    <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-sourceIndex')}" *matHeaderCellDef [attr.colspan]="1"></th>
   </ng-container>
   <!-- Filter SourceCode -->
   <ng-container matColumnDef="filter-sourceCode">
