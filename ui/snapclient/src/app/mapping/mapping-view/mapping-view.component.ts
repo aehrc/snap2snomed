@@ -59,7 +59,7 @@ import {MatBottomSheet, MatBottomSheetConfig} from '@angular/material/bottom-she
 import {ResultsdialogComponent} from 'src/app/resultsdialog/resultsdialog.component';
 import {MappingTableSelectorComponent} from '../mapping-table-selector/mapping-table-selector.component';
 import {selectMappingFile, selectMappingFileError, selectMappingFileLoading, selectMappingFileSuccess} from 'src/app/store/source-feature/source.selectors';
-import {ErrorDetail} from 'src/app/_models/error_detail';
+import {ErrorCategory, ErrorDetail} from 'src/app/_models/error_detail';
 import {AuthService} from '../../_services/auth.service';
 import {MappingImportSource} from 'src/app/_models/mapping_import_source';
 import {ImportMappingFile, ImportMappingFileParams, InitSelectedMappingFile} from 'src/app/store/source-feature/source.actions';
@@ -242,6 +242,13 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.add(this.store.select(selectMappingFile).subscribe(
       (result) => {
         this.selectedMappingFile = result;
+        // reset the error so subsequent successful imports aren't confused by old errors if the user has not
+        // closed them
+        if (this.error.detail?.category === ErrorCategory.IMPORT) {
+          this.error.message = undefined;
+          this.error.messages = undefined;
+          this.error.detail = undefined;
+        }
       })
     );
     this.subscription.add(this.store.select(selectMappingFileSuccess).subscribe(
@@ -377,6 +384,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
           const errorDetail = new ErrorDetail();
           errorDetail.title = err;
           errorDetail.detail = '';
+          errorDetail.category = ErrorCategory.IMPORT;
           self.error.detail = errorDetail;
         });
       }

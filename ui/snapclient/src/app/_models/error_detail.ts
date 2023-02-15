@@ -15,8 +15,17 @@
  * limitations under the License.
  */
 
+// Used to identify errors to purge them if the operation is repeated
+// so as not to confuse the user if they haven't closed the error
+//
+// Add further categories here as required
+export const enum ErrorCategory {
+  IMPORT = 'IMPORT',
+}
+
 export class ErrorDetail {
   type: string;
+  category?: ErrorCategory;
   title: string;
   detail: string;
   status: number;
