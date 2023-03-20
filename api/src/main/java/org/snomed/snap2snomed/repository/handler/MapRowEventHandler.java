@@ -16,8 +16,8 @@
 
 package org.snomed.snap2snomed.repository.handler;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.snomed.snap2snomed.model.*;
 import org.snomed.snap2snomed.model.enumeration.MapStatus;

@@ -17,7 +17,7 @@
 package org.snomed.snap2snomed.problem.config;
 
 import java.net.URI;
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 import org.snomed.snap2snomed.problem.mapping.InvalidStateTransitionProblem;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,8 @@ public interface CustomAdviceTrait extends ConstraintViolationAdviceTrait {
     ResponseEntity<Problem> response;
 
     if (exception.getRootCause() instanceof ConstraintViolationException) {
-      response = handleConstraintViolation((ConstraintViolationException) exception.getRootCause(), request);
+      //response = handleConstraintViolation((ConstraintViolationException) exception.getRootCause(), request); waiting for zalando/problem-spring-web to upgrade to spring boot 3
+      response = create(exception.getRootCause(), request);
     } else if (exception.getRootCause() instanceof InvalidStateTransitionProblem) {
       response = create((InvalidStateTransitionProblem) exception.getRootCause(), request);
     } else {

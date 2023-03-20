@@ -39,7 +39,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 

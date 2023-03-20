@@ -43,7 +43,7 @@
     <problem-spring-web.version>0.27.0</problem-spring-web.version>
     <swagger-request-validator.version>2.34.0</swagger-request-validator.version>
     <apache-poi.version>5.2.3</apache-poi.version>
-    <rest-assured.version>4.4.0</rest-assured.version>
+    <rest-assured.version>5.3.0</rest-assured.version>
     <jjwt.version>0.11.5</jjwt.version>
     <tc-mysql.version>1.17.2</tc-mysql.version>
     <mockserver.version>5.14.0</mockserver.version>
@@ -52,6 +52,7 @@
     <hapi.version>6.4.2</hapi.version>
     <spring-security-core.version>6.0.2</spring-security-core.version>
     <spring-core.version>6.0.6</spring-core.version>
+    <querydsl.version>5.0.0</querydsl.version>
   </properties>
 
   <dependencyManagement>
@@ -98,6 +99,10 @@
       <artifactId>flyway-core</artifactId>
     </dependency>
     <dependency>
+    <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-mysql</artifactId>
+    </dependency>
+    <dependency>
       <groupId>software.aws.rds</groupId>
       <artifactId>aws-mysql-jdbc</artifactId>
       <version>${aws-mysql-jdbc.version}</version>
@@ -106,6 +111,7 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-data</artifactId>
+      <version>${spring-security-core.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -124,12 +130,16 @@
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-apt</artifactId>
+      <classifier>jakarta</classifier>
+      <version>${querydsl.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>com.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
+      <classifier>jakarta</classifier>
+      <version>${querydsl.version}</version>
     </dependency>
 
     <dependency>
@@ -182,7 +192,7 @@
 
     <dependency>
       <groupId>io.sentry</groupId>
-      <artifactId>sentry-spring-boot-starter</artifactId>
+      <artifactId>sentry-spring-boot-starter-jakarta</artifactId>
       <version>${sentry.version}</version>
     </dependency>
     <dependency>
@@ -365,18 +375,19 @@
               <goal>process</goal>
             </goals>
             <configuration>
-              <outputDirectory>target/generated-sources/java</outputDirectory>
+              <!-- <outputDirectory>target/generated-sources/java</outputDirectory> -->
               <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor,lombok.launch.AnnotationProcessorHider$AnnotationProcessor</processor>
             </configuration>
           </execution>
         </executions>
-        <dependencies>
+        <!-- <dependencies>
           <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
             <version>${querydsl.version}</version>
+            <classifier>jakarta</classifier>
           </dependency>
-        </dependencies>
+        </dependencies> -->
       </plugin>
 
       <!-- Code coverage -->

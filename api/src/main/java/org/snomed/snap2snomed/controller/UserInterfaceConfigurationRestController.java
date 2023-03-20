@@ -17,7 +17,7 @@
 package org.snomed.snap2snomed.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.snomed.snap2snomed.Snap2snomedVersion;
 import org.snomed.snap2snomed.config.SecurityConfiguration;
 import org.snomed.snap2snomed.config.Snap2snomedConfiguration;
