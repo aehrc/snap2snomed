@@ -107,7 +107,7 @@ public class TaskResourceIT extends IntegrationTestBase {
   }
 
   @BeforeEach
-  private void beforeEachTest() throws JsonProcessingException {
+  void beforeEachTest() throws JsonProcessingException {
     restClient.deleteAllTasks();
 
     restClient.updateProjectRoles(DEFAULT_TEST_USER_SUBJECT, projectId,

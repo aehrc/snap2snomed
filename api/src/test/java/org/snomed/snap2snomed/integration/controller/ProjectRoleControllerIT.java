@@ -69,7 +69,7 @@ public class ProjectRoleControllerIT extends IntegrationTestBase {
   }
 
   @BeforeEach
-  private void beforeEachTest() throws JsonProcessingException {
+  void beforeEachTest() throws JsonProcessingException {
     restClient.updateProjectRoles(DEFAULT_TEST_ADMIN_USER_SUBJECT, projectId, Set.of(DEFAULT_TEST_USER_SUBJECT, USER_1), Set.of(), Set.of());
   }
 
