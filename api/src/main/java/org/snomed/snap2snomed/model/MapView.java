@@ -36,8 +36,9 @@
  @NoArgsConstructor
  public class MapView {
  
-  public MapView(MapRow row, MapRowTarget target, Instant latestNote, String loggedInUser) {
-     this.rowId = row.getId();
+  //public MapView(MapRow row, MapRowTarget target, Instant latestNote, String loggedInUser) {
+  public MapView(MapRow row, MapRowTarget target, String loggedInUser) {
+    this.rowId = row.getId();
      this.sourceIndex = row.getSourceCode().getIndex();
      this.sourceCode = row.getSourceCode().getCode();
      this.sourceDisplay = row.getSourceCode().getDisplay();
