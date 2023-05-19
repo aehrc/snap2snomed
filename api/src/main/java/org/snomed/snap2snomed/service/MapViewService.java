@@ -16,6 +16,7 @@
 
 package org.snomed.snap2snomed.service;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +25,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.snomed.snap2snomed.model.*;
 
 import javax.persistence.EntityManager;
 
@@ -63,6 +65,10 @@ import org.springframework.util.CollectionUtils;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
+import com.blazebit.persistence.CriteriaBuilderFactory;
+import com.blazebit.persistence.querydsl.BlazeJPAQuery;
+import com.blazebit.persistence.querydsl.JPQLNextExpressions;
+import com.blazebit.persistence.querydsl.SetExpression;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Expression;
@@ -247,7 +253,11 @@ public class MapViewService {
   @Autowired 
   AuthenticationFacade authenticationFacade;
 
+  @Autowired
+  CriteriaBuilderFactory cbf;
+
   private final QMapRow mapRow = QMapRow.mapRow;
+  private final QMapRow siblingMapRow = new QMapRow("siblingMapRow");
   private final QMapRowTarget mapTarget = QMapRowTarget.mapRowTarget;
   private final QNote note = QNote.note;
 
@@ -321,20 +331,52 @@ public class MapViewService {
       PagedResourcesAssembler<MapView> assembler, MapViewFilter filter) {
     final List<AdditionalCodeColumn> additionalColumns = mapRepository.findSourceByMapId(mapId).get().getAdditionalColumnsMetadata();
 
-    JPAQuery<MapView> query = getQueryForMap(mapId, task, filter);
-    query = transformSortable(query, pageable.getSort(), additionalColumns);
-    query = transformPageable(query, pageable);
+    
+    final Map map = mapRepository.findById(mapId).orElseThrow(() -> Problem.valueOf(Status.NOT_FOUND, "No Map found with id " + mapId));
+    Boolean dualMapMode = map.getProject().getDualMapMode();
 
-    final QueryResults<MapView> results = query.fetchResults();
 
-    final JPAQuery<MappedRowDetailsDto> mappingRowDetailsQuery = getQueryMappedRowDetailsForMap(mapId, task, filter,
-            pageable);
-    final List<MappedRowDetailsDto> sourceIndexResults = mappingRowDetailsQuery.fetch();
+    if (dualMapMode) {
+      //TODO reinstate task query for single and dual
+      // if (task != null) {
+      //   query = getDualMapQueryForMapTask(mapId, task, filter);
+      // }
+      // else {
+        //SetExpression<MapView> querySE = getDualMapQueryForMap(mapId, task, filter);
+        // query = transformSortable(query, pageable.getSort(), additionalColumns);
+        // query = transformPageable(query, pageable);
+        //List<MapView> fetchList = querySE.fetch();
+        final List<MapView> results = getDualMapQueryForMap(mapId, task, filter).fetch();
+        System.err.println("results.size()" + results.size());
+        System.err.println("results.get(0).getClass" +  results.get(0).getClass());
+        System.err.println("results.get(0)" +  results.get(0));
 
-    final Page<MapView> page = new PageImpl<>(results.getResults(), pageable, results.getTotal());
-    final PagedModel<EntityModel<MapView>> pagedModel = assembler.toModel(page);
-    final Snap2SnomedPagedModel<EntityModel<MapView>> _results = new Snap2SnomedPagedModel<>(pagedModel, sourceIndexResults, additionalColumns);
-    return _results;
+        final JPAQuery<MappedRowDetailsDto> mappingRowDetailsQuery = getQueryMappedRowDetailsForMap(mapId, task, filter, pageable);
+        final List<MappedRowDetailsDto> sourceIndexResults = mappingRowDetailsQuery.fetch();
+
+        final Page<MapView> page = new PageImpl<>(results, pageable, results.size());
+        final PagedModel<EntityModel<MapView>> pagedModel = assembler.toModel(page);
+        final Snap2SnomedPagedModel<EntityModel<MapView>> _results = new Snap2SnomedPagedModel<>(pagedModel, sourceIndexResults, additionalColumns);
+        return _results;
+      // }
+
+    }
+    else {
+      BlazeJPAQuery<MapView> query;
+      query = getQueryForMap(mapId, task, filter);
+      //TODO 
+      // query = transformSortable(query, pageable.getSort(), additionalColumns);
+      // query = transformPageable(query, pageable);
+      final QueryResults<MapView> results = query.fetchResults();
+
+      final JPAQuery<MappedRowDetailsDto> mappingRowDetailsQuery = getQueryMappedRowDetailsForMap(mapId, task, filter, pageable);
+      final List<MappedRowDetailsDto> sourceIndexResults = mappingRowDetailsQuery.fetch();
+
+      final Page<MapView> page = new PageImpl<>(results.getResults(), pageable, results.getTotal());
+      final PagedModel<EntityModel<MapView>> pagedModel = assembler.toModel(page);
+      final Snap2SnomedPagedModel<EntityModel<MapView>> _results = new Snap2SnomedPagedModel<>(pagedModel, sourceIndexResults, additionalColumns);
+      return _results;
+    }
   }
 
   protected JPAQuery<MapView> transformPageable(JPAQuery<MapView> query, Pageable pageable) {
@@ -450,8 +492,62 @@ public class MapViewService {
     return stream.map(RepresentationModel::of).collect(Collectors.toList());
   }
 
-  protected JPAQuery<MapView> getQueryForMap(Long mapId, Task task, MapViewFilter filter) {
+  protected BlazeJPAQuery<MapView> getQueryForMap(Long mapId, Task task, MapViewFilter filter) {
     
+    String principalSubject = authenticationFacade.getPrincipalSubject();
+    Expression<String> loggedInUser = ConstantImpl.create(principalSubject);
+
+    return new BlazeJPAQuery<MapView>(entityManager, cbf)
+        .select(Projections.constructor(MapView.class, mapRow, mapTarget,
+        new BlazeJPAQuery<Instant>().createSubQuery()
+            .select(note.modified.max())
+            .from(note)
+            .where(note.mapRow.eq(mapRow))
+            .where(note.deleted.isFalse()),
+        loggedInUser))
+        .from(mapRow)
+        .leftJoin(mapTarget).on(mapTarget.row.eq(mapRow))
+        .leftJoin(mapRow.authorTask)
+        .leftJoin(mapRow.reviewTask)
+        .leftJoin(mapRow.lastAuthor)
+        .leftJoin(mapRow.lastReviewer)
+        .where(getWhereClause(mapId, task, filter))
+        .where(mapRow.blindMapFlag.eq(false));
+  }
+
+  private SetExpression<MapView> getDualMapQueryForMap(Long mapId, Task task, MapViewFilter filter) {
+
+    String principalSubject = authenticationFacade.getPrincipalSubject();
+    Expression<String> loggedInUser = ConstantImpl.create(principalSubject);
+
+    SetExpression<MapView> union = new BlazeJPAQuery<MapView>(entityManager, cbf)
+    .union(
+      JPQLNextExpressions.select(Projections.constructor(MapView.class, mapRow, mapTarget, loggedInUser))
+        .from(mapRow)
+        .leftJoin(mapTarget).on(mapTarget.row.eq(mapRow))
+        .leftJoin(mapRow.authorTask)
+        .leftJoin(mapRow.reviewTask)
+        .leftJoin(mapRow.lastAuthor)
+        .leftJoin(mapRow.lastReviewer)
+        .where(getWhereClause(mapId, task, filter))
+        .where(mapRow.blindMapFlag.eq(false)),
+      JPQLNextExpressions.select(Projections.constructor(MapView.class, mapRow, mapTarget, loggedInUser))
+        .from(mapRow)
+        .leftJoin(mapTarget).on(mapTarget.row.eq(mapRow))
+        .leftJoin(mapRow.authorTask)
+        .leftJoin(mapRow.reviewTask)
+        .leftJoin(mapRow.lastAuthor)
+        .leftJoin(mapRow.lastReviewer)
+        .where(getWhereClause(mapId, task, filter))
+        .where(mapRow.blindMapFlag.eq(true))
+    );
+
+    return union;
+        
+  }
+
+  private JPAQuery<MapView> getDualMapQueryForMapTask(Long mapId, Task task, MapViewFilter filter) {
+
     String principalSubject = authenticationFacade.getPrincipalSubject();
     Expression<String> loggedInUser = ConstantImpl.create(principalSubject);
 
@@ -465,7 +561,8 @@ public class MapViewService {
         .leftJoin(mapRow.reviewTask)
         .leftJoin(mapRow.lastAuthor)
         .leftJoin(mapRow.lastReviewer)
-        .where(getWhereClause(mapId, task, filter));
+        .where(getWhereClause(mapId, task, filter)
+        .and(mapRow.blindMapFlag.eq(true)));
   }
 
   protected JPAQuery<MappedRowDetailsDto> getQueryMappedRowDetailsForMap(Long mapId, Task task, MapViewFilter filter,
@@ -495,21 +592,6 @@ public class MapViewService {
       } else {
         whereClause = whereClause.and(mapRow.reviewTask.eq(task));
       }
-    }
-
-    final Map map = mapRepository.findById(mapId).orElseThrow(() -> Problem.valueOf(Status.NOT_FOUND, "No Map found with id " + mapId));
-    Boolean dualMapMode = map.getProject().getDualMapMode();
-
-    if (dualMapMode) {
-      if (task != null) {
-        // task view 
-        //TODO?
-      }
-      else {
-        // map view
-        whereClause = whereClause.and(mapRow.masterMapRow.isNull());
-      }
-
     }
 
     if (filter != null) {
