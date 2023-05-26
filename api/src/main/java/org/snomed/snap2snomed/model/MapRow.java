@@ -38,9 +38,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
-import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -88,7 +86,7 @@ public class MapRow implements Snap2SnomedEntity, Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  protected Long id;
 
   @NotNull
   @ManyToOne
