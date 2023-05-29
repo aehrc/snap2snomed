@@ -744,6 +744,7 @@ public class Snap2snomedRestClient {
     if (guests != null) {
       map.put("guests", guests.stream().map(o -> "/users/" + o).collect(Collectors.toList()));
     }
+    map.put("dualMapMode", false);
     return objectMapper.writeValueAsString(map);
   }
 
