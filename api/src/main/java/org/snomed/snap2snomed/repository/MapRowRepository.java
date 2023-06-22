@@ -104,13 +104,36 @@ public interface MapRowRepository
 //       + "                    and mr2.authorTask is null "
 //       + "                    and mr2.id < mr.id)"
 //       + " )", nativeQuery = true)
-@Query(value = "update map_row mr set mr.author_task_id = :taskId"
-+ " where mr.map_id = :mapId "
-+ " and not exists (select mr2.id from (select * from map_row) mr2 "
-+ "                 where mr2.map_id = mr.map_id)", nativeQuery = true)
+  @Query(value = "update map_row mr set mr.author_task_id = :taskId, mr.modified_by = :userId, mr.modified = :date " 
+  + " where mr.map_id = :mapId "
+  + " and mr.source_code_id in "
+  + "  (select code.id from imported_code code "
+  + "   where code.imported_codeset_id = :#{#task.map.source.id} "
+  + "   and code._index between :lowerEndpoint and :upperEndpoint) "
+  + " and mr.author_task_id is null "
+  + " and not exists (select mr2.id from map_row mr2 "
+  + "                 where mr2.map_id = mr.map_id "
+  + "                   and mr2.source_code_id = mr.source_code_id "
+  + "                   and mr2.author_task_id is null "
+  + "                   and mr2.id < mr.id)", nativeQuery = true)
+// + " and not exists (select mr2.id from (select * from map_row) mr2 "
+// + "                 where mr2.map_id = mr.map_id)", nativeQuery = true)
+
+// @Query("update MapRow mr set mr.authorTask = :task, mr.modifiedBy = :user, mr.modified = :date"
+// + " where mr.map.id = :#{#task.map.id} "
+// + " and mr.sourceCode.id in "
+// + "  (select code.id from ImportedCode code "
+// + "   where code.importedCodeSet.id = :#{#task.map.source.id} "
+// + "   and code.index between :lowerEndpoint and :upperEndpoint) "
+// + " and mr.authorTask is null ")
+// //   + " and not exists (select mr2.id from MapRow mr2 "
+// //   + "                 where mr2.map.id = mr.map.id "
+// //   + "                   and mr2.sourceCode.id = mr.sourceCode.id "
+// //   + "                   and mr2.authorTask is null "
+// //   + "                   and mr2.id < mr.id)")
   @Modifying
   @RestResource(exported = false)
-  void setAuthorTaskBySourceCodeRangeDualMap(long taskId, long mapId);
+  void setAuthorTaskBySourceCodeRangeDualMap(Long taskId, Long mapId, Long userId, Instant date, Long lowerEndpoint, Long upperEndpoint);
 
 //   @Query("update MapRow umr set umr.authorTask = :task, umr.modifiedBy = :user, umr.modified = :date"
 //       + " where umr.id in "
