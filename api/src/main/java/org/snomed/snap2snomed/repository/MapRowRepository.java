@@ -134,7 +134,7 @@ public interface MapRowRepository
 + "                 where mr2.map_id = mr.map_id)", nativeQuery = true)
   @Modifying
   @RestResource(exported = false)
-  void setAuthorTaskBySourceCodeDualMap(Task task);
+  void setAuthorTaskBySourceCodeDualMap(long taskId, long mapId);
 
   @Query("update MapRow mr set mr.authorTask = :task, mr.modifiedBy = :user, mr.modified = :date"
   + " where mr.map.id = :#{#task.map.id} "
