@@ -88,45 +88,53 @@ public interface MapRowRepository
 
   /* Note that the subselect in these update queries looks strange, but any form of join in an
    * update statement is not permitted outside a subselect in a where clause in JPQL */
-  @Query("update MapRow umr set umr.authorTask = :task, umr.modifiedBy = :user, umr.modified = :date"
-      + " where umr.id in "
-      + " (select mr.id "
-      + "  from MapRow mr"
-      + "  where mr.map.id = :#{#task.map.id} "
-      + "    and mr.sourceCode.id in "
-      + "        (select code.id from ImportedCode code "
-      + "         where code.importedCodeSet.id = :#{#task.map.source.id} "
-      + "           and code.index between :lowerEndpoint and :upperEndpoint) "
-      + "    and mr.authorTask is null "
-      + "    and not exists (select 1 from MapRow mr2 "
-      + "                  where mr2.map.id = mr.map.id "
-      + "                    and mr2.sourceCode.id = mr.sourceCode.id "
-      + "                    and mr2.authorTask is null "
-      + "                    and mr2.id < mr.id)"
-      + " )")
+//   @Query(value = "update MapRow umr set umr.authorTask = :task, umr.modifiedBy = :user, umr.modified = :date"
+//       + " where umr.id in "
+//       + " (select mr.id "
+//       + "  from MapRow mr"
+//       + "  where mr.map.id = :#{#task.map.id} "
+//       + "    and mr.sourceCode.id in "
+//       + "        (select code.id from ImportedCode code "
+//       + "         where code.importedCodeSet.id = :#{#task.map.source.id} "
+//       + "           and code.index between :lowerEndpoint and :upperEndpoint) "
+//       + "    and mr.authorTask is null "
+//       + "    and not exists (select 1 from MapRow mr2 "
+//       + "                  where mr2.map.id = mr.map.id "
+//       + "                    and mr2.sourceCode.id = mr.sourceCode.id "
+//       + "                    and mr2.authorTask is null "
+//       + "                    and mr2.id < mr.id)"
+//       + " )", nativeQuery = true)
+@Query(value = "update map_row mr set mr.author_task_id = :taskId"
++ " where mr.map_id = :mapId "
++ " and not exists (select mr2.id from (select * from Map_Row) mr2 "
++ "                 where mr2.map_id = mr.map_id)", nativeQuery = true)
   @Modifying
   @RestResource(exported = false)
-  void setAuthorTaskBySourceCodeRangeDualMap(Task task, Long lowerEndpoint, Long upperEndpoint, Instant date, String user);
+  void setAuthorTaskBySourceCodeRangeDualMap(long taskId, long mapId);
 
-  @Query("update MapRow umr set umr.authorTask = :task, umr.modifiedBy = :user, umr.modified = :date"
-      + " where umr.id in "
-      + " (select mr.id "
-      + "  from MapRow mr"
-      + "  where mr.map.id = :#{#task.map.id} "
-      + "    and mr.sourceCode.id in "
-      + "        (select code.id from ImportedCode code "
-      + "         where code.importedCodeSet.id = :#{#task.map.source.id} "
-      + "           and code.index in :singleIndexes) "
-      + "    and mr.authorTask is null "
-      + "    and not exists (select 1 from MapRow mr2 "
-      + "                  where mr2.map.id = mr.map.id "
-      + "                    and mr2.sourceCode.id = mr.sourceCode.id "
-      + "                    and mr2.authorTask is null "
-      + "                    and mr2.id < mr.id)"
-      + " )")
+//   @Query("update MapRow umr set umr.authorTask = :task, umr.modifiedBy = :user, umr.modified = :date"
+//       + " where umr.id in "
+//       + " (select mr.id "
+//       + "  from MapRow mr"
+//       + "  where mr.map.id = :#{#task.map.id} "
+//       + "    and mr.sourceCode.id in "
+//       + "        (select code.id from ImportedCode code "
+//       + "         where code.importedCodeSet.id = :#{#task.map.source.id} "
+//       + "           and code.index in :singleIndexes) "
+//       + "    and mr.authorTask is null "
+//       + "    and not exists (select 1 from MapRow mr2 "
+//       + "                  where mr2.map.id = mr.map.id "
+//       + "                    and mr2.sourceCode.id = mr.sourceCode.id "
+//       + "                    and mr2.authorTask is null "
+//       + "                    and mr2.id < mr.id)"
+//       + " )")
+@Query(value = "update map_row mr set mr.author_task_id = :taskId"
++ " where mr.map_id = :mapId "
++ " and not exists (select mr2.id from (select * from Map_Row) mr2 "
++ "                 where mr2.map_id = mr.map_id)", nativeQuery = true)
   @Modifying
   @RestResource(exported = false)
-  void setAuthorTaskBySourceCodeDualMap(Task task, Set<Long> singleIndexes, Instant date, String user);
+  void setAuthorTaskBySourceCodeDualMap(Task task);
 
   @Query("update MapRow mr set mr.authorTask = :task, mr.modifiedBy = :user, mr.modified = :date"
   + " where mr.map.id = :#{#task.map.id} "
