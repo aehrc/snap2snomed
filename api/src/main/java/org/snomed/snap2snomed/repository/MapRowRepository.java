@@ -106,7 +106,7 @@ public interface MapRowRepository
 //       + " )", nativeQuery = true)
 @Query(value = "update map_row mr set mr.author_task_id = :taskId"
 + " where mr.map_id = :mapId "
-+ " and not exists (select mr2.id from (select * from Map_Row) mr2 "
++ " and not exists (select mr2.id from (select * from map_row) mr2 "
 + "                 where mr2.map_id = mr.map_id)", nativeQuery = true)
   @Modifying
   @RestResource(exported = false)
@@ -130,7 +130,7 @@ public interface MapRowRepository
 //       + " )")
 @Query(value = "update map_row mr set mr.author_task_id = :taskId"
 + " where mr.map_id = :mapId "
-+ " and not exists (select mr2.id from (select * from Map_Row) mr2 "
++ " and not exists (select mr2.id from (select * from map_row) mr2 "
 + "                 where mr2.map_id = mr.map_id)", nativeQuery = true)
   @Modifying
   @RestResource(exported = false)
