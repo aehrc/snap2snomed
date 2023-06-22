@@ -108,7 +108,7 @@ public interface MapRowRepository
   + " where mr.map_id = :mapId "
   + " and mr.source_code_id in "
   + "  (select code.id from imported_code code "
-  + "   where code.imported_codeset_id = :#{#task.map.source.id} "
+  + "   where code.imported_codeset_id = :sourceId "
   + "   and code._index between :lowerEndpoint and :upperEndpoint) "
   + " and mr.author_task_id is null "
   + " and not exists (select mr2.id from map_row mr2 "
@@ -133,7 +133,7 @@ public interface MapRowRepository
 // //   + "                   and mr2.id < mr.id)")
   @Modifying
   @RestResource(exported = false)
-  void setAuthorTaskBySourceCodeRangeDualMap(Long taskId, Long mapId, Long userId, Instant date, Long lowerEndpoint, Long upperEndpoint);
+  void setAuthorTaskBySourceCodeRangeDualMap(Long taskId, Long mapId, String userId, Instant date, Long lowerEndpoint, Long upperEndpoint, Long sourceId);
 
 //   @Query("update MapRow umr set umr.authorTask = :task, umr.modifiedBy = :user, umr.modified = :date"
 //       + " where umr.id in "
