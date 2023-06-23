@@ -374,7 +374,8 @@ public class TaskEventHandler {
         // dual mapping mode
         addRange = (lower, upper) -> mapRowRepository.setAuthorTaskBySourceCodeRangeDualMap(task.getId(), task.getMap().getId(), user, modified, lower, upper, 
           task.getMap().getSource().getId());
-        addCollection = (ids) -> mapRowRepository.setAuthorTaskBySourceCodeDualMap(task.getId(), task.getMap().getId());
+        addCollection = (ids) -> mapRowRepository.setAuthorTaskBySourceCodeDualMap(task.getId(), task.getMap().getId(), user, modified, ids, 
+          task.getMap().getSource().getId());
       }
       else {
         // single mapping mode

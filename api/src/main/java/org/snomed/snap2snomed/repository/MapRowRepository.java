@@ -111,7 +111,7 @@ public interface MapRowRepository
   + "   where code.imported_codeset_id = :sourceId "
   + "   and code._index between :lowerEndpoint and :upperEndpoint) "
   + " and mr.author_task_id is null "
-  + " and not exists (select mr2.id from map_row mr2 "
+  + " and not exists (select mr2.id from (select * from map_row) mr2 "
   + "                 where mr2.map_id = mr.map_id "
   + "                   and mr2.source_code_id = mr.source_code_id "
   + "                   and mr2.author_task_id is null "
@@ -151,13 +151,21 @@ public interface MapRowRepository
 //       + "                    and mr2.authorTask is null "
 //       + "                    and mr2.id < mr.id)"
 //       + " )")
-@Query(value = "update map_row mr set mr.author_task_id = :taskId"
-+ " where mr.map_id = :mapId "
-+ " and not exists (select mr2.id from (select * from map_row) mr2 "
-+ "                 where mr2.map_id = mr.map_id)", nativeQuery = true)
+  @Query(value = "update map_row mr set mr.author_task_id = :taskId, mr.modified_by = :userId, mr.modified = :date " 
+  + " where mr.map_id = :mapId "
+  + " and mr.source_code_id in "
+  + "  (select code.id from imported_code code "
+  + "   where code.imported_codeset_id = :sourceId "
+  + "   and code._index in :singleIndexes) "
+  + " and mr.author_task_id is null "
+  + " and not exists (select mr2.id from (select * from map_row) mr2 "
+  + "                 where mr2.map_id = mr.map_id "
+  + "                   and mr2.source_code_id = mr.source_code_id "
+  + "                   and mr2.author_task_id is null "
+  + "                   and mr2.id < mr.id)", nativeQuery = true)
   @Modifying
   @RestResource(exported = false)
-  void setAuthorTaskBySourceCodeDualMap(long taskId, long mapId);
+  void setAuthorTaskBySourceCodeDualMap(Long taskId, Long mapId, String userId, Instant date, Set<Long> singleIndexes, Long sourceId);
 
   @Query("update MapRow mr set mr.authorTask = :task, mr.modifiedBy = :user, mr.modified = :date"
   + " where mr.map.id = :#{#task.map.id} "
