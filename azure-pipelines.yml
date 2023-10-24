@@ -60,18 +60,29 @@ stages:
               summaryFileLocation: '**/target/site/jacoco/jacoco.xml'
               reportDirectory: '**/target/site/jacoco'
               additionalCodeCoverageFiles: '**/target/jacoco.exec'
-          - script: |
-              sudo apt-get install rpm
-              wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
-              sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
-              trivy -v
-            displayName: 'Download and install Trivy'
-          - task: CmdLine@2
-            displayName: "Run trivy scan on snap2snomed"
+          - task: trivy@1
+            displayName: "Run trivy scan on snap2snomed (low/medium)"
             inputs:
-              script: |
-                trivy image --exit-code 0 --severity LOW,MEDIUM --security-checks vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
-                trivy image --exit-code 1 --severity HIGH,CRITICAL --security-checks vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
+              image: '$(dockerRegistry)/$(registryPath):$(Build.BuildNumber)'
+              severities: LOW,MEDIUM
+              exitCode: 0
+          - task: trivy@1
+            displayName: "Run trivy scan on snap2snomed (high/critical)"
+            inputs:
+              image: '$(dockerRegistry)/$(registryPath):$(Build.BuildNumber)'
+              severities: CRITICAL,HIGH
+          # - script: |
+          #     sudo apt-get install rpm
+          #     wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
+          #     sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
+          #     trivy -v
+          #   displayName: 'Download and install Trivy'
+          # - task: CmdLine@2
+          #   displayName: "Run trivy scan on snap2snomed"
+          #   inputs:
+          #     script: |
+          #       trivy image --exit-code 0 --severity LOW,MEDIUM --security-checks vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
+          #       trivy image --exit-code 1 --severity HIGH,CRITICAL --security-checks vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
           - script: |
               export VERSION=`git rev-parse --short=7 HEAD` && \
               yarn exec sentry-cli releases new $VERSION && \
