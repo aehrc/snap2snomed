@@ -13,7 +13,7 @@ pool:
 variables:
   mavenCache: $(Pipeline.Workspace)/.m2/repository
   mavenOptions: '-Dmaven.repo.local=$(mavenCache)'
-  trivyVersion: 0.27.1
+  trivyVersion: 'v0.46.0'
 
 stages:
   - stage: build
@@ -60,18 +60,48 @@ stages:
               summaryFileLocation: '**/target/site/jacoco/jacoco.xml'
               reportDirectory: '**/target/site/jacoco'
               additionalCodeCoverageFiles: '**/target/jacoco.exec'
-          - script: |
-              sudo apt-get install rpm
-              wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
-              sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
-              trivy -v
-            displayName: 'Download and install Trivy'
-          - task: CmdLine@2
-            displayName: "Run trivy scan on snap2snomed"
+          - task: trivy@1
+            displayName: "Trivy snap2snomed image (low/medium)"
             inputs:
-              script: |
-                trivy image --exit-code 0 --severity LOW,MEDIUM --security-checks vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
-                trivy image --exit-code 1 --severity HIGH,CRITICAL --security-checks vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
+              image: '$(dockerRegistry)/$(registryPath):$(Build.BuildNumber)'
+              severities: LOW,MEDIUM
+              exitCode: 0
+              docker: false
+              version: $(trivyVersion)
+          - task: trivy@1
+            displayName: "Trivy snap2snomed path (low/medium)"
+            inputs:
+              path: .
+              severities: LOW,MEDIUM
+              exitCode: 0
+              docker: false
+              version: $(trivyVersion)
+          - task: trivy@1
+            displayName: "Trivy snap2snomed image (high/critical)"
+            inputs:
+              image: '$(dockerRegistry)/$(registryPath):$(Build.BuildNumber)'
+              severities: CRITICAL,HIGH
+              docker: false
+              version: $(trivyVersion)
+          - task: trivy@1
+            displayName: "Trivy snap2snomed path (high/critical)"
+            inputs:
+              path: .
+              severities: CRITICAL,HIGH
+              docker: false
+              version: $(trivyVersion)
+          # - script: |
+          #     sudo apt-get install rpm
+          #     wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
+          #     sudo dpkg -i trivy_$(trivyVersion)_Linux-64bit.deb
+          #     trivy -v
+          #   displayName: 'Download and install Trivy'
+          # - task: CmdLine@2
+          #   displayName: "Run trivy scan on snap2snomed"
+          #   inputs:
+          #     script: |
+          #       trivy image --exit-code 0 --severity LOW,MEDIUM --security-checks vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
+          #       trivy image --exit-code 1 --severity HIGH,CRITICAL --security-checks vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
           - script: |
               export VERSION=`git rev-parse --short=7 HEAD` && \
               yarn exec sentry-cli releases new $VERSION && \
@@ -83,6 +113,14 @@ stages:
               SENTRY_ORG: $(sentryOrg)
               SENTRY_PROJECT: $(sentryProject)
               SENTRY_AUTH_TOKEN: $(sentryAuthToken)
+          - script: |
+              if [[ "$(Build.SourceBranch)" == "refs/heads/main" ]]; then
+                echo "##vso[task.setvariable variable=DOCKER_TAG]$(Build.BuildNumber)"
+              else
+                echo "##vso[task.setvariable variable=DOCKER_TAG]$(Build.SourceBranchName)"
+              fi
+            displayName: Determine Docker Tag
+            condition: succeeded()
           - task: Docker@2
             condition: succeeded()
             displayName: Push image
@@ -90,23 +128,15 @@ stages:
               containerRegistry: $(serviceConnection)
               repository: $(registryPath)
               command: push
-              tags: |
-                $(Build.SourceBranchName)
-          - task: Docker@2
-            condition: contains(variables['build.sourceBranch'], 'refs/heads/main')
-            displayName: Push image
-            inputs:
-              containerRegistry: $(serviceConnection)
-              repository: $(registryPath)
-              command: push
-              tags: |
-                $(Build.BuildNumber)
+              tags: $(DOCKER_TAG)
           - task: PublishPipelineArtifact@1
+            displayName: Publish UI artifacts
             inputs:
               targetPath: '$(System.DefaultWorkingDirectory)/ui/target/site'
               artifact: 'snap2snomed-ui'
               publishLocation: 'pipeline'
           - task: PublishPipelineArtifact@1
+            displayName: Publish terraform artifacts
             inputs:
               targetPath: '$(System.DefaultWorkingDirectory)/terraform'
               artifact: 'snap2snomed-terraform'
