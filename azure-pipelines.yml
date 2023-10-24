@@ -13,7 +13,7 @@ pool:
 variables:
   mavenCache: $(Pipeline.Workspace)/.m2/repository
   mavenOptions: '-Dmaven.repo.local=$(mavenCache)'
-  trivyVersion: 0.46.0
+  trivyVersion: 'v0.46.0'
 
 stages:
   - stage: build
@@ -67,7 +67,7 @@ stages:
               severities: LOW,MEDIUM
               exitCode: 0
               docker: false
-              version: 0.46.0
+              version: $(trivyVersion)
           - task: trivy@1
             displayName: "Run trivy scan on snap2snomed (high/critical)"
             inputs:
