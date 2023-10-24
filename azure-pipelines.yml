@@ -61,7 +61,7 @@ stages:
               reportDirectory: '**/target/site/jacoco'
               additionalCodeCoverageFiles: '**/target/jacoco.exec'
           - task: trivy@1
-            displayName: "Run trivy scan on snap2snomed (low/medium)"
+            displayName: "Trivy snap2snomed image (low/medium)"
             inputs:
               image: '$(dockerRegistry)/$(registryPath):$(Build.BuildNumber)'
               severities: LOW,MEDIUM
@@ -69,11 +69,27 @@ stages:
               docker: false
               version: $(trivyVersion)
           - task: trivy@1
-            displayName: "Run trivy scan on snap2snomed (high/critical)"
+            displayName: "Trivy snap2snomed path (low/medium)"
+            inputs:
+              path: .
+              severities: LOW,MEDIUM
+              exitCode: 0
+              docker: false
+              version: $(trivyVersion)
+          - task: trivy@1
+            displayName: "Trivy snap2snomed image (high/critical)"
             inputs:
               image: '$(dockerRegistry)/$(registryPath):$(Build.BuildNumber)'
               severities: CRITICAL,HIGH
               docker: false
+              version: $(trivyVersion)
+          - task: trivy@1
+            displayName: "Trivy snap2snomed path (high/critical)"
+            inputs:
+              path: .
+              severities: CRITICAL,HIGH
+              docker: false
+              version: $(trivyVersion)
           # - script: |
           #     sudo apt-get install rpm
           #     wget https://github.com/aquasecurity/trivy/releases/download/v$(trivyVersion)/trivy_$(trivyVersion)_Linux-64bit.deb
