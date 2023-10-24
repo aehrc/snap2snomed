@@ -13,7 +13,7 @@ pool:
 variables:
   mavenCache: $(Pipeline.Workspace)/.m2/repository
   mavenOptions: '-Dmaven.repo.local=$(mavenCache)'
-  trivyVersion: 0.27.1
+  trivyVersion: 0.46.0
 
 stages:
   - stage: build
@@ -83,6 +83,14 @@ stages:
               SENTRY_ORG: $(sentryOrg)
               SENTRY_PROJECT: $(sentryProject)
               SENTRY_AUTH_TOKEN: $(sentryAuthToken)
+          - script: |
+              if [[ "$(Build.SourceBranch)" == "refs/heads/main" ]]; then
+                echo "##vso[task.setvariable variable=DOCKER_TAG]$(Build.BuildNumber)"
+              else
+                echo "##vso[task.setvariable variable=DOCKER_TAG]$(Build.SourceBranchName)"
+              fi
+            displayName: Determine Docker Tag
+            condition: succeeded()
           - task: Docker@2
             condition: succeeded()
             displayName: Push image
@@ -90,17 +98,7 @@ stages:
               containerRegistry: $(serviceConnection)
               repository: $(registryPath)
               command: push
-              tags: |
-                $(Build.SourceBranchName)
-          - task: Docker@2
-            condition: contains(variables['build.sourceBranch'], 'refs/heads/main')
-            displayName: Push image
-            inputs:
-              containerRegistry: $(serviceConnection)
-              repository: $(registryPath)
-              command: push
-              tags: |
-                $(Build.BuildNumber)
+              tags: $(DOCKER_TAG)
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: '$(System.DefaultWorkingDirectory)/ui/target/site'

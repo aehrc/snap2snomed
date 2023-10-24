@@ -15,16 +15,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Updated Trivy version to prevent database hanging.
 - Updated library versions to mitigate CVEs:
- -
+  -
 
-#### Changed
+### Changed
 
+- Streamlined the Docker image tag pushing process.
 - SNOMED-457: streamline login process (DEX)
 - SNOMED-499: expand export to include additional source columns
-- SNOMED-500: export notes, author and reviewer
+- SNOMED-500: export notes, author, and reviewer
 
-#### Fixed
+### Fixed
 
 - SNOMED-496: Hiding index column causes filters to be misaligned
 - SNOMED-475: Import error never goes away
