@@ -100,11 +100,13 @@ stages:
               command: push
               tags: $(DOCKER_TAG)
           - task: PublishPipelineArtifact@1
+            displayName: Publish UI artifacts
             inputs:
               targetPath: '$(System.DefaultWorkingDirectory)/ui/target/site'
               artifact: 'snap2snomed-ui'
               publishLocation: 'pipeline'
           - task: PublishPipelineArtifact@1
+            displayName: Publish terraform artifacts
             inputs:
               targetPath: '$(System.DefaultWorkingDirectory)/terraform'
               artifact: 'snap2snomed-terraform'
