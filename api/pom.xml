@@ -52,6 +52,7 @@
     <hapi.version>6.6.2</hapi.version>
     <spring-security-core.version>6.0.5</spring-security-core.version>
     <spring-core.version>5.3.29</spring-core.version>
+    <flyway-mysql.version>10.0.0</flyway-mysql.version>
   </properties>
 
   <dependencyManagement>
@@ -60,10 +61,6 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-text</artifactId>
         <version>1.10.0</version> <!-- force version for CVE-2022-42889 ; remove when mockserver-netty updates -->
-      </dependency>
-      <dependency>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-mysql</artifactId>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -100,6 +97,11 @@
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-core</artifactId>
+    </dependency>      
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-mysql</artifactId>
+      <version>${flyway-mysql.version}</version>
     </dependency>
     <dependency>
       <groupId>software.aws.rds</groupId>
