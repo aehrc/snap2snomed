@@ -98,6 +98,10 @@
       <artifactId>flyway-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-mysql</artifactId>
+    </dependency>
+    <dependency>
       <groupId>software.aws.rds</groupId>
       <artifactId>aws-mysql-jdbc</artifactId>
       <version>${aws-mysql-jdbc.version}</version>
