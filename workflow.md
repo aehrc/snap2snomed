@@ -4,20 +4,24 @@
 
 ```mermaid
 stateDiagram-v2
-   direction TB
+  direction TB
 
-   U: Unmapped
-   D: Draft
-   M: Mapped
+  state Author {
+    U: Unmapped
+    D: Draft
+    M: Mapped
 
-   [*] --> U
-   U --> D
-   D --> M
-   M --> D
-   M --> [*]
+    [*] --> U
+    U --> D
+    D --> M
+    M --> D
+    M --> [*]
+  }
 ```
 
 ## Single author mapping, with review stage
+
+### Unified view
 
 ```mermaid
 stateDiagram-v2
@@ -31,17 +35,50 @@ stateDiagram-v2
    R: Rejected
 
    [*] --> U
-   U --> D
-   D --> M
-   M --> D
-   M --> I
-   M --> A
-   I --> A
-   I --> R
-   M --> R
+   U --> D : A
+   D --> M : A
+   M --> D : A
+   M --> I : R
+   M --> A : R
+   I --> A : R
+   I --> R : R
+   M --> R : R
    A --> [*]
    R --> [*]
-   R --> D
+   R --> D : A
+```
+
+### Role-based view
+
+```mermaid
+stateDiagram-v2
+   direction TB
+
+   U: Unmapped
+   AD: Draft
+   AM: Mapped
+   RM: Mapped
+   I: In Review
+   A: Accepted
+   R: Rejected
+
+ state Author {
+   [*] --> U
+   U --> AD : A
+   AD --> AM : A
+   AM --> AD : A
+   R --> AD : A
+   AM --> RM
+ }
+ state Reviewer {
+   RM --> I : R
+   RM --> A : R
+   I --> A : R
+   I --> R : R
+   RM --> R : R
+   A --> [*]
+   R --> [*]
+ }
 ```
 
 ## Dual author mapping, no review stage
@@ -53,6 +90,10 @@ stateDiagram-v2
    state join_state <<join>>
    state if_conflict <<choice>>
 
+   A1: Author 1
+   A2: Author 2
+   R: Reconciler
+
    U1: Unmapped
    U2: Unmapped
    D1: Draft
@@ -63,22 +104,34 @@ stateDiagram-v2
    C: Reconcile
 
    [*] --> fork_state
-   fork_state --> U1
-   fork_state --> U2
+   fork_state --> A1
+   fork_state --> A2
+ state A1 {
+   [*] --> U1
    U1 --> D1
    D1 --> M1
    M1 --> D1
-   M1 --> join_state
+   M1 --> [*]
+ }
+   A1 --> join_state
+ state A2 {
+   [*] --> U2
    U2 --> D2
    D2 --> M2
    M2 --> D2
-   M2 --> join_state
-   join_state --> if_conflict
+   M2 --> [*]
+ }
+   A2 --> join_state
+   join_state --> R
+
+ state R {
+   [*] --> if_conflict
    if_conflict --> M: if no conflict
    if_conflict --> C: if conflict
    C --> M
    M --> C
    M --> [*]
+ }
 ```
 
 ## Dual author mapping, with review stage
