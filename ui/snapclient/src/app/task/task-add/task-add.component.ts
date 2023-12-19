@@ -60,6 +60,7 @@ export class TaskAddComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() currentUser: User | null | undefined;
   @Input() mapping: Mapping | undefined;
   @Input() mappingTableSelector: MappingTableSelectorComponent | null | undefined;
+  @Input() tableFilterEnabled: boolean | undefined;
   @Output() newTaskEvent = new EventEmitter<string>();
   @Output() cancelNewTaskEvent = new EventEmitter<void>();
   // @ts-ignore
@@ -81,7 +82,7 @@ export class TaskAddComponent implements OnInit, AfterViewInit, OnDestroy {
     self.subscription.add(self.store.select(selectSelectedRows).subscribe(
       (selectedRows) => {
         if (self.task) {
-          if (this.mappingTableSelector?.isAllSelected) {
+          if (!this.tableFilterEnabled && this.mappingTableSelector?.isAllSelected) {
             self.task.sourceRowSpecification = '*';
           }
           else if (selectedRows.length > 0) {
@@ -136,7 +137,7 @@ export class TaskAddComponent implements OnInit, AfterViewInit, OnDestroy {
   updateSelectedRows(): void {
     if (this.mappingTableSelector && this.mappingTableSelector.selectedRows && this.task) {
       if (this.mappingTableSelector.selectedRows.length > 0) {
-        if (this.mappingTableSelector.isAllSelected) {
+        if (!this.tableFilterEnabled && this.mappingTableSelector.isAllSelected) {
           this.task.sourceRowSpecification = '*';
         }
         else {

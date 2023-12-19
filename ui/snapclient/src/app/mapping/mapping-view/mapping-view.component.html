@@ -432,6 +432,7 @@
           [(authPageSize)]="authPageSize" [(authCurrentPage)]="authCurrentPage"
           [(reviewPageSize)]="reviewPageSize" [(reviewCurrentPage)]="reviewCurrentPage"
           [mappingTableSelector]="mappingTableSelector"
+          [tableFilterEnabled]="filterEnabled && filterEntity.hasFilters()"
           (updateCurrentTaskPage)="updateCurrentTaskPage($event)"
           (updateTableEvent)="refreshTable($event)"></app-assigned-work>
           <!-- TODO consider if this refreshTable is necessary -->

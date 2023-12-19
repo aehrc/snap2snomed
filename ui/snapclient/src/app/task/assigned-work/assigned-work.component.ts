@@ -67,6 +67,7 @@ export class AssignedWorkComponent implements OnInit, AfterViewInit, OnDestroy {
   pageSizeOptions: number[] = [10, 25, 50, 100];
   @Input() mapping: Mapping | undefined;
   @Input() mappingTableSelector: MappingTableSelectorComponent | null | undefined;
+  @Input() tableFilterEnabled: boolean | undefined;
   @Output() updateTableEvent = new EventEmitter<string>();
   @Output() updateCurrentTaskPage = new EventEmitter<string>();
 
