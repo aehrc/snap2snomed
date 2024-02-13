@@ -256,7 +256,7 @@ public class MapRowEventHandler {
 
     if (author && reviewer) {
       // state transition will be validated precommit
-      validateAuthorChanges(mapRow, mapRowFromDatabase);
+      validateAuthorChanges(mapRow, mapRowFromDatabase, reconciler);
     } else if (author || reviewer || reconciler) {
       if (!mapRowFromDatabase.getStatus().isValidTransitionForRole(mapRow.getStatus(), authorOrReviewerRole)) {
         if (null == reconcilerRole) {
@@ -271,7 +271,7 @@ public class MapRowEventHandler {
         }
       }
       if (author || reconciler) {
-        validateAuthorChanges(mapRow, mapRowFromDatabase);
+        validateAuthorChanges(mapRow, mapRowFromDatabase, reconciler);
       } else if (reviewer) {
         if (mapRowFromDatabase.isNoMap() != mapRow.isNoMap()) {
           throw new UnauthorisedMappingProblem("Reviewer cannot change no map status");
@@ -282,9 +282,12 @@ public class MapRowEventHandler {
     }
   }
 
-  private void validateAuthorChanges(MapRow mapRow, MapRow mapRowFromDatabase) {
+  private void validateAuthorChanges(MapRow mapRow, MapRow mapRowFromDatabase, boolean reconciler) {
     if (mapRowFromDatabase.getStatus().equals(MapStatus.REJECTED) && mapRow.getStatus().equals(MapStatus.REJECTED)
-        && (mapRow.isNoMap() != mapRowFromDatabase.isNoMap())) {
+        && (!reconciler) && (mapRow.isNoMap() != mapRowFromDatabase.isNoMap())) {
+      // !reconciler ensures that reconcile task can change the no map state for a dual map.
+      // In dual mapping, author task cannot edit rejected, so this won't adversely affect the author task.
+      // reconciler is only possibly true for dual maps
       throw new UnauthorisedMappingProblem("Author cannot change mapping in the REJECTED state, change to DRAFT first");
     } else if (!MapStatus.UNMAPPED.equals(mapRow.getStatus()) && !MapStatus.RECONCILE.equals(mapRow.getStatus()) && !mapRow.isNoMap() && mapRow.getMapRowTargets().isEmpty()) {
       if (mapRow.getMap().getProject().getDualMapMode()) {

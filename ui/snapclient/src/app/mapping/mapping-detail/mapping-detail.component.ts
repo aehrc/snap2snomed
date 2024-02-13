@@ -400,7 +400,8 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
         self.source.status = MapRowStatus.RECONCILE;
         return false;
       }
-      else if ((this.selectedRowset?.mapRow?.targetCode === this.selectedRowset?.siblingRow?.targetCode) 
+      else if ((this.selectedRowset?.mapRow?.targetCode && this.selectedRowset?.siblingRow?.targetCode) 
+        && (this.selectedRowset?.mapRow?.targetCode === this.selectedRowset?.siblingRow?.targetCode) 
         && (this.selectedRowset?.mapRow?.relationship !== this.selectedRowset?.siblingRow?.relationship)) {
         self.translate.get('ERROR.RECONCILE_SAME_TARGET_MULTIPLE_RELATIONSHIPS').subscribe((res: any) => {
           self.error.message = res;
@@ -444,6 +445,10 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
                 self.mapRows = [];
                 self.source.status = result.status;
                 if (self.task && self.selectedRowset?.current && self.selectedRowset?.mapRow) {
+                  self.selectedRowset.mapRow.targetCode = undefined; 
+                  if (self.selectedRowset?.siblingRow) {
+                    self.selectedRowset.siblingRow.targetCode = undefined;
+                  }
                   self.selectedRowset.mapRow.updateFromRow(result as MapRow);
                 }
               });

@@ -1025,7 +1025,7 @@ public class MapViewService {
       else if (task.getType().equals(TaskType.RECONCILE)) {
         whereClause = whereClause.and(mapRow.blindMapFlag.eq(false));
         whereClause = whereClause.and(mapRow.reconcileTask.eq(task));
-        whereClause = whereClause.and((mapRow.status.eq(MapStatus.RECONCILE)).or(mapRow.status.eq(MapStatus.MAPPED).or(mapRow.status.eq(MapStatus.REJECTED))));
+        whereClause = whereClause.and((mapRow.status.eq(MapStatus.RECONCILE)).or(mapRow.status.eq(MapStatus.REJECTED)));
       }
     }
 

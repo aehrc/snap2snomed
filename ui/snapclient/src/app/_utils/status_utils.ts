@@ -53,6 +53,8 @@ export class StatusUtils {
       case TaskType.RECONCILE:
         if (mapView.status === MapRowStatus.RECONCILE) {
           disableStatus = true;
+        } else if (mapView.status === MapRowStatus.REJECTED) {
+          disableStatus = statusOption === MapRowStatus.REJECTED;
         }
         break;
       case TaskType.REVIEW:
@@ -111,7 +113,10 @@ export class StatusUtils {
           statusList = reconcileStatuses;
         } else if (status === MapRowStatus.MAPPED) {
           statusList = [MapRowStatus.MAPPED];
+        } else if (status === MapRowStatus.REJECTED) {
+          statusList = [MapRowStatus.MAPPED, MapRowStatus.REJECTED];
         }
+
         break;
     }
     return statusList;

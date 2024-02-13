@@ -105,7 +105,8 @@ public class MapRowTargetEventHandler {
    * @param mapRowTarget
    */
   public void performAutomaticUpdates(MapRowTarget mapRowTarget) {
-    if (mapRowTarget.getRow().getStatus() != MapStatus.RECONCILE) {
+    // prevent rejected rows from reverting to draft and dropping out of the reconcile task
+    if (mapRowTarget.getRow().getStatus() != MapStatus.RECONCILE && mapRowTarget.getTaskType() != TaskType.RECONCILE) {
       MapRowTarget storedMapRowTarget = null;
       if (mapRowTarget.getId() != null) {
         em.detach(mapRowTarget);
