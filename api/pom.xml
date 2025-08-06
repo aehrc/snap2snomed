@@ -30,7 +30,7 @@
   <description>API Backend for the Snap2Snomed mapping tool</description>
 
   <properties>
-    <java.version>17</java.version>
+    <java.version>21</java.version>
     <docker.repository>aehrc/snap2snomed</docker.repository>
     <docker.registry.host>quay.io</docker.registry.host>
     <sentry.version>7.3.0</sentry.version>
@@ -385,7 +385,7 @@
         <artifactId>jib-maven-plugin</artifactId>
         <version>${jib.version}</version>
         <configuration>
-          <from><image>aehrc/jre:openjdk-17-fontconfig</image></from>
+          <from><image>aehrc/jre:openjdk-21-fontconfig</image></from>
           <container>
             <ports>
               <port>8080</port>
