@@ -119,7 +119,11 @@
           <artifactId>spring-security-crypto</artifactId>
           <version>5.7.14</version>
       </dependency>
-
+      <dependency>
+          <groupId>org.hibernate.validator</groupId>
+          <artifactId>hibernate-validator</artifactId>
+          <version>6.2.5.Final</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
