@@ -87,7 +87,7 @@
       <dependency>
           <groupId>com.nimbusds</groupId>
           <artifactId>nimbus-jose-jwt</artifactId>
-          <version>9.37.3</version> <!-- force version for CVE-2023-52428; remove when spring-boot spring-boot-starter-oauth2-resource-server updates to this (currently 9.22) -->
+          <version>9.37.4</version> <!-- force version for CVE-2023-52428; remove when spring-boot spring-boot-starter-oauth2-resource-server updates to this (currently 9.22) -->
       </dependency>
       <dependency>
           <groupId>ca.uhn.hapi.fhir</groupId>
