@@ -51,7 +51,7 @@
     <hamcrest-date.version>2.0.8</hamcrest-date.version>
     <hapi.version>6.6.2</hapi.version>
     <spring-security-core.version>6.5.2</spring-security-core.version>
-    <spring-core.version>5.3.29</spring-core.version>
+    <spring-core.version>6.2.10</spring-core.version>
     <snomed-utilities.version>2.1.0</snomed-utilities.version>
   </properties>
 
