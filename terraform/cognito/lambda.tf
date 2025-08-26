@@ -11,7 +11,7 @@ data "archive_file" "pre_signup_zip" {
 resource "aws_lambda_function" "pre_signup" {
   function_name    = local.lambda_name
   role             = aws_iam_role.pre_signup_role.arn
-  runtime          = "nodejs18.x"
+  runtime          = "nodejs20.x"
   handler          = "pre_signup_lambda.handler"
   filename         = data.archive_file.pre_signup_zip.output_path
   source_code_hash = data.archive_file.pre_signup_zip.output_base64sha256
