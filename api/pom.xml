@@ -77,7 +77,7 @@
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-core</artifactId>
         <!--<version>9.0.91</version>--><!-- force version for CVE-2024-34750; remove when spring-boot-starter-web transitive dependency updates to this (currently 9.0.83)-->
-        <version>9.0.108</version><!-- force version for CVE-2024-50379 and CVE-2024-56337 --> <!-- force version for CVE-2025-24813 --> <!-- force version for CVE-2025-48988 -->
+        <version>9.0.110</version><!-- force version for CVE-2024-50379 and CVE-2024-56337 --> <!-- force version for CVE-2025-24813 --> <!-- force version for CVE-2025-48988 -->
       </dependency>
       <dependency>
         <groupId>org.springframework.security</groupId>
@@ -87,7 +87,7 @@
       <dependency>
           <groupId>com.nimbusds</groupId>
           <artifactId>nimbus-jose-jwt</artifactId>
-          <version>9.37.3</version> <!-- force version for CVE-2023-52428; remove when spring-boot spring-boot-starter-oauth2-resource-server updates to this (currently 9.22) -->
+          <version>9.37.4</version> <!-- force version for CVE-2023-52428; remove when spring-boot spring-boot-starter-oauth2-resource-server updates to this (currently 9.22) -->
       </dependency>
       <dependency>
           <groupId>ca.uhn.hapi.fhir</groupId>
