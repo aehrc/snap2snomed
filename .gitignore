@@ -12,6 +12,7 @@ ui/snapclient/src/environments/environment.ts
 snap2snomed.iml
 ui/ui.iml
 ui/snapclient/src/assets/config.json
+ui/snapclient/.angular/cache
 
 # UI dependencies
 /ui/snapclient/node_modules
