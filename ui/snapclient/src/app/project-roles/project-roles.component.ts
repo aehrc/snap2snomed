@@ -17,7 +17,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {ProjectRole, projectRoles, ProjectUserFilter, User} from '../_models/user';
-import {FormControl, NgForm} from '@angular/forms';
+import {UntypedFormControl, NgForm} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {UserService} from '../_services/user.service';
 import {Project} from '../_models/project';
@@ -46,8 +46,8 @@ export class ProjectRolesComponent implements OnInit {
   displayedColumns = ['username', 'project_role'];
   displayedFilterColumns = ['filter_name', 'filter_role'];
 
-  usernameFilterControl = new FormControl('');
-  emailFilterControl = new FormControl('');
+  usernameFilterControl = new UntypedFormControl('');
+  emailFilterControl = new UntypedFormControl('');
 
   private subscription = new Subscription();
   private debounce = 200;

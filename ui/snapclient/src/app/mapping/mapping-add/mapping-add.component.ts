@@ -40,7 +40,7 @@ import {Source} from 'src/app/_models/source';
 import {FhirService, Release} from 'src/app/_services/fhir.service';
 import {LoadReleases} from 'src/app/store/fhir-feature/fhir.actions';
 import {selectFhirError, selectReleaseList} from 'src/app/store/fhir-feature/fhir.selectors';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {cloneDeep} from 'lodash';
 import {ErrorInfo} from 'src/app/errormessage/errormessage.component';
 import {FormUtils} from '../../_utils/form_utils';
@@ -77,16 +77,16 @@ export class MappingAddComponent implements OnInit {
   previousVersionSource: Source | undefined;
   warnDelete = false;
 
-  formGroup: FormGroup = new FormGroup({
-    title: new FormControl(''),
-    mapVersion: new FormControl(''),
-    description: new FormControl(''),
-    sourceId: new FormControl(''),
-    toEdition: new FormControl(''),
-    toVersion: new FormControl(''),
-    toScopeSelect: new FormControl(''),
-    toScope: new FormControl('', [Validators.minLength(1)]),
-    dualMapMode: new FormControl('')
+  formGroup: UntypedFormGroup = new UntypedFormGroup({
+    title: new UntypedFormControl(''),
+    mapVersion: new UntypedFormControl(''),
+    description: new UntypedFormControl(''),
+    sourceId: new UntypedFormControl(''),
+    toEdition: new UntypedFormControl(''),
+    toVersion: new UntypedFormControl(''),
+    toScopeSelect: new UntypedFormControl(''),
+    toScope: new UntypedFormControl('', [Validators.minLength(1)]),
+    dualMapMode: new UntypedFormControl('')
   });
 
   @Input() set mapping(value: Mapping | undefined) {

@@ -19,7 +19,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {SourceImportComponent} from './source-import.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UntypedFormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
@@ -75,7 +75,7 @@ describe('SourceImportComponent', () => {
         })
       ],
       providers: [{ provide: APP_CONFIG, useValue: {} },
-        provideMockStore({initialState: initialAppState}), TranslateService, FormBuilder,
+        provideMockStore({initialState: initialAppState}), TranslateService, UntypedFormBuilder,
         {provide: MatDialogRef, useValue: {}}, {provide: MAT_DIALOG_DATA, useValue: {}}],
       declarations: [SourceImportComponent, ErrormessageComponent]
     })

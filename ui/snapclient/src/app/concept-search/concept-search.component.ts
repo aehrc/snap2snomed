@@ -16,7 +16,7 @@
 
 import {R4} from '@ahryman40k/ts-fhir-types';
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {TranslateService} from '@ngx-translate/core';
 import {Subscription} from 'rxjs';
@@ -47,7 +47,7 @@ export class ConceptSearchComponent implements OnInit, OnDestroy {
   activeOnly = true;
 
   size = 10;
-  searchControl = new FormControl('');
+  searchControl = new UntypedFormControl('');
   error: ErrorInfo = {};
   total?: number;
   matches: Match[] = [];

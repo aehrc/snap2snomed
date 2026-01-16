@@ -40,7 +40,7 @@ import {DroppableDirective} from 'src/app/_directives/droppable.directive';
 import {DraggableDirective} from 'src/app/_directives/draggable.directive';
 import {FhirService} from "../../_services/fhir.service";
 import {of} from "rxjs";
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 
 describe('TargetRelationshipComponent', () => {
   let component: TargetRelationshipComponent;
@@ -105,7 +105,7 @@ describe('TargetRelationshipComponent', () => {
         {provide: APP_CONFIG, useValue: {}},
         provideMockStore({
           initialState: initialAppState,
-        }), FhirService, TranslateService, SelectionService, FormBuilder],
+        }), FhirService, TranslateService, SelectionService, UntypedFormBuilder],
       declarations: [TargetRelationshipComponent, ErrormessageComponent, DroppableDirective, DraggableDirective]
     })
       .compileComponents();

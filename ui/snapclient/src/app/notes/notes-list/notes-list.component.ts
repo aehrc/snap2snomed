@@ -27,7 +27,7 @@ import {ErrorInfo} from '../../errormessage/errormessage.component';
 import {Task} from '../../_models/task';
 import {Subscription} from 'rxjs';
 import {FormUtils} from '../../_utils/form_utils';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import {DroppableEventObject} from "../../_directives/droppable.directive";
 import {Router} from "@angular/router";
 import {AuthService} from "../../_services/auth.service";
@@ -46,7 +46,7 @@ export class NotesListComponent implements OnInit, OnDestroy {
   @Input() currentUser: User | null = null;
   @Input() task: Task | null = null;
   @Input() sourceNavSet: SourceNavSet | null = null;
-  @ViewChild('text') formControl: FormControl | undefined;
+  @ViewChild('text') formControl: UntypedFormControl | undefined;
 
   mapRow: MapRow | null = null;
   error: ErrorInfo = {};
