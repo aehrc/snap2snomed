@@ -139,7 +139,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@^11.2.13", "@angular/cdk@^14.2.7", "@angular/cdk@>=10.2.7", "@angular/cdk@14.2.7":
+"@angular/cdk@^11.2.13", "@angular/cdk@^14.2.7", "@angular/cdk@14.2.7":
   version "14.2.7"
   resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-14.2.7.tgz"
   integrity sha512-/tEsYaUbDSnfEmKVvAMramIptmhI67O+9STjOV0i+74XR2NospeK0fkbywIANu1n3w6AHGMotvRWJrjmbCElFg==
@@ -174,7 +174,7 @@
     uuid "8.3.2"
     yargs "17.5.1"
 
-"@angular/common@^10.0.0-rc.0 || >=10.0.0 <13.0.0", "@angular/common@^14.0.0", "@angular/common@^14.0.0 || ^15.0.0", "@angular/common@^14.3.0", "@angular/common@>=10.0.0", "@angular/common@>=10.2.4", "@angular/common@>=9.0.0", "@angular/common@~11.2.13", "@angular/common@10.x || 11.x || 12.x || 13.x", "@angular/common@14.3.0":
+"@angular/common@^10.0.0-rc.0 || >=10.0.0 <13.0.0", "@angular/common@^14.0.0", "@angular/common@^14.0.0 || ^15.0.0", "@angular/common@^14.2.0", "@angular/common@^14.3.0", "@angular/common@>=10.0.0", "@angular/common@>=9.0.0", "@angular/common@~11.2.13", "@angular/common@10.x || 11.x || 12.x || 13.x", "@angular/common@14.3.0":
   version "14.3.0"
   resolved "https://registry.npmjs.org/@angular/common/-/common-14.3.0.tgz"
   integrity sha512-pV9oyG3JhGWeQ+TFB0Qub6a1VZWMNZ6/7zEopvYivdqa5yDLLDSBRWb6P80RuONXyGnM1pa7l5nYopX+r/23GQ==
@@ -209,7 +209,7 @@
   resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-9.0.0.tgz"
   integrity sha512-ctjwuntPfZZT2mNj2NDIVu51t9cvbhl/16epc5xEwyzyDt76pX9UgwvY+MbXrf/C/FWwdtmNtfP698BKI+9leQ==
 
-"@angular/core@^10.0.0-rc.0 || >=10.0.0 <13.0.0", "@angular/core@^14.0.0", "@angular/core@^14.0.0 || ^15.0.0", "@angular/core@^14.3.0", "@angular/core@>=10.0.0", "@angular/core@>=10.2.4", "@angular/core@>=9.0.0", "@angular/core@~11.2.13", "@angular/core@10.x || 11.x || 12.x || 13.x", "@angular/core@14.3.0":
+"@angular/core@^10.0.0-rc.0 || >=10.0.0 <13.0.0", "@angular/core@^14.0.0", "@angular/core@^14.0.0 || ^15.0.0", "@angular/core@^14.2.0", "@angular/core@^14.3.0", "@angular/core@>=10.0.0", "@angular/core@>=9.0.0", "@angular/core@~11.2.13", "@angular/core@10.x || 11.x || 12.x || 13.x", "@angular/core@14.3.0":
   version "14.3.0"
   resolved "https://registry.npmjs.org/@angular/core/-/core-14.3.0.tgz"
   integrity sha512-wYiwItc0Uyn4FWZ/OAx/Ubp2/WrD3EgUJ476y1XI7yATGPF8n9Ld5iCXT08HOvc4eBcYlDfh90kTXR6/MfhzdQ==
@@ -237,7 +237,7 @@
     glob "8.0.3"
     yargs "^17.2.1"
 
-"@angular/material@^11.2.13", "@angular/material@^14.2.7", "@angular/material@>=10.2.7":
+"@angular/material@^11.2.13", "@angular/material@^14.2.7":
   version "14.2.7"
   resolved "https://registry.npmjs.org/@angular/material/-/material-14.2.7.tgz"
   integrity sha512-WXHh8pEStpgkXZJmYOg2cI8BSHkV82ET4XTJCNPdveumaCn1UYnaNzsXD13kw5z+zmy8CufhFEzdXTrv/yt7KQ==
@@ -5205,7 +5205,7 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.17.20:
+lodash-es@^4.17.21:
   version "4.17.22"
   resolved "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.22.tgz"
   integrity sha512-XEawp1t0gxSi9x01glktRZ5HDy0HXqrM0x5pXQM98EaI0NxO6jVM7omDOxsuEo5UIASAnm2bRp1Jt/e0a2XU8Q==
@@ -5324,13 +5324,13 @@ make-fetch-happen@^10.0.3, make-fetch-happen@^10.0.6:
     socks-proxy-agent "^7.0.0"
     ssri "^9.0.0"
 
-mat-table-filter@^10.2.0:
-  version "10.2.0"
-  resolved "https://registry.npmjs.org/mat-table-filter/-/mat-table-filter-10.2.0.tgz"
-  integrity sha512-IOuqsn+hKJRP7xRbhd71AzOoPH5FuzM9D8ySxk8OH2OqvdFeWOfwwgl1dEEwdV9L59We5OnlA9/5hd95w7/FvQ==
+mat-table-filter@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.npmjs.org/mat-table-filter/-/mat-table-filter-14.0.0.tgz"
+  integrity sha512-OzHy48xQC6opuTZFH38DLA4kv3BdOP/QM8huD5RJtpSeonYeLWMKPQlhvZphu8tc9dO6aO1YlrgEpig6xQcVgQ==
   dependencies:
-    lodash-es "^4.17.20"
-    tslib "^2.0.0"
+    lodash-es "^4.17.21"
+    tslib "^2.3.0"
 
 math-intrinsics@^1.1.0:
   version "1.1.0"
