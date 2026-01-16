@@ -16,7 +16,7 @@
 
 import {Component, Input, OnInit} from '@angular/core';
 import {Task} from '../../_models/task';
-import {MatSelectChange} from '@angular/material/select';
+import {MatLegacySelectChange as MatSelectChange} from '@angular/material/legacy-select';
 import {ErrorInfo} from 'src/app/errormessage/errormessage.component';
 import {Router} from '@angular/router';
 

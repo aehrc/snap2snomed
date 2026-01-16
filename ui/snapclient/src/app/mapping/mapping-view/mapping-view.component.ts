@@ -24,8 +24,8 @@ import {
   selectCurrentView,
   selectMappingLoading
 } from '../../store/mapping-feature/mapping.selectors';
-import {MatTable} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyTable as MatTable} from '@angular/material/legacy-table';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {
   MappedRowDetailsDto,
   MapRowRelationship,
@@ -54,7 +54,7 @@ import {ErrorInfo} from '../../errormessage/errormessage.component';
 import {ServiceUtils} from '../../_utils/service_utils';
 import {LoadMapping, LoadMapView, ViewContext} from 'src/app/store/mapping-feature/mapping.actions';
 import {BulkchangeComponent, BulkChangeDialogData, getResultMessage} from '../bulkchange/bulkchange.component';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {MatBottomSheet, MatBottomSheetConfig} from '@angular/material/bottom-sheet';
 import {ResultsdialogComponent} from 'src/app/resultsdialog/resultsdialog.component';
 import {MappingTableSelectorComponent} from '../mapping-table-selector/mapping-table-selector.component';
@@ -65,7 +65,7 @@ import {MappingImportSource} from 'src/app/_models/mapping_import_source';
 import {ImportMappingFile, ImportMappingFileParams, InitSelectedMappingFile} from 'src/app/store/source-feature/source.actions';
 import {MappingImportComponent} from '../mapping-import/mapping-import.component';
 import { MappingNotesComponent } from '../mapping-table-notes/mapping-notes.component';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
 import { TableColumn } from '../mapping-table/mapping-table.component';
 import { TargetChangedService } from 'src/app/_services/target-changed.service';
 import { cloneDeep } from 'lodash';

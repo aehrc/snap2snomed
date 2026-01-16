@@ -34,14 +34,14 @@ import {Subscription} from 'rxjs';
 import {Mapping} from 'src/app/_models/mapping';
 import {Source} from 'src/app/_models/source';
 import {AuthService} from '../../_services/auth.service';
-import {PageEvent} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSelectChange} from "@angular/material/select";
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatLegacySelectChange as MatSelectChange} from "@angular/material/legacy-select";
 import {MatSort} from '@angular/material/sort';
 import {debounce} from "lodash";
 import {tap} from "rxjs/operators";
 import {ConfirmDialogComponent, DialogType} from "../../dialog/confirm-dialog/confirm-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {ErrorDetail} from "../../_models/error_detail";
 import { FormUtils } from 'src/app/_utils/form_utils';
 

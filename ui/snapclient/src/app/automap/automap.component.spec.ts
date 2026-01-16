@@ -17,7 +17,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AutomapComponent } from './automap.component';
-import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {DebugElement} from '@angular/core';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {RouterTestingModule} from '@angular/router/testing';

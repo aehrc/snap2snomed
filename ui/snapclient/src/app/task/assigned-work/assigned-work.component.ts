@@ -24,11 +24,11 @@ import {User} from '../../_models/user';
 import {Mapping} from '../../_models/mapping';
 import {Subscription} from 'rxjs';
 import {selectCurrentUser} from '../../store/auth-feature/auth.selectors';
-import {MatTabChangeEvent} from '@angular/material/tabs';
+import {MatLegacyTabChangeEvent as MatTabChangeEvent} from '@angular/material/legacy-tabs';
 import {ErrorInfo} from 'src/app/errormessage/errormessage.component';
 import {MappingTableSelectorComponent} from 'src/app/mapping/mapping-table-selector/mapping-table-selector.component';
 import {AuthService} from '../../_services/auth.service';
-import {PageEvent} from '@angular/material/paginator';
+import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
 import {LoadTasksForMap} from 'src/app/store/task-feature/task.actions';
 
 

@@ -19,13 +19,13 @@ import {Store} from '@ngrx/store';
 import {IAppState} from '../store/app.state';
 import {selectAuthState, selectAuthUser} from '../store/auth-feature/auth.selectors';
 import {User} from '../_models/user';
-import {MatMenuTrigger} from '@angular/material/menu';
+import {MatLegacyMenuTrigger as MatMenuTrigger} from '@angular/material/legacy-menu';
 import {LoadUser, LogOut} from '../store/auth-feature/auth.actions';
 import {TranslateService} from '@ngx-translate/core';
 import {APP_CONFIG, AppConfig} from '../app.config';
 import {ErrorInfo} from '../errormessage/errormessage.component';
 import {AuthService} from '../_services/auth.service';
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {AcceptTermsComponent} from "../accept-terms/accept-terms.component";
 import {IAuthState} from "../store/auth-feature/auth.reducer";
 

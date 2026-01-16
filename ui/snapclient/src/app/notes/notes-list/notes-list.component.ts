@@ -31,9 +31,9 @@ import {UntypedFormControl} from '@angular/forms';
 import {DroppableEventObject} from "../../_directives/droppable.directive";
 import {Router} from "@angular/router";
 import {AuthService} from "../../_services/auth.service";
-import {MatDialog} from "@angular/material/dialog";
+import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
 import {ConfirmDialogComponent, DialogType} from "../../dialog/confirm-dialog/confirm-dialog.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatLegacySnackBar as MatSnackBar} from "@angular/material/legacy-snack-bar";
 import {ErrorNotifier} from "../../errorhandler/errornotifier";
 
 @Component({

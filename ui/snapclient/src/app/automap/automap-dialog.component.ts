@@ -15,9 +15,9 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {DialogData} from '../dialog/confirm-dialog/confirm-dialog.component';
-import {ProgressAnimationEnd} from '@angular/material/progress-bar';
+import {LegacyProgressAnimationEnd as ProgressAnimationEnd} from '@angular/material/legacy-progress-bar';
 
 export interface ProgressDialogData extends DialogData {
   automapPercent: any;

@@ -19,8 +19,8 @@ import { Subscription } from 'rxjs';
 import { Note, NoteCategory } from 'src/app/_models/note';
 import { MapService, NoteResults } from 'src/app/_services/map.service';
 
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyTable as MatTable, MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'app-mapping-notes',

@@ -33,7 +33,7 @@ import {
 import {selectCurrentUser} from '../../store/auth-feature/auth.selectors';
 import {Mapping} from '../../_models/mapping';
 import {SourceImportComponent} from '../../source/source-import/source-import.component';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {selectMappingFile, selectSourceList, selectSourceState} from '../../store/source-feature/source.selectors';
 import {ImportMappingFileParams, InitSelectedSource, LoadSources} from 'src/app/store/source-feature/source.actions';
 import {Source} from 'src/app/_models/source';
@@ -48,7 +48,7 @@ import {MappingImportComponent} from '../mapping-import/mapping-import.component
 import {MappingImportSource} from 'src/app/_models/mapping_import_source';
 import {selectAuthorizedProjects} from '../../store/app.selectors';
 import {Project} from '../../_models/project';
-import { MatSelectChange } from '@angular/material/select';
+import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
 
 @Component({
   selector: 'app-mapping-add',

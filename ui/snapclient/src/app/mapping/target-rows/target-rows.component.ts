@@ -15,12 +15,12 @@
  */
 
 import {Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild} from '@angular/core';
-import {MatTable} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
+import {MatLegacyTable as MatTable} from '@angular/material/legacy-table';
+import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {MatSort, Sort} from '@angular/material/sort';
 import {ErrorInfo} from '../../errormessage/errormessage.component';
 import {MapRowStatus, mapRowStatuses, MapView} from '../../_models/map_row';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {TranslateService} from '@ngx-translate/core';
 import {ServiceUtils} from '../../_utils/service_utils';
 import {Task, TaskType} from '../../_models/task';

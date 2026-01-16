@@ -22,7 +22,7 @@ import {forkJoin, from, Observable, of} from 'rxjs';
 import {DEFAULT, FhirService} from '../_services/fhir.service';
 import {catchError, concatMap, map, mergeMap, tap} from 'rxjs/operators';
 import {TargetRow} from '../_models/target_row';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {TranslateService} from '@ngx-translate/core';
 import {Mapping} from '../_models/mapping';
 
