@@ -17,7 +17,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../app.module';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {} from '@angular/common/http/testing';
 
 import {ErrormessageComponent} from './errormessage.component';
 import {DebugElement} from '@angular/core';

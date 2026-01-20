@@ -17,7 +17,7 @@
 import {ComponentFixture, discardPeriodicTasks, fakeAsync, flush, inject, TestBed} from '@angular/core/testing';
 import {MappingTableComponent} from './mapping-table.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
 import {APP_CONFIG} from '../../app.config';
@@ -57,6 +57,7 @@ import {MatInputModule} from '@angular/material/input';
 import {BulkchangeComponent} from '../bulkchange/bulkchange.component';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MappingTableSelectorComponent} from '../mapping-table-selector/mapping-table-selector.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingTableComponent', () => {
   let component: MappingTableComponent;
@@ -72,9 +73,15 @@ describe('MappingTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [MappingTableComponent,
+        InitialsPipe,
+        LastupdatedPipe,
+        MatSort,
+        MatPaginator,
+        ErrormessageComponent,
+        BulkchangeComponent,
+        MappingTableSelectorComponent],
+    imports: [RouterTestingModule,
         MatButtonModule,
         MatDividerModule,
         MatIconModule,
@@ -96,32 +103,26 @@ describe('MappingTableComponent', () => {
         MatInputModule,
         MatBottomSheetModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectCurrentMapping, value: mapping},
-            {selector: selectSelectedRows, value: []}
-          ],
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectCurrentMapping, value: mapping },
+                { selector: selectSelectedRows, value: [] }
+            ],
         }), TranslateService,
-        { provide: MapService, useValue: mockMapService }],
-      declarations: [MappingTableComponent,
-        InitialsPipe,
-        LastupdatedPipe,
-        MatSort,
-        MatPaginator,
-        ErrormessageComponent,
-        BulkchangeComponent,
-        MappingTableSelectorComponent]
-    })
+        { provide: MapService, useValue: mockMapService },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   // });
   //

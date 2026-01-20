@@ -19,11 +19,12 @@ import {ConceptSearchComponent} from './concept-search.component';
 import {APP_CONFIG} from '../app.config';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../store/app.state';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../app.module';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ConceptSearchComponent', () => {
   let component: ConceptSearchComponent;
@@ -32,20 +33,17 @@ describe('ConceptSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [TranslateService, {provide: APP_CONFIG, useValue: {}},
-        provideMockStore({initialState: initialAppState})],
-      declarations: [ConceptSearchComponent]
-    })
+    declarations: [ConceptSearchComponent],
+    imports: [TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },
+        provideMockStore({ initialState: initialAppState }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
 
     fixture = TestBed.createComponent(ConceptSearchComponent);

@@ -19,7 +19,7 @@ import {HomeComponent} from './home.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import {HttpLoaderFactory} from '../app.module';
 import {AuthService} from '../_services/auth.service';
 import {UserService} from '../_services/user.service';
@@ -32,6 +32,7 @@ import {APP_CONFIG} from '../app.config';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 describe('HomeComponent', () => {
@@ -48,33 +49,33 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [HomeComponent],
+    imports: [RouterTestingModule,
         MatMenuModule,
         MatIconModule,
         MatDialogModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {} },
-        {provide: MAT_DIALOG_DATA, useValue: {}},
-        {provide: MatDialogRef, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
         provideMockStore({
-        initialState: initialAppState,
-        selectors: [
-          {selector: selectCurrentUserError, value: 'MockError'},
-          {selector: selectAuthState, value: {isAuthenticated: true, user, errorMessage: null}},
-        ],
-      }), AuthService, UserService, TranslateService],
-      declarations: [HomeComponent]
-    }).compileComponents();
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectCurrentUserError, value: 'MockError' },
+                { selector: selectAuthState, value: { isAuthenticated: true, user, errorMessage: null } },
+            ],
+        }), AuthService, UserService, TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
     authService = TestBed.inject(AuthService);
     userService = TestBed.inject(UserService);
     translateService = TestBed.inject(TranslateService);

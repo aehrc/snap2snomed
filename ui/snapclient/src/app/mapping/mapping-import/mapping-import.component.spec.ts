@@ -15,7 +15,7 @@
  */
 
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {UntypedFormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
@@ -36,6 +36,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { MappingImportComponent } from './mapping-import.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingImportComponent', () => {
   let component: MappingImportComponent;
@@ -45,9 +46,8 @@ describe('MappingImportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [MappingImportComponent],
+    imports: [RouterTestingModule,
         BrowserAnimationsModule,
         FormsModule,
         MatDialogModule,
@@ -63,18 +63,16 @@ describe('MappingImportComponent', () => {
         MatCheckboxModule,
         MatTooltipModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [{ provide: APP_CONFIG, useValue: {} },
-        provideMockStore({initialState: initialAppState}), TranslateService, UntypedFormBuilder,
-        {provide: MatDialogRef, useValue: {}}, {provide: MAT_DIALOG_DATA, useValue: {source: {delimiter: ''}}}],
-      declarations: [MappingImportComponent]
-    })
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [{ provide: APP_CONFIG, useValue: {} },
+        provideMockStore({ initialState: initialAppState }), TranslateService, UntypedFormBuilder,
+        { provide: MatDialogRef, useValue: {} }, { provide: MAT_DIALOG_DATA, useValue: { source: { delimiter: '' } } }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
     translateService = TestBed.inject(TranslateService);
     store = TestBed.inject(MockStore);

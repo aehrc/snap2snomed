@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {APP_CONFIG} from '../app.config';
@@ -22,6 +22,7 @@ import {HttpLoaderFactory} from '../app.module';
 import {SelectionService} from '../_services/selection.service';
 
 import { TreeViewComponent } from './tree-view.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TreeViewComponent', () => {
   let component: TreeViewComponent;
@@ -29,21 +30,17 @@ describe('TreeViewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [TranslateService, SelectionService,
-        {provide: APP_CONFIG, useValue: {}},
-      ],
-      declarations: [ TreeViewComponent ]
-    })
+    declarations: [TreeViewComponent],
+    imports: [TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [TranslateService, SelectionService,
+        { provide: APP_CONFIG, useValue: {} }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting(),]
+})
     .compileComponents();
   });
 

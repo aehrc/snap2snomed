@@ -22,7 +22,7 @@ import {APP_CONFIG} from '../app.config';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../store/app.state';
 import {HttpLoaderFactory} from '../app.module';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {MatTableModule} from '@angular/material/table';
 import {UserService} from '../_services/user.service';
 import {MatSelectModule} from '@angular/material/select';
@@ -35,6 +35,7 @@ import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {MatSelectHarness} from '@angular/material/select/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InitialsPipe} from '../_utils/initialize_pipe';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ProjectRolesComponent', () => {
   let component: ProjectRolesComponent;
@@ -45,9 +46,8 @@ describe('ProjectRolesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        MatTableModule,
+    declarations: [ProjectRolesComponent, InitialsPipe],
+    imports: [MatTableModule,
         MatSelectModule,
         MatSortModule,
         BrowserAnimationsModule,
@@ -56,18 +56,16 @@ describe('ProjectRolesComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [TranslateService, {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },
         { provide: UserService, useValue: userService },
-        provideMockStore({initialState: initialAppState})],
-      declarations: [ProjectRolesComponent, InitialsPipe]
-    })
+        provideMockStore({ initialState: initialAppState }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
     translateService = TestBed.inject(TranslateService);
     fixture = TestBed.createComponent(ProjectRolesComponent);

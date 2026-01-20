@@ -20,13 +20,14 @@ import {Observable} from 'rxjs';
 
 import {AuthEffects} from './auth.effects';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {Routes} from '@angular/router';
 import {AppComponent} from '../../app.component';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../app.state';
 import { APP_CONFIG } from '../../app.config';
 import {testRoutes} from '../../auth.guard.spec';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 
@@ -38,17 +39,16 @@ describe('AuthEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes(routes),
-        HttpClientTestingModule
-      ],
-      providers: [
+    imports: [RouterTestingModule.withRoutes(routes)],
+    providers: [
         AuthEffects,
         provideMockActions(() => actions$),
-        provideMockStore({initialState}),
-        { provide: APP_CONFIG, useValue: {} }
-      ]
-    });
+        provideMockStore({ initialState }),
+        { provide: APP_CONFIG, useValue: {} },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
 
     effects = TestBed.inject(AuthEffects);
   });

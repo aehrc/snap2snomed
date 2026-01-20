@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {DebugElement} from '@angular/core';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
@@ -44,6 +44,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {ScannedActionsSubject} from '@ngrx/store';
 import {MatDialogModule} from '@angular/material/dialog';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskCardComponent', () => {
   let component: TaskCardComponent;
@@ -60,16 +61,15 @@ describe('TaskCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
+    declarations: [TaskCardComponent, InitialsPipe, ErrormessageComponent, MatCheckbox, UserChipComponent],
+    imports: [RouterTestingModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
         }),
-        HttpClientTestingModule,
         MatCheckboxModule,
         MatIconModule,
         MatCardModule,
@@ -79,20 +79,18 @@ describe('TaskCardComponent', () => {
         MatChipsModule,
         MatTooltipModule,
         MatProgressBarModule,
-        MatDialogModule
-      ],
-      providers: [TranslateService, ScannedActionsSubject,
-        {provide: APP_CONFIG, useValue: {}},
+        MatDialogModule],
+    providers: [TranslateService, ScannedActionsSubject,
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectTaskSaveError, value: {task: {id: '1'}, error: 'taskError'}},
-            {selector: selectCurrentUser, value: user},
-          ]
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectTaskSaveError, value: { task: { id: '1' }, error: 'taskError' } },
+                { selector: selectCurrentUser, value: user },
+            ]
         }),
-        HttpClientTestingModule],
-      declarations: [TaskCardComponent, InitialsPipe, ErrormessageComponent, MatCheckbox, UserChipComponent]
-    })
+        HttpClientTestingModule, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
     store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(TaskCardComponent);

@@ -27,7 +27,7 @@ import {Mapping} from '../../_models/mapping';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {selectCurrentUser} from '../../store/auth-feature/auth.selectors';
 import {HttpLoaderFactory} from '../../app.module';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
@@ -52,6 +52,7 @@ import {ProjectRolesComponent} from '../../project-roles/project-roles.component
 import {MatTableModule} from '@angular/material/table';
 import {Project} from '../../_models/project';
 import {selectAuthorizedProjects} from '../../store/app.selectors';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingAddComponent', () => {
   let component: MappingAddComponent;
@@ -77,9 +78,8 @@ describe('MappingAddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [MappingAddComponent, ErrormessageComponent, ProjectRolesComponent],
+    imports: [RouterTestingModule,
         BrowserAnimationsModule,
         FormsModule,
         MatDialogModule,
@@ -99,34 +99,36 @@ describe('MappingAddComponent', () => {
         MatSnackBarModule,
         MatTableModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
         FhirService,
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectMappingError, value: 'MockError'},
-            {selector: selectCurrentMapping, value: new Mapping()},
-            {selector: selectCurrentUser, value: user},
-            {selector: selectAuthorizedProjects, value: [
-                {
-                  id: 1,
-                  title: 'p1',
-                  maps: [{id: '1'}]
-                }]
-            }
-          ],
-        }), {provide: MatDialogRef, useValue: {}}, {provide: MAT_DIALOG_DATA, useValue: {}},
-        TranslateService],
-      declarations: [MappingAddComponent, ErrormessageComponent, ProjectRolesComponent]
-    }).compileComponents();
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectMappingError, value: 'MockError' },
+                { selector: selectCurrentMapping, value: new Mapping() },
+                { selector: selectCurrentUser, value: user },
+                { selector: selectAuthorizedProjects, value: [
+                        {
+                            id: 1,
+                            title: 'p1',
+                            maps: [{ id: '1' }]
+                        }
+                    ]
+                }
+            ],
+        }), { provide: MatDialogRef, useValue: {} }, { provide: MAT_DIALOG_DATA, useValue: {} },
+        TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
     translateService = TestBed.inject(TranslateService);
     fhirService = TestBed.inject(FhirService);
     store = TestBed.inject(MockStore);

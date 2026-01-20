@@ -20,7 +20,7 @@ import {TaskItemComponent} from './task-item.component';
 import {User} from '../../_models/user';
 import {Mapping} from '../../_models/mapping';
 import {Task, TaskType} from '../../_models/task';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
@@ -32,6 +32,7 @@ import {DebugElement} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {By} from '@angular/platform-browser';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskItemComponent', () => {
   let component: TaskItemComponent;
@@ -50,27 +51,23 @@ describe('TaskItemComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        NoopAnimationsModule,
+    declarations: [TaskItemComponent, TrimPipe],
+    imports: [NoopAnimationsModule,
         MatIconModule,
         MatTooltipModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [TranslateService,
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [TranslateService,
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-        })
-      ],
-      declarations: [TaskItemComponent, TrimPipe]
-    })
+            initialState: initialAppState,
+        }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
     store = TestBed.inject(MockStore);
     translateService = TestBed.inject(TranslateService);

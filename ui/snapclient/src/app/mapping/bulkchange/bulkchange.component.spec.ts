@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,6 +35,7 @@ import { HttpLoaderFactory } from 'src/app/app.module';
 import { ErrormessageComponent } from 'src/app/errormessage/errormessage.component';
 
 import { BulkchangeComponent } from './bulkchange.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('BulkchangeComponent', () => {
   let component: BulkchangeComponent;
@@ -42,9 +43,10 @@ describe('BulkchangeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        MatDialogModule,
-        HttpClientTestingModule,
+    declarations: [BulkchangeComponent,
+        ErrormessageComponent,
+        MatLabel],
+    imports: [MatDialogModule,
         BrowserAnimationsModule,
         MatDialogModule,
         MatButtonModule,
@@ -59,23 +61,22 @@ describe('BulkchangeComponent', () => {
         MatSelectModule,
         NoopAnimationsModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: MatDialogRef, useValue: {}},
-        {provide: MAT_DIALOG_DATA, useValue: {selectedRows: ['a']}},
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: { selectedRows: ['a'] } },
+        { provide: APP_CONFIG, useValue: {} },
         MatSnackBar,
-        TranslateService],
-      declarations: [ BulkchangeComponent,
-                      ErrormessageComponent,
-                      MatLabel ]
-    })
+        TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
   });
 

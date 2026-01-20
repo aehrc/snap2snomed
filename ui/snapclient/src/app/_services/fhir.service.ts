@@ -15,7 +15,7 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import {Observable, forkJoin, of} from 'rxjs';
 import {ServiceUtils} from '../_utils/service_utils';
 import {APP_CONFIG, AppConfig} from '../app.config';

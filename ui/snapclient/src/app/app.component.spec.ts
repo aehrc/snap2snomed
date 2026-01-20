@@ -20,7 +20,7 @@ import {AppComponent} from './app.component';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {AuthService} from './_services/auth.service';
 import {UserService} from './_services/user.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {CUSTOM_ELEMENTS_SCHEMA, DebugElement} from '@angular/core';
 import {IAppState, initialAppState} from './store/app.state';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -28,6 +28,7 @@ import {of} from 'rxjs';
 import {By} from '@angular/platform-browser';
 import {HttpLoaderFactory} from './app.module';
 import {APP_CONFIG} from './app.config';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 export class TranslateServiceStub {
 
@@ -64,27 +65,26 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {appName: 'Snap2SNOMED', authDomainUrl: 'anything'}},
-        provideMockStore({initialState: initialAppState}), AuthService, UserService,
-        {provide: TranslateService, useClass: TranslateServiceStub},
-      ],
-      declarations: [
+    declarations: [
         AppComponent,
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: { appName: 'Snap2SNOMED', authDomainUrl: 'anything' } },
+        provideMockStore({ initialState: initialAppState }), AuthService, UserService,
+        { provide: TranslateService, useClass: TranslateServiceStub },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
 
     store = TestBed.inject(MockStore);
     testAuthService = TestBed.inject(AuthService);

@@ -18,7 +18,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {NotesListComponent} from './notes-list.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
@@ -46,6 +46,7 @@ import {FormsModule} from '@angular/forms';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ErrorNotifier} from "../../errorhandler/errornotifier";
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('NotesListComponent', () => {
   let component: NotesListComponent;
@@ -58,9 +59,8 @@ describe('NotesListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [NotesListComponent],
+    imports: [RouterTestingModule,
         MatButtonModule,
         MatIconModule,
         MatCardModule,
@@ -73,25 +73,26 @@ describe('NotesListComponent', () => {
         NoopAnimationsModule,
         FormsModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
-        {provide: MatDialogRef, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectCurrentMapping, value: mapping},
-          ],
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectCurrentMapping, value: mapping },
+            ],
         }), TranslateService, ErrorNotifier,
-        {provide: MapService, useValue: mockMapService}],
-      declarations: [NotesListComponent]
-    })
+        { provide: MapService, useValue: mockMapService },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   });
 

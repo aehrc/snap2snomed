@@ -19,7 +19,7 @@ import {By} from '@angular/platform-browser';
 import {MatTabsModule} from '@angular/material/tabs';
 import {AssignedWorkComponent} from './assigned-work.component';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {HttpLoaderFactory} from '../../app.module';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
@@ -33,6 +33,7 @@ import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AssignedWorkComponent', () => {
   let component: AssignedWorkComponent;
@@ -51,36 +52,32 @@ describe('AssignedWorkComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        NoopAnimationsModule,
+    declarations: [
+        AssignedWorkComponent,
+        InitialsPipe,
+        ErrormessageComponent
+    ],
+    imports: [NoopAnimationsModule,
         MatSnackBarModule,
         MatTabsModule,
         MatTooltipModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      declarations: [
-        AssignedWorkComponent,
-        InitialsPipe,
-        ErrormessageComponent
-      ],
-      providers: [TranslateService,
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [TranslateService,
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectTaskSaveError, value: 'MockError'},
-            {selector: selectTaskList, value: [task]},
-          ]
-        })
-      ]
-    })
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectTaskSaveError, value: 'MockError' },
+                { selector: selectTaskList, value: [task] },
+            ]
+        }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
     store = TestBed.inject(MockStore);
     translateService = TestBed.inject(TranslateService);

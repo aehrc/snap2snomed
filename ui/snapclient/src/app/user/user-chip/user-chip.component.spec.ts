@@ -18,7 +18,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {UserChipComponent} from './user-chip.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -32,6 +32,7 @@ import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {User} from '../../_models/user';
 import {By} from '@angular/platform-browser';
 import {GravatarComponent} from '../gravatar/gravatar.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('UserChipComponent', () => {
   let component: UserChipComponent;
@@ -42,28 +43,28 @@ describe('UserChipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [UserChipComponent, GravatarComponent, InitialsPipe],
+    imports: [RouterTestingModule,
         BrowserAnimationsModule,
         MatSelectModule,
         MatSnackBarModule,
         MatTooltipModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-        }), TranslateService],
-      declarations: [UserChipComponent, GravatarComponent, InitialsPipe]
-    })
+            initialState: initialAppState,
+        }), TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
     fixture = TestBed.createComponent(UserChipComponent);
     component = fixture.componentInstance;

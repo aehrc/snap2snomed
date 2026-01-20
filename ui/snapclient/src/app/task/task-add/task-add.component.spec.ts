@@ -18,7 +18,7 @@ import {ComponentFixture, fakeAsync, flush, TestBed} from '@angular/core/testing
 
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import {HttpLoaderFactory} from '../../app.module';
@@ -46,6 +46,7 @@ import {ScannedActionsSubject} from '@ngrx/store';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { MappingTableSelectorComponent } from 'src/app/mapping/mapping-table-selector/mapping-table-selector.component';
 import {InitialsPipe} from '../../_utils/initialize_pipe';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskAddComponent', () => {
   let component: TaskAddComponent;
@@ -67,9 +68,8 @@ describe('TaskAddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        NoopAnimationsModule,
+    declarations: [TaskAddComponent, ErrormessageComponent, MappingTableSelectorComponent, InitialsPipe],
+    imports: [NoopAnimationsModule,
         MatTabsModule,
         FormsModule,
         MatCardModule,
@@ -82,26 +82,23 @@ describe('TaskAddComponent', () => {
         MatSlideToggleModule,
         MatDialogModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [TranslateService, ScannedActionsSubject,
-        {provide: MatDialogRef, useValue: {}},
-        {provide: MAT_DIALOG_DATA, useValue: {}},
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [TranslateService, ScannedActionsSubject,
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectTaskList, value: [task]},
-          ]
-        })
-      ],
-      declarations: [TaskAddComponent, ErrormessageComponent, MappingTableSelectorComponent, InitialsPipe]
-    })
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectTaskList, value: [task] },
+            ]
+        }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
     store = TestBed.inject(MockStore);
     translateService = TestBed.inject(TranslateService);

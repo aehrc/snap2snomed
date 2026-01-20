@@ -49,7 +49,7 @@ import {User} from '../../_models/user';
 import {selectTaskList} from '../../store/task-feature/task.selectors';
 import {AssignedWorkComponent} from '../../task/assigned-work/assigned-work.component';
 import {MatTableFilter} from 'mat-table-filter';
-import {HttpParams} from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import {ErrorInfo} from '../../errormessage/errormessage.component';
 import {ServiceUtils} from '../../_utils/service_utils';
 import {LoadMapping, LoadMapView, ViewContext} from 'src/app/store/mapping-feature/mapping.actions';

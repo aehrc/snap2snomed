@@ -15,8 +15,8 @@
  */
 
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { HttpErrorResponse } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpErrorResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { APP_CONFIG } from '../app.config';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ErrorNotifier } from './errornotifier';
@@ -34,22 +34,22 @@ describe('Snap2SnomedErrorHandler', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
+    imports: [TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
         }),
         MatSnackBarModule,
-        NoopAnimationsModule
-      ],
-      providers: [
-        { provide: APP_CONFIG, useValue: {fhirBaseUrl: fhirUrl, apiBaseUrl: apiUrl} },
-        TranslateService, ErrorNotifier, Snap2SnomedErrorHandler, Snap2SnomedHttpErrorInterceptor],
-    });
+        NoopAnimationsModule],
+    providers: [
+        { provide: APP_CONFIG, useValue: { fhirBaseUrl: fhirUrl, apiBaseUrl: apiUrl } },
+        TranslateService, ErrorNotifier, Snap2SnomedErrorHandler, Snap2SnomedHttpErrorInterceptor,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
     handler = TestBed.inject(Snap2SnomedErrorHandler);
     errorNotifier = TestBed.inject(ErrorNotifier);
   });

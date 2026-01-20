@@ -19,7 +19,7 @@ import {provideMockActions} from '@ngrx/effects/testing';
 import {Observable} from 'rxjs';
 
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../app.state';
 import {FhirEffects} from './fhir.effects';
@@ -27,6 +27,7 @@ import { APP_CONFIG } from '../../app.config';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
 import {testRoutes} from '../../auth.guard.spec';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('FhirEffects', () => {
   let actions$: Observable<any>;
@@ -38,24 +39,23 @@ describe('FhirEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes(routes),
-        HttpClientTestingModule,
+    imports: [RouterTestingModule.withRoutes(routes),
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
         { provide: APP_CONFIG, useValue: {} },
         FhirEffects,
         provideMockActions(() => actions$),
-        provideMockStore({initialState})
-      ]
-    });
+        provideMockStore({ initialState }),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
     translateService = TestBed.inject(TranslateService);
     effects = TestBed.inject(FhirEffects);
   });

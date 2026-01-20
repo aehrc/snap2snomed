@@ -20,7 +20,7 @@ import {MappingWorkComponent} from './mapping-work.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {APP_CONFIG} from '../../app.config';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {IAppState, initialAppState} from '../../store/app.state';
@@ -48,6 +48,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import {MappingDetailsCardComponent} from '../mapping-details-card/mapping-details-card.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 describe('MappingWorkComponent', () => {
@@ -66,9 +67,9 @@ describe('MappingWorkComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [MappingWorkComponent, ErrormessageComponent, MappingTableComponent, TaskItemComponent, TrimPipe, LastupdatedPipe,
+        MatSort, MatPaginator, MappingDetailsCardComponent],
+    imports: [RouterTestingModule,
         BrowserAnimationsModule,
         MatSelectModule,
         MatSnackBarModule,
@@ -77,27 +78,27 @@ describe('MappingWorkComponent', () => {
         MatBottomSheetModule,
         MatMenuModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectMappingError, value: 'error'},
-            {selector: selectCurrentUser, value: user},
-            {selector: selectCurrentMapping, value: mapping},
-            {selector: selectTaskList, value: [task]}
-          ],
-        }), TranslateService],
-      declarations: [MappingWorkComponent, ErrormessageComponent, MappingTableComponent, TaskItemComponent, TrimPipe, LastupdatedPipe,
-        MatSort, MatPaginator, MappingDetailsCardComponent]
-    })
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectMappingError, value: 'error' },
+                { selector: selectCurrentUser, value: user },
+                { selector: selectCurrentMapping, value: mapping },
+                { selector: selectTaskList, value: [task] }
+            ],
+        }), TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
     store = TestBed.inject(MockStore);
     translateService = TestBed.inject(TranslateService);

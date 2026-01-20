@@ -26,12 +26,13 @@ import {ScannedActionsSubject} from '@ngrx/store';
 import {APP_CONFIG} from '../../app.config';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../../store/app.state';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {HttpLoaderFactory} from '../../app.module';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatRadioModule} from '@angular/material/radio';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskCreateComponent', () => {
   let component: TaskCreateComponent;
@@ -48,30 +49,26 @@ describe('TaskCreateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        MatSnackBarModule,
+    declarations: [TaskCreateComponent],
+    imports: [MatSnackBarModule,
         MatSlideToggleModule,
         MatRadioModule,
         MatDialogModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [TranslateService, ScannedActionsSubject,
-        {provide: MatDialogRef, useValue: {}},
-        {provide: MAT_DIALOG_DATA, useValue: {}},
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [TranslateService, ScannedActionsSubject,
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState
-        })
-      ],
-      declarations: [TaskCreateComponent]
-    })
+            initialState: initialAppState
+        }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
   });
 

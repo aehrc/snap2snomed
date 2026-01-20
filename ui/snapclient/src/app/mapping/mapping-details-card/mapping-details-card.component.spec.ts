@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -29,6 +29,7 @@ import { Project } from 'src/app/_models/project';
 import {LastupdatedPipe} from 'src/app/_utils/lastupdated_pipe';
 
 import { MappingDetailsCardComponent } from './mapping-details-card.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingDetailsCardComponent', () => {
   let component: MappingDetailsCardComponent;
@@ -40,33 +41,33 @@ describe('MappingDetailsCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {appName: 'Snap2SNOMED', authDomainUrl: 'anything'}},
-        provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {
-              selector: selectAuthorizedProjects,
-              value: {project: project},
-            }
-          ],}),
-      ],
-      declarations: [
+    declarations: [
         MappingDetailsCardComponent,
         LastupdatedPipe
-      ]
-    })
+    ],
+    imports: [RouterTestingModule.withRoutes([]),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: { appName: 'Snap2SNOMED', authDomainUrl: 'anything' } },
+        provideMockStore({
+            initialState: initialAppState,
+            selectors: [
+                {
+                    selector: selectAuthorizedProjects,
+                    value: { project: project },
+                }
+            ],
+        }),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     .compileComponents();
   });
 

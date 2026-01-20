@@ -25,7 +25,7 @@ import {User} from '../../_models/user';
 import {Mapping} from '../../_models/mapping';
 import {Task, TaskType} from '../../_models/task';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpLoaderFactory} from '../../app.module';
 import {APP_CONFIG} from '../../app.config';
@@ -35,6 +35,7 @@ import {By} from '@angular/platform-browser';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MapRowStatus} from '../../_models/map_row';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingDetailComponent', () => {
   let component: MappingDetailComponent;
@@ -66,30 +67,30 @@ describe('MappingDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [MappingDetailComponent],
+    imports: [RouterTestingModule,
         BrowserAnimationsModule,
         MatDialogModule,
         MatTooltipModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectCurrentUser, value: user},
-          ],
-        }), TranslateService],
-      declarations: [MappingDetailComponent]
-    })
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectCurrentUser, value: user },
+            ],
+        }), TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
     store = TestBed.inject(MockStore);
     translateService = TestBed.inject(TranslateService);

@@ -16,8 +16,8 @@
 
 import {TestBed} from '@angular/core/testing';
 import {Snap2SnomedHttpErrorInterceptor} from './snap2snomedhttperrorinterceptor';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {APP_CONFIG} from '../app.config';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ErrorNotifier} from './errornotifier';
@@ -52,37 +52,37 @@ describe('Snap2SnomedHttpErrorInterceptor', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
+    imports: [TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
         }),
         MatSnackBarModule,
         NoopAnimationsModule,
-        RouterTestingModule.withRoutes(routes)
-      ],
-      providers: [
+        RouterTestingModule.withRoutes(routes)],
+    providers: [
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectToken, value: tokenMsg},
-            {selector: selectAuthState, value: {isAuthenticated: true, user: {token: tokenMsg}}}
-          ]
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectToken, value: tokenMsg },
+                { selector: selectAuthState, value: { isAuthenticated: true, user: { token: tokenMsg } } }
+            ]
         }),
-        { provide: APP_CONFIG, useValue: {apiBaseUrl: url} },
+        { provide: APP_CONFIG, useValue: { apiBaseUrl: url } },
         {
-          provide: HTTP_INTERCEPTORS,
-          useClass: Snap2SnomedHttpErrorInterceptor, multi: true
+            provide: HTTP_INTERCEPTORS,
+            useClass: Snap2SnomedHttpErrorInterceptor, multi: true
         },
         { provide: HTTP_INTERCEPTORS,
-          useClass: TokenInterceptor, multi: true
+            useClass: TokenInterceptor, multi: true
         },
-        TranslateService, ErrorNotifier, Snap2SnomedErrorHandler, Snap2SnomedHttpErrorInterceptor, AuthService],
-    });
+        TranslateService, ErrorNotifier, Snap2SnomedErrorHandler, Snap2SnomedHttpErrorInterceptor, AuthService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
     httpClient = TestBed.inject(HttpClient);
     httpMock = TestBed.inject(HttpTestingController);
     service = TestBed.inject(Snap2SnomedHttpErrorInterceptor);

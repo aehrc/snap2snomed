@@ -18,7 +18,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {SourceImportComponent} from './source-import.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {UntypedFormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
@@ -39,6 +39,7 @@ import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import { APP_CONFIG } from '../../app.config';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SourceImportComponent', () => {
   let component: SourceImportComponent;
@@ -49,9 +50,8 @@ describe('SourceImportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [SourceImportComponent, ErrormessageComponent],
+    imports: [RouterTestingModule,
         BrowserAnimationsModule,
         FormsModule,
         MatDialogModule,
@@ -67,18 +67,16 @@ describe('SourceImportComponent', () => {
         MatCheckboxModule,
         MatTooltipModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [{ provide: APP_CONFIG, useValue: {} },
-        provideMockStore({initialState: initialAppState}), TranslateService, UntypedFormBuilder,
-        {provide: MatDialogRef, useValue: {}}, {provide: MAT_DIALOG_DATA, useValue: {}}],
-      declarations: [SourceImportComponent, ErrormessageComponent]
-    })
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [{ provide: APP_CONFIG, useValue: {} },
+        provideMockStore({ initialState: initialAppState }), TranslateService, UntypedFormBuilder,
+        { provide: MatDialogRef, useValue: {} }, { provide: MAT_DIALOG_DATA, useValue: {} }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
       .compileComponents();
     translateService = TestBed.inject(TranslateService);
     store = TestBed.inject(MockStore);

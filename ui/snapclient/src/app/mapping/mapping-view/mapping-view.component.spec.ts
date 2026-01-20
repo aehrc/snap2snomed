@@ -23,7 +23,7 @@ import {IAppState, initialAppState} from '../../store/app.state';
 import {ChangeDetectorRef, DebugElement} from '@angular/core';
 import {User} from '../../_models/user';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatIconModule} from '@angular/material/icon';
@@ -51,6 +51,7 @@ import { MappingTableSelectorComponent } from '../mapping-table-selector/mapping
 import {MappingDetailsCardComponent} from '../mapping-details-card/mapping-details-card.component';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, of} from 'rxjs';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingViewComponent', () => {
   let component: MappingViewComponent;
@@ -67,9 +68,18 @@ describe('MappingViewComponent', () => {
 
   beforeEach(async (done) => {
      await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [
+        MappingViewComponent,
+        InitialsPipe,
+        LastupdatedPipe,
+        MatSort,
+        MatPaginator,
+        ErrormessageComponent,
+        BulkchangeComponent,
+        MappingDetailsCardComponent,
+        MappingTableSelectorComponent
+    ],
+    imports: [RouterTestingModule,
         MatButtonModule,
         MatDividerModule,
         MatIconModule,
@@ -82,45 +92,35 @@ describe('MappingViewComponent', () => {
         MatDialogModule,
         MatBottomSheetModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
-        {provide: ActivatedRoute,
-          useValue: {
-            params: of({
-              mappingid: mapping.id,
-            }),
-            queryParams: of({
-            })
-          }
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
+        { provide: ActivatedRoute,
+            useValue: {
+                params: of({
+                    mappingid: mapping.id,
+                }),
+                queryParams: of({})
+            }
         },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectMappingError, value: 'MockError'},
-            {selector: selectCurrentMapping, value: mapping},
-            {selector: selectCurrentUser, value: user},
-            {selector: selectSelectedRows, value: null},
-          ],
-        }), TranslateService],
-      declarations: [
-        MappingViewComponent,
-        InitialsPipe,
-        LastupdatedPipe,
-        MatSort,
-        MatPaginator,
-        ErrormessageComponent,
-        BulkchangeComponent,
-        MappingDetailsCardComponent,
-        MappingTableSelectorComponent
-      ]
-    }).compileComponents();
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectMappingError, value: 'MockError' },
+                { selector: selectCurrentMapping, value: mapping },
+                { selector: selectCurrentUser, value: user },
+                { selector: selectSelectedRows, value: null },
+            ],
+        }), TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
     store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(MappingViewComponent);
     component = fixture.componentInstance;

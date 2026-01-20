@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {provideMockStore} from '@ngrx/store/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -23,6 +23,7 @@ import {HttpLoaderFactory} from 'src/app/app.module';
 import {initialAppState} from 'src/app/store/app.state';
 
 import {ConceptAutosuggestComponent} from './concept-autosuggest.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ConceptAutosuggestComponent', () => {
   let component: ConceptAutosuggestComponent;
@@ -30,20 +31,17 @@ describe('ConceptAutosuggestComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [TranslateService, {provide: APP_CONFIG, useValue: {}},
-        provideMockStore({initialState: initialAppState})],
-      declarations: [ ConceptAutosuggestComponent ]
-    })
+    declarations: [ConceptAutosuggestComponent],
+    imports: [TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },
+        provideMockStore({ initialState: initialAppState }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
   });
 

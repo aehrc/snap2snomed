@@ -19,11 +19,12 @@ import {provideMockActions} from '@ngrx/effects/testing';
 import {Observable} from 'rxjs';
 
 import {MappingEffects} from './mapping.effects';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../app.state';
 import { APP_CONFIG } from '../../app.config';
 import {RouterTestingModule} from '@angular/router/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingEffects', () => {
   let actions$: Observable<any>;
@@ -33,17 +34,16 @@ describe('MappingEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule
-      ],
-      providers: [
+    imports: [RouterTestingModule],
+    providers: [
         { provide: APP_CONFIG, useValue: {} },
         MappingEffects,
         provideMockActions(() => actions$),
-        provideMockStore({initialState})
-      ]
-    });
+        provideMockStore({ initialState }),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+});
 
     effects = TestBed.inject(MappingEffects);
   });

@@ -18,7 +18,7 @@ import {ComponentFixture, fakeAsync, TestBed, flush, discardPeriodicTasks} from 
 
 import {TargetRelationshipComponent} from './target-relationship.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -41,6 +41,7 @@ import {DraggableDirective} from 'src/app/_directives/draggable.directive';
 import {FhirService} from "../../_services/fhir.service";
 import {of} from "rxjs";
 import { UntypedFormBuilder } from '@angular/forms';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TargetRelationshipComponent', () => {
   let component: TargetRelationshipComponent;
@@ -83,9 +84,8 @@ describe('TargetRelationshipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [TargetRelationshipComponent, ErrormessageComponent, DroppableDirective, DraggableDirective],
+    imports: [RouterTestingModule,
         BrowserAnimationsModule,
         MatSelectModule,
         MatSnackBarModule,
@@ -94,20 +94,21 @@ describe('TargetRelationshipComponent', () => {
         MatCardModule,
         MatListModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClientTestingModule]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-        }), FhirService, TranslateService, SelectionService, UntypedFormBuilder],
-      declarations: [TargetRelationshipComponent, ErrormessageComponent, DroppableDirective, DraggableDirective]
-    })
+            initialState: initialAppState,
+        }), FhirService, TranslateService, SelectionService, UntypedFormBuilder,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
     store = TestBed.inject(MockStore);
     fhirService = TestBed.inject(FhirService);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import {MapRowRelationship, MapViewFilter, MapViewPaging} from '../_models/map_row';
 import {TranslateService} from '@ngx-translate/core';
 import {Params} from '@angular/router';

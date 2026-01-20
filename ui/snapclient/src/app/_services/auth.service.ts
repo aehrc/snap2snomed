@@ -15,7 +15,7 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {TokenMsg, UserInfo} from '../_models/user';
 import {Task} from '../_models/task';
