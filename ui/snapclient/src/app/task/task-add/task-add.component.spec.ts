@@ -37,7 +37,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import {MatCardModule} from '@angular/material/card';
-import {MatLegacySelectHarness as MatSelectHarness} from '@angular/material/legacy-select/testing';
+import {MatSelectHarness} from '@angular/material/select/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {MatSnackBarModule} from '@angular/material/snack-bar';

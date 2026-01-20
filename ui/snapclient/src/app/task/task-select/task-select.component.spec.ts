@@ -35,7 +35,7 @@ import {selectTaskList} from '../../store/task-feature/task.selectors';
 import {User} from '../../_models/user';
 import {Mapping} from '../../_models/mapping';
 import {Task, TaskType} from '../../_models/task';
-import {MatLegacySelectHarness as MatSelectHarness} from '@angular/material/legacy-select/testing';
+import {MatSelectHarness} from '@angular/material/select/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {selectCurrentUser} from '../../store/auth-feature/auth.selectors';

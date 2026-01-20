@@ -32,7 +32,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 import {MatSortModule} from '@angular/material/sort';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {MatLegacySelectHarness as MatSelectHarness} from '@angular/material/legacy-select/testing';
+import {MatSelectHarness} from '@angular/material/select/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InitialsPipe} from '../_utils/initialize_pipe';
 
