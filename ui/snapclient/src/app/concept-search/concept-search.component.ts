@@ -29,9 +29,10 @@ import {selectConceptSearchList, selectFhirError} from '../store/fhir-feature/fh
 import {SelectionService} from '../_services/selection.service';
 
 @Component({
-  selector: 'app-concept-search',
-  templateUrl: './concept-search.component.html',
-  styleUrls: ['./concept-search.component.css']
+    selector: 'app-concept-search',
+    templateUrl: './concept-search.component.html',
+    styleUrls: ['./concept-search.component.css'],
+    standalone: false
 })
 export class ConceptSearchComponent implements OnInit, OnDestroy {
   @Input() active: boolean = true;

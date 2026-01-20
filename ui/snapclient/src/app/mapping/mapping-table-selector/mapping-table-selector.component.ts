@@ -24,9 +24,10 @@ import { selectCurrentView, selectSelectedRows } from '../../../app/store/mappin
 import { MappedRowDetailsDto, MapView, Page } from '../../../app/_models/map_row';
 
 @Component({
-  selector: 'app-mapping-table-selector',
-  templateUrl: './mapping-table-selector.component.html',
-  styleUrls: ['./mapping-table-selector.component.css']
+    selector: 'app-mapping-table-selector',
+    templateUrl: './mapping-table-selector.component.html',
+    styleUrls: ['./mapping-table-selector.component.css'],
+    standalone: false
 })
 export class MappingTableSelectorComponent implements OnInit, OnDestroy, AfterViewInit {
 

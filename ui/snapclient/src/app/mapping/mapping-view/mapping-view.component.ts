@@ -71,9 +71,10 @@ import { TargetChangedService } from 'src/app/_services/target-changed.service';
 import { cloneDeep } from 'lodash';
 
 @Component({
-  selector: 'app-mapping-view',
-  templateUrl: './mapping-view.component.html',
-  styleUrls: ['./mapping-view.component.css']
+    selector: 'app-mapping-view',
+    templateUrl: './mapping-view.component.html',
+    styleUrls: ['./mapping-view.component.css'],
+    standalone: false
 })
 export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
 

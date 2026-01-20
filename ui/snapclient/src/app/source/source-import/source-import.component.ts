@@ -31,9 +31,10 @@ import {ErrorInfo} from '../../errormessage/errormessage.component';
 
 
 @Component({
-  selector: 'app-source-import',
-  templateUrl: './source-import.component.html',
-  styleUrls: ['./source-import.component.css']
+    selector: 'app-source-import',
+    templateUrl: './source-import.component.html',
+    styleUrls: ['./source-import.component.css'],
+    standalone: false
 })
 export class SourceImportComponent implements OnInit, OnDestroy, AfterViewChecked{
 

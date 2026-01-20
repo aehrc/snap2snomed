@@ -55,9 +55,10 @@ const ALT_RELATIONSHIP_TYPE_CODE_OPTION_LABEL = 'relationship';
 const NUM_SAMPLE_LINES = 3;
 
 @Component({
-  selector: 'app-mapping-import',
-  templateUrl: './mapping-import.component.html',
-  styleUrls: ['./mapping-import.component.css', '../../source/source-import/source-import.component.css'],
+    selector: 'app-mapping-import',
+    templateUrl: './mapping-import.component.html',
+    styleUrls: ['./mapping-import.component.css', '../../source/source-import/source-import.component.css'],
+    standalone: false
 })
 export class MappingImportComponent implements OnInit, OnDestroy, AfterViewChecked {
 

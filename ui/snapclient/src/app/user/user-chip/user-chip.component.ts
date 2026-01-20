@@ -18,9 +18,10 @@ import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import {User} from '../../_models/user';
 
 @Component({
-  selector: 'app-user-chip',
-  templateUrl: './user-chip.component.html',
-  styleUrls: ['./user-chip.component.css']
+    selector: 'app-user-chip',
+    templateUrl: './user-chip.component.html',
+    styleUrls: ['./user-chip.component.css'],
+    standalone: false
 })
 export class UserChipComponent implements OnInit {
   @Input() user: User = new User();

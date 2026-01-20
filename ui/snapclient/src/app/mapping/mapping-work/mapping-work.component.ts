@@ -65,9 +65,10 @@ const enum TaskMode {
 }
 
 @Component({
-  selector: 'app-mapping-work',
-  templateUrl: './mapping-work.component.html',
-  styleUrls: ['./mapping-work.component.css']
+    selector: 'app-mapping-work',
+    templateUrl: './mapping-work.component.html',
+    styleUrls: ['./mapping-work.component.css'],
+    standalone: false
 })
 export class MappingWorkComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();

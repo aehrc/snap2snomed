@@ -28,9 +28,10 @@ import {Observable, Subscription} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 @Component({
-  selector: 'app-project-roles',
-  templateUrl: './project-roles.component.html',
-  styleUrls: ['./project-roles.component.css']
+    selector: 'app-project-roles',
+    templateUrl: './project-roles.component.html',
+    styleUrls: ['./project-roles.component.css'],
+    standalone: false
 })
 export class ProjectRolesComponent implements OnInit {
 

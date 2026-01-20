@@ -39,9 +39,10 @@ export interface Coding { //import from reducer?
 }
 
 @Component({
-  selector: 'app-target-relationship',
-  templateUrl: './target-relationship.component.html',
-  styleUrls: ['./target-relationship.component.css']
+    selector: 'app-target-relationship',
+    templateUrl: './target-relationship.component.html',
+    styleUrls: ['./target-relationship.component.css'],
+    standalone: false
 })
 export class TargetRelationshipComponent implements OnInit {
   relationships: MapRowRelationship[] = [];

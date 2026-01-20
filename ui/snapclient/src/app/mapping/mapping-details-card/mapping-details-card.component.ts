@@ -24,9 +24,10 @@ import { MapService } from 'src/app/_services/map.service';
 import { TargetChangedService } from 'src/app/_services/target-changed.service';
 
 @Component({
-  selector: 'app-mapping-details-card',
-  templateUrl: './mapping-details-card.component.html',
-  styleUrls: ['./mapping-details-card.component.css']
+    selector: 'app-mapping-details-card',
+    templateUrl: './mapping-details-card.component.html',
+    styleUrls: ['./mapping-details-card.component.css'],
+    standalone: false
 })
 export class MappingDetailsCardComponent {
 

@@ -20,9 +20,10 @@ import {Md5} from 'ts-md5';
 const SESSION_STORAGE_FAILED_GRAVATARS_KEY = "failedGravatars";
 
 @Component({
-  selector: 'app-gravatar',
-  templateUrl: './gravatar.component.html',
-  styleUrls: ['./gravatar.component.css']
+    selector: 'app-gravatar',
+    templateUrl: './gravatar.component.html',
+    styleUrls: ['./gravatar.component.css'],
+    standalone: false
 })
 export class GravatarComponent implements OnInit {
 

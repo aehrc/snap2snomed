@@ -63,9 +63,10 @@ export type SourceRow = {
 };
 
 @Component({
-  selector: 'app-mapping-detail',
-  templateUrl: './mapping-detail.component.html',
-  styleUrls: ['./mapping-detail.component.css']
+    selector: 'app-mapping-detail',
+    templateUrl: './mapping-detail.component.html',
+    styleUrls: ['./mapping-detail.component.css'],
+    standalone: false
 })
 export class MappingDetailComponent implements OnInit, OnDestroy {
 

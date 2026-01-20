@@ -46,9 +46,10 @@ import {ErrorDetail} from "../../_models/error_detail";
 import { FormUtils } from 'src/app/_utils/form_utils';
 
 @Component({
-  selector: 'app-mapping-list',
-  templateUrl: './mapping-list.component.html',
-  styleUrls: ['./mapping-list.component.css']
+    selector: 'app-mapping-list',
+    templateUrl: './mapping-list.component.html',
+    styleUrls: ['./mapping-list.component.css'],
+    standalone: false
 })
 export class MappingListComponent implements OnInit, AfterViewInit, OnDestroy {
   error: ErrorInfo = {};

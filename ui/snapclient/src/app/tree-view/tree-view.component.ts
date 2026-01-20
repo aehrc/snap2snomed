@@ -31,9 +31,10 @@ export class Node {
 }
 
 @Component({
-  selector: 'app-tree-view',
-  templateUrl: './tree-view.component.html',
-  styleUrls: ['./tree-view.component.css']
+    selector: 'app-tree-view',
+    templateUrl: './tree-view.component.html',
+    styleUrls: ['./tree-view.component.css'],
+    standalone: false
 })
 export class TreeViewComponent implements OnInit, OnDestroy {
 

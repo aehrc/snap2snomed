@@ -37,9 +37,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {ErrorNotifier} from "../../errorhandler/errornotifier";
 
 @Component({
-  selector: 'app-notes-list',
-  templateUrl: './notes-list.component.html',
-  styleUrls: ['./notes-list.component.css']
+    selector: 'app-notes-list',
+    templateUrl: './notes-list.component.html',
+    styleUrls: ['./notes-list.component.css'],
+    standalone: false
 })
 export class NotesListComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();

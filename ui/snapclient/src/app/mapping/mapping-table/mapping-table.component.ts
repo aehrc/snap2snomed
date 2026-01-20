@@ -67,9 +67,10 @@ export interface TableColumn {
 }
 
 @Component({
-  selector: 'app-mapping-table',
-  templateUrl: './mapping-table.component.html',
-  styleUrls: ['./mapping-table.component.css']
+    selector: 'app-mapping-table',
+    templateUrl: './mapping-table.component.html',
+    styleUrls: ['./mapping-table.component.css'],
+    standalone: false
 })
 export class MappingTableComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() paging!: TableParams;

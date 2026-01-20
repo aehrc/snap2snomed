@@ -20,7 +20,8 @@ import { By } from '@angular/platform-browser';
 import { DroppableDirective } from './droppable.directive';
 
 @Component({
-  template: `<div [appDroppable]="{zone: 'testZone'}">red green blue</div>`
+    template: `<div [appDroppable]="{zone: 'testZone'}">red green blue</div>`,
+    standalone: false
 })
 class TestDroppableComponent {
 }

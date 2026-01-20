@@ -76,9 +76,10 @@ export function getResultMessage(translateService: TranslateService, result: any
 }
 
 @Component({
-  selector: 'app-bulkchange',
-  templateUrl: './bulkchange.component.html',
-  styleUrls: ['./bulkchange.component.css']
+    selector: 'app-bulkchange',
+    templateUrl: './bulkchange.component.html',
+    styleUrls: ['./bulkchange.component.css'],
+    standalone: false
 })
 export class BulkchangeComponent implements OnInit {
 

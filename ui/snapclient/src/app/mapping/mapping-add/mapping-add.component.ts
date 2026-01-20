@@ -51,9 +51,10 @@ import {Project} from '../../_models/project';
 import { MatSelectChange } from '@angular/material/select';
 
 @Component({
-  selector: 'app-mapping-add',
-  templateUrl: './mapping-add.component.html',
-  styleUrls: ['./mapping-add.component.css']
+    selector: 'app-mapping-add',
+    templateUrl: './mapping-add.component.html',
+    styleUrls: ['./mapping-add.component.css'],
+    standalone: false
 })
 export class MappingAddComponent implements OnInit {
   private width = '1000px';
