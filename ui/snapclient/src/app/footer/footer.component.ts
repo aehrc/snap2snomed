@@ -17,7 +17,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {APP_CONFIG, AppConfig} from '../app.config';
 import {FeedbackWidgetComponent} from "../feedback-widget/feedback-widget.component";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-footer',

@@ -33,21 +33,21 @@ import {By} from '@angular/platform-browser';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import {MappingTableComponent} from '../mapping-table/mapping-table.component';
 
-import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
+import {MatSelectModule} from '@angular/material/select';
 import {selectCurrentUser} from '../../store/auth-feature/auth.selectors';
 import {selectTaskList} from '../../store/task-feature/task.selectors';
-import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {TrimPipe} from '../../_utils/trim_pipe';
 import {LastupdatedPipe} from '../../_utils/lastupdated_pipe';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {TaskItemComponent} from '../../task/task-item/task-item.component';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
-import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material/dialog';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import {MappingDetailsCardComponent} from '../mapping-details-card/mapping-details-card.component';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatMenuModule } from '@angular/material/menu';
 
 
 describe('MappingWorkComponent', () => {

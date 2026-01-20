@@ -17,7 +17,7 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Task, TaskType} from '../../../app/_models/task';
 import {MappedRowDetailsDto, MapRowRelationship, mapRowRelationships, MapRowStatus} from '../../../app/_models/map_row';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {authorStatuses, reviewStatuses} from '../../_models/map_row';
 import {MappingDetails, MappingDto, MappingUpdateDto, MapService} from '../../../app/_services/map.service';
 import {TranslateService} from '@ngx-translate/core';

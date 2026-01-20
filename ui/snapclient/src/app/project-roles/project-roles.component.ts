@@ -15,7 +15,7 @@
  */
 
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
+import {MatTableDataSource} from '@angular/material/table';
 import {ProjectRole, projectRoles, ProjectUserFilter, User} from '../_models/user';
 import {UntypedFormControl, NgForm} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
@@ -23,7 +23,7 @@ import {UserService} from '../_services/user.service';
 import {Project} from '../_models/project';
 import {ErrorInfo} from '../errormessage/errormessage.component';
 import {MatSort} from '@angular/material/sort';
-import {MatLegacySelectChange as MatSelectChange} from '@angular/material/legacy-select';
+import {MatSelectChange} from '@angular/material/select';
 import {Observable, Subscription} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 

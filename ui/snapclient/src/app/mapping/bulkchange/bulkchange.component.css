@@ -30,7 +30,7 @@
   margin-bottom: 15px;
 }
 
-.mat-checkbox {
+.mat-mdc-checkbox {
   margin-right: 5px;
 }
 
@@ -38,7 +38,7 @@
   margin-top: auto;
 }
 
-.mat-card {
+.mat-mdc-card {
   margin-bottom: 15px;
 }
 

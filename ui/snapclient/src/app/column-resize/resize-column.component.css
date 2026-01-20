@@ -1,11 +1,11 @@
-.mat-table.resizing {
+.mat-mdc-table.resizing {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     cursor: ew-resize;
   }
   
-  .mat-header-cell {
+  .mat-mdc-header-cell {
     position: relative;
   }
   

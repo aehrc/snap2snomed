@@ -4,10 +4,12 @@
   max-height: 230px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 #search-input ::ng-deep .mat-form-field-wrapper {
   padding-bottom: 0 !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
 mat-card-header {
   display: flex;
   justify-content: space-between;

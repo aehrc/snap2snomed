@@ -44,7 +44,7 @@
     </mat-form-field>
   </div>
   <div class="alert-warning" *ngIf="noMapValue != null || clearTarget || resetDualMap">{{'BULKCHANGEDIALOG.STATUS_AUTO' | translate}}</div>
-  <mat-card *ngIf="((data.task && data.task.type !== 'REVIEW') || data.task === null) && !clearTarget && changedStatus == null && changedRelationship == null && !hasSearchValue && !isDualMapView()">
+  <mat-card appearance="outlined" *ngIf="((data.task && data.task.type !== 'REVIEW') || data.task === null) && !clearTarget && changedStatus == null && changedRelationship == null && !hasSearchValue && !isDualMapView()">
     <div class="box spaced">
       <span class="box">
         <mat-checkbox color="primary"
@@ -61,7 +61,7 @@
     </div>
     <div *ngIf="noMapValue" class="alert-danger">{{'BULKCHANGEDIALOG.NOMAP_WARNING' | translate}}</div>
   </mat-card>
-  <mat-card *ngIf="((data.task && data.task.type !== 'REVIEW') || data.task === null) && !(noMapValue != null) && changedStatus == null && changedRelationship == null && !hasSearchValue && !isDualMapView()">
+  <mat-card appearance="outlined" *ngIf="((data.task && data.task.type !== 'REVIEW') || data.task === null) && !(noMapValue != null) && changedStatus == null && changedRelationship == null && !hasSearchValue && !isDualMapView()">
     <div class="box">
       <mat-checkbox color="primary"
       [(ngModel)]="clearTarget"
@@ -69,7 +69,7 @@
       <span class="auto-margin-top">{{'BULKCHANGEDIALOG.CLEAR_TARGET' | translate}}</span>
     </div>
   </mat-card>
-  <mat-card *ngIf="isDualMapView() && changedStatus == null">
+  <mat-card appearance="outlined" *ngIf="isDualMapView() && changedStatus == null">
     <div class="box">
       <mat-checkbox color="primary"
       [(ngModel)]="resetDualMap"

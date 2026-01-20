@@ -1,5 +1,5 @@
 <div class="tasks-panel">
-  <mat-card *ngIf="task && (isAdmin || isMember || isOwner)">
+  <mat-card appearance="outlined" *ngIf="task && (isAdmin || isMember || isOwner)">
     <form #taskForm="ngForm">
       <mat-card-content>
         <app-errormessage [error]="error" (closed)="clearError()"></app-errormessage>

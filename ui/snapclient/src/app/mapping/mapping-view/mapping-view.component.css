@@ -2,16 +2,16 @@
   background-color: #e6e6e6;
 }
 
-.mat-card {
+.mat-mdc-card {
   margin: 10px;
   flex-grow: 1;
 }
 
-.mat-cell {
+.mat-mdc-cell {
   padding-right: 10px;
 }
 
-.mat-icon-button {
+.mat-mdc-icon-button {
   width:30px !important;
   height:30px !important;
   line-height: 30px !important;
@@ -42,7 +42,7 @@ ul.sources-list li {
   min-width: 40%;
 }
 
-.actions-card .mat-card-content {
+.actions-card .mat-mdc-card-content {
   height: 100%;
 }
 
@@ -64,15 +64,15 @@ ul.sources-list li {
   width: 100% !important;
 }
 
-.compact-table .mat-row {
+.compact-table .mat-mdc-row {
   height: 30px;
 }
 
-.mat-header-cell {
+.mat-mdc-header-cell {
   padding: 0 5px 0 0;
 }
 
-.mat-slide-toggle {
+.mat-mdc-slide-toggle {
   margin-top: 1px;
   margin-right: 10px;
 }
@@ -115,7 +115,7 @@ ul.sources-list li {
 }
 
 .mat-column-filter-sourceCode, .mat-column-filter-targetCode,
-.mat-column-filter-sourceCode .mat-form-field, .mat-column-filter-targetCode .mat-form-field,
+.mat-column-filter-sourceCode .mat-mdc-form-field, .mat-column-filter-targetCode .mat-form-field,
 .mat-column-sourceCode, .mat-column-targetCode {
   width: 100px;
   max-width: 150px; /* wide enough for an 18 digit SNOMED code */
@@ -127,10 +127,12 @@ ul.sources-list li {
   min-width: 100px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
 .mat-column-filter-sourceDisplay .mat-form-field-type-mat-input {
   width: 95% !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
 .mat-column-filter-targetDisplay .mat-form-field-type-mat-input {
   width: 95% !important;
 }
@@ -140,41 +142,41 @@ ul.sources-list li {
   text-align: center;
 }
 
-::ng-deep .mat-column-filter-notes .mat-form-field,
+::ng-deep .mat-column-filter-notes .mat-mdc-form-field,
 ::ng-deep .mat-column-filter-noMap .mat-form-field {
   width: 100px;
 }
 
 
-::ng-deep .mat-column-filter-targetOutOfScope .mat-form-field{
+::ng-deep .mat-column-filter-targetOutOfScope .mat-mdc-form-field{
   width: 60px;
 }
 
 
-::ng-deep .mat-column-filter-flagged .mat-form-field{
+::ng-deep .mat-column-filter-flagged .mat-mdc-form-field{
   width: 60px;
 }
 
-::ng-deep .mat-column-filter-notes .mat-form-field{
+::ng-deep .mat-column-filter-notes .mat-mdc-form-field{
   width: 60px;
 }
 
-::ng-deep .mat-column-filter-assignedAuthor .mat-form-field {
-  width: 60px;
-  text-align: center;
-}
-
-::ng-deep .mat-column-filter-assignedReconciler .mat-form-field {
+::ng-deep .mat-column-filter-assignedAuthor .mat-mdc-form-field {
   width: 60px;
   text-align: center;
 }
 
-::ng-deep .mat-column-filter-assignedReviewer .mat-form-field {
+::ng-deep .mat-column-filter-assignedReconciler .mat-mdc-form-field {
   width: 60px;
   text-align: center;
 }
 
-::ng-deep .mat-column-filter-lastAuthorReviewer .mat-form-field {
+::ng-deep .mat-column-filter-assignedReviewer .mat-mdc-form-field {
+  width: 60px;
+  text-align: center;
+}
+
+::ng-deep .mat-column-filter-lastAuthorReviewer .mat-mdc-form-field {
   width: 60px;
   text-align: center;
 }
@@ -184,22 +186,24 @@ ul.sources-list li {
   font-size: 0.8em;
 }
 
-::ng-deep .mat-column-filter-relationship .mat-form-field,
+::ng-deep .mat-column-filter-relationship .mat-mdc-form-field,
 ::ng-deep .mat-column-filter-status .mat-form-field {
   width: 100px;
 }
 
-.mat-standard-chip {
+.mat-mdc-standard-chip {
   height: auto;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 #table-mapping ::ng-deep .mat-form-field-wrapper {
   padding-bottom: 0!important;
 }
 
-td.mat-cell {
+td.mat-mdc-cell {
   padding: 0 5px;
 }
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 ::ng-deep .highlight-check .mat-checkbox-inner-container .mat-checkbox-persistent-ripple {
   opacity: .1;
   background-color: blueviolet !important;
@@ -296,7 +300,7 @@ td.mat-cell {
   }
 }
 
-.mat-chip {
+.mat-mdc-chip {
   transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 20px;
   height: 40px;

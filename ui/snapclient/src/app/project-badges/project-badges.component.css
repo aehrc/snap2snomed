@@ -23,6 +23,7 @@
   margin-right: 5px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 .member-badges .mat-chip-list {
   display: inline-flex;
   margin: 0px;
@@ -33,13 +34,14 @@
   margin-right: 8px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
 .member-badges .mat-chip-list-wrapper {
   display: inline-flex !important;
   align-items: flex-start !important;
   justify-content: space-between !important;
 }
 
-.member-badges .mat-standard-chip {
+.member-badges .mat-mdc-standard-chip {
   padding: 10px;
 }
 

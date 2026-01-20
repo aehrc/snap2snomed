@@ -12,7 +12,7 @@
   </div>
   <div class="container" [ngClass]="{'has-error': error.message}">
     <div class="header">
-      <mat-form-field class='filter' appearance="standard">
+      <mat-form-field class='filter'>
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Search title and description" #input>
         <button class="cancel" [disabled]="input.value == ''" (click)="clearInput(input)"><mat-icon>cancel</mat-icon></button>
@@ -77,7 +77,7 @@
         <tr mat-row (click)="viewMapping(row)" *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
       <div *ngIf="projects.length === 0">
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-header>
             <mat-card-title>
               <mat-icon>info</mat-icon>

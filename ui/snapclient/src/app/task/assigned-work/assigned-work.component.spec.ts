@@ -16,7 +16,7 @@
 
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
-import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
+import {MatTabsModule} from '@angular/material/tabs';
 import {AssignedWorkComponent} from './assigned-work.component';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
@@ -31,8 +31,8 @@ import {User} from '../../_models/user';
 import {Mapping} from '../../_models/mapping';
 import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
-import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 describe('AssignedWorkComponent', () => {
   let component: AssignedWorkComponent;

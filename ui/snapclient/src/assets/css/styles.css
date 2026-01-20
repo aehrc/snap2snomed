@@ -110,12 +110,13 @@ header {
   background-color: white;
 }
 
-.mat-card-actions {
+.mat-mdc-card-actions {
   margin-top: 12px !important;
   margin-left: 16px !important;
   margin-bottom: 0px !important;
 }
 
+/*TODO(mdc-migration): The following rule targets internal classes of paginator that may no longer apply for the MDC version.*/
 .mat-paginator-sticky {
   bottom: 0px;
   position: sticky;
@@ -333,13 +334,13 @@ footer {
   border-color: #f5c6cb;
 }
 
-.backenderror-snackbar .mat-simple-snackbar-action span:before {
+.backenderror-snackbar .mat-mdc-snack-bar-action span:before {
     content: "\e5c9";
     font-family: "Material Icons";
     font-size: 1.5em;
 }
 
-.mat-snack-bar-container {
+.mat-mdc-snack-bar-container {
   background-color: #ffffff !important;
 }
 
@@ -351,12 +352,12 @@ flag {
   background-color: aliceblue;
 }
 
-.mat-tooltip {
+.mat-mdc-tooltip {
   font-size: 0.8em;
 }
 
 /** reduce font-size in tables **/
-.mat-cell td {
+.mat-mdc-cell td {
   font-size: smaller;
 }
 

@@ -28,10 +28,10 @@ import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../../store/app.state';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {HttpLoaderFactory} from '../../app.module';
-import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
-import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
-import {MatLegacyRadioModule as MatRadioModule} from '@angular/material/legacy-radio';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatRadioModule} from '@angular/material/radio';
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 
 describe('TaskCreateComponent', () => {
   let component: TaskCreateComponent;

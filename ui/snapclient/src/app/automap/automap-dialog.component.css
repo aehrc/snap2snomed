@@ -12,16 +12,16 @@
   height: 35px;
 }
 
-.mat-dialog-title{
+.mat-mdc-dialog-title{
   margin: 0;
 }
 
-.mat-dialog-content {
+.mat-mdc-dialog-content {
   max-height: 80vh !important;
   margin: 0;
 }
 
-.mat-progress-bar {
+.mat-mdc-progress-bar {
   height: 20px;
   border-radius: 10px;
 }

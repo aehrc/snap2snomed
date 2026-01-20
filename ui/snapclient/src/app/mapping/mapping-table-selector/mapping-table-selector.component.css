@@ -21,14 +21,17 @@
 }
 
 
-.mat-checkbox .mat-checkbox-frame {
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+.mat-mdc-checkbox .mat-checkbox-frame {
   transform: scale(2);
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 .mat-checkbox-checked .mat-checkbox-background {
   transform: scale(2);
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 mat-checkbox.select-all-on-page {
   margin: 2px 0;
 }

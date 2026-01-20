@@ -32,9 +32,9 @@ import {APP_CONFIG} from '../../app.config';
 import {selectCurrentUser} from '../../store/auth-feature/auth.selectors';
 import {Source} from '../../_models/source';
 import {By} from '@angular/platform-browser';
-import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
+import {MatDialogModule} from '@angular/material/dialog';
 import {MapRowStatus} from '../../_models/map_row';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 describe('MappingDetailComponent', () => {
   let component: MappingDetailComponent;

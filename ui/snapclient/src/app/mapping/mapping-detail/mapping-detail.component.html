@@ -2,7 +2,7 @@
   <div *ngIf="loading">
     <app-loading-spinner></app-loading-spinner>
   </div>
-  <mat-card class="source-details-card" *ngIf="task && source">
+  <mat-card appearance="outlined" class="source-details-card" *ngIf="task && source">
     <mat-card-content>
       <div class="panel-header">
         <div class="col">
@@ -63,10 +63,10 @@
         </div>
       </div>
       <div class="row">
-        <mat-chip-list aria-label="Filters">
-          <mat-chip *ngFor="let filter of appliedFilters" [disabled]="true" #tooltip="matTooltip"
-            matTooltip="{{'DETAILS.APPLIED_FILTER' | translate}}">{{filter | translate}}</mat-chip>
-        </mat-chip-list>
+        <mat-chip-listbox aria-label="Filters">
+          <mat-chip-option *ngFor="let filter of appliedFilters" [disabled]="true" #tooltip="matTooltip"
+            matTooltip="{{'DETAILS.APPLIED_FILTER' | translate}}">{{filter | translate}}</mat-chip-option>
+        </mat-chip-listbox>
       </div>
     </mat-card-content>
   </mat-card>
@@ -95,7 +95,7 @@
         </div>
       </div>
         <div class="relationship-view card-col">
-          <mat-card>
+          <mat-card appearance="outlined">
             <mat-card-header>
               <mat-card-title>{{'DETAILS.TARGET_BY_RELATIONSHIP' | translate}}</mat-card-title>
               <span class="cbNoMap pull-right">

@@ -31,10 +31,10 @@ import {
   toMapRowStatus
 } from '../../_models/map_row';
 import {TargetRow} from '../../_models/target_row';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {ServiceUtils} from '../../_utils/service_utils';
 import {ConfirmDialogComponent, DialogType} from '../../dialog/confirm-dialog/confirm-dialog.component';
-import {MatLegacyCheckboxChange as MatCheckboxChange} from '@angular/material/legacy-checkbox';
+import {MatCheckboxChange} from '@angular/material/checkbox';
 import {TableColumn, TableParams} from '../mapping-table/mapping-table.component';
 import {selectCurrentView} from 'src/app/store/mapping-feature/mapping.selectors';
 import {MapViewParams, SourceNavigationService, SourceNavSet} from 'src/app/_services/source-navigation.service';

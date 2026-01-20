@@ -20,7 +20,7 @@ import {FooterComponent} from './footer.component';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {APP_CONFIG} from "../app.config";
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogModule as MatDialogModule} from "@angular/material/legacy-dialog";
+import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HttpLoaderFactory } from '../app.module';

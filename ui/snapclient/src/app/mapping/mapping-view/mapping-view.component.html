@@ -11,7 +11,7 @@
       <div class="mapping-details">
         <app-mapping-details-card [mapping]="mapping" (clicked)="editMapping()" [editable]="isOwner() || isAdmin"></app-mapping-details-card>
       </div>
-      <mat-card class="actions-card">
+      <mat-card appearance="outlined" class="actions-card">
         <mat-card-content>
           <div class="task-dropdown" *ngIf="myTasks.length > 0; else notasks">
             <app-task-select [selectedLabel]="selectedLabel" [myTasks]="myTasks" [showRows]="true"></app-task-select>
@@ -34,9 +34,9 @@
             <span class="space-fill">&nbsp;</span>
             <ng-template #notasks>
               <p>
-                <mat-chip color="accent" selected>
+                <mat-chip-option color="accent" selected>
                   <mat-icon>warning</mat-icon>
-                  {{'MAP.NO_MY_TASKS' | translate}}</mat-chip>
+                  {{'MAP.NO_MY_TASKS' | translate}}</mat-chip-option>
               </p>
             </ng-template>
             <span class="space-fill">&nbsp;</span>

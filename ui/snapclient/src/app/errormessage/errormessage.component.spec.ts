@@ -24,7 +24,7 @@ import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {ErrorDetail} from '../_models/error_detail';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('ErrormessageComponent', () => {
   let component: ErrormessageComponent;

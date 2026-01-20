@@ -135,10 +135,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@^15.2.3", "@angular/cdk@~16.2.12", "@angular/cdk@16.2.14":
-  version "16.2.14"
-  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-16.2.14.tgz"
-  integrity sha512-n6PrGdiVeSTEmM/HEiwIyg6YQUUymZrb5afaNLGFRM5YL0Y8OBqd+XhCjb0OfD/AfgCUtedVEPwNqrfW8KzgGw==
+"@angular/cdk@^15.2.3", "@angular/cdk@~17.3.10", "@angular/cdk@16.2.14":
+  version "17.3.10"
+  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-17.3.10.tgz"
+  integrity sha512-b1qktT2c1TTTe5nTji/kFAVW92fULK0YhYAvJ+BjZTPKu2FniZNe8o4qqQ0pUuvtMu+ZQxp/QqFYoidIVCjScg==
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
@@ -168,7 +168,7 @@
     symbol-observable "4.0.0"
     yargs "17.7.2"
 
-"@angular/common@^15.2.3", "@angular/common@^16.0.0", "@angular/common@^16.0.0 || ^17.0.0", "@angular/common@>= 14.x <= 21.x", "@angular/common@>=10.0.0", "@angular/common@>=9.0.0", "@angular/common@~17.3.12", "@angular/common@17.3.12":
+"@angular/common@^15.2.3", "@angular/common@^16.0.0", "@angular/common@^16.0.0 || ^17.0.0", "@angular/common@^17.0.0 || ^18.0.0", "@angular/common@>= 14.x <= 21.x", "@angular/common@>=10.0.0", "@angular/common@>=9.0.0", "@angular/common@~17.3.12", "@angular/common@17.3.12":
   version "17.3.12"
   resolved "https://registry.npmjs.org/@angular/common/-/common-17.3.12.tgz"
   integrity sha512-vabJzvrx76XXFrm1RJZ6o/CyG32piTB/1sfFfKHdlH1QrmArb8It4gyk9oEjZ1IkAD0HvBWlfWmn+T6Vx3pdUw==
@@ -201,7 +201,7 @@
   resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-9.0.0.tgz"
   integrity sha512-ctjwuntPfZZT2mNj2NDIVu51t9cvbhl/16epc5xEwyzyDt76pX9UgwvY+MbXrf/C/FWwdtmNtfP698BKI+9leQ==
 
-"@angular/core@^15.2.3", "@angular/core@^16.0.0", "@angular/core@^16.0.0 || ^17.0.0", "@angular/core@>= 14.x <= 21.x", "@angular/core@>=13.0.0", "@angular/core@>=9.0.0", "@angular/core@~17.3.12", "@angular/core@17.3.12":
+"@angular/core@^15.2.3", "@angular/core@^16.0.0", "@angular/core@^16.0.0 || ^17.0.0", "@angular/core@^17.0.0 || ^18.0.0", "@angular/core@>= 14.x <= 21.x", "@angular/core@>=13.0.0", "@angular/core@>=9.0.0", "@angular/core@~17.3.12", "@angular/core@17.3.12":
   version "17.3.12"
   resolved "https://registry.npmjs.org/@angular/core/-/core-17.3.12.tgz"
   integrity sha512-MuFt5yKi161JmauUta4Dh0m8ofwoq6Ino+KoOtkYMBGsSx+A7dSm+DUxxNwdj7+DNyg3LjVGCFgBFnq4g8z06A==
@@ -230,7 +230,7 @@
     fast-glob "3.3.2"
     yargs "^17.2.1"
 
-"@angular/material@^15.2.3", "@angular/material@~16.2.12":
+"@angular/material@^15.2.3", "@angular/material@^16.2.0":
   version "16.2.14"
   resolved "https://registry.npmjs.org/@angular/material/-/material-16.2.14.tgz"
   integrity sha512-zQIxUb23elPfiIvddqkIDYqQhAHa9ZwMblfbv+ug8bxr4D0Dw360jIarxCgMjAcLj7Ccl3GBqZMUnVeM6cjthw==

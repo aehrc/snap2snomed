@@ -15,7 +15,7 @@
  */
 
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Optional, Output, ViewChild } from '@angular/core';
-import { MatLegacyColumnDef as MatColumnDef, MatLegacyTable as MatTable } from '@angular/material/legacy-table';
+import { MatColumnDef, MatTable } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IAppState } from '../../../app/store/app.state';

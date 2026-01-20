@@ -23,7 +23,7 @@ import { ErrorNotifier } from './errornotifier';
 import { Snap2SnomedErrorHandler } from './snap2snomederrorhandler';
 import { HttpLoaderFactory } from '../app.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Snap2SnomedHttpErrorInterceptor } from './snap2snomedhttperrorinterceptor';
 
 describe('Snap2SnomedErrorHandler', () => {

@@ -1,11 +1,11 @@
 <div id="target-relationship-container">
   <app-errormessage [error]="error"></app-errormessage>
   <div class="card-relationship">
-    <mat-card *ngIf="isNoMap() && !isReconcileTask(); else showRelationships">
+    <mat-card appearance="outlined" *ngIf="isNoMap() && !isReconcileTask(); else showRelationships">
       <mat-card-content>{{'MAP.NO_MAPPING_AVAILABLE' | translate}}</mat-card-content>
     </mat-card>
     <ng-template #showRelationships>
-      <mat-card cdkDropList *ngFor="let relationship of relationships"
+      <mat-card appearance="outlined" cdkDropList *ngFor="let relationship of relationships"
                 [appDroppable]="{zone: 'relationshipZone'}"
                 [dropDisabled]="isEditDisabled()"
                 (onDroppableComplete)="onDrop($event, relationship)">

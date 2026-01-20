@@ -23,7 +23,7 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {HttpLoaderFactory} from '../app.module';
 import {AuthService} from '../_services/auth.service';
 import {UserService} from '../_services/user.service';
-import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
+import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {User} from '../_models/user';
 import {IAppState, initialAppState} from '../store/app.state';
@@ -31,7 +31,7 @@ import {selectAuthState, selectCurrentUserError} from '../store/auth-feature/aut
 import {APP_CONFIG} from '../app.config';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 
 
 describe('HomeComponent', () => {

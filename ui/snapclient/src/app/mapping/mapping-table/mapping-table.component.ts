@@ -28,7 +28,7 @@ import {
   Page,
   TARGET_OUT_OF_SCOPE_TAG
 } from '../../_models/map_row';
-import {MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatSort, Sort, SortDirection} from '@angular/material/sort';
 import {Subscription} from 'rxjs';
 import {Store} from '@ngrx/store';
@@ -37,17 +37,17 @@ import {Task, TaskType} from '../../_models/task';
 import {selectCurrentView} from '../../store/mapping-feature/mapping.selectors';
 import {Mapping} from '../../_models/mapping';
 import {DroppableEventObject} from 'src/app/_directives/droppable.directive';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatTableFilter} from 'mat-table-filter';
 import {ErrorInfo} from 'src/app/errormessage/errormessage.component';
 import {Params} from '@angular/router';
 import {ServiceUtils} from '../../_utils/service_utils';
 import {SelectionService} from 'src/app/_services/selection.service';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {ConfirmDialogComponent, DialogData, DialogType} from 'src/app/dialog/confirm-dialog/confirm-dialog.component';
 import {StatusUtils} from '../../_utils/status_utils';
 import {MappingTableSelectorComponent} from '../mapping-table-selector/mapping-table-selector.component';
-import {MatLegacyTable as MatTable} from '@angular/material/legacy-table';
+import {MatTable} from '@angular/material/table';
 import {WriteDisableUtils} from '../../_utils/write_disable_utils';
 import {FhirService} from "../../_services/fhir.service";
 import { MappingNotesComponent } from '../mapping-table-notes/mapping-notes.component';

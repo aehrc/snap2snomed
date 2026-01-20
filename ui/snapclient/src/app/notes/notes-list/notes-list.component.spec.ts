@@ -19,11 +19,11 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {NotesListComponent} from './notes-list.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
+import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
-import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
+import {MatCardModule} from '@angular/material/card';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
@@ -34,18 +34,18 @@ import {selectCurrentMapping} from '../../store/mapping-feature/mapping.selector
 import {MapService} from '../../_services/map.service';
 import {DebugElement} from '@angular/core';
 import {Mapping} from '../../_models/mapping';
-import {MatLegacyInputModule as MatInputModule} from '@angular/material/legacy-input';
+import {MatInputModule} from '@angular/material/input';
 import {By} from '@angular/platform-browser';
 import {Note, NoteCategory} from '../../_models/note';
 import {User} from '../../_models/user';
 import {SourceCode} from '../../_models/source_code';
 import {Source} from '../../_models/source';
 import {MapRow} from '../../_models/map_row';
-import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormsModule} from '@angular/forms';
-import {MatLegacySnackBarModule as MatSnackBarModule} from "@angular/material/legacy-snack-bar";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ErrorNotifier} from "../../errorhandler/errornotifier";
-import {MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
+import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 
 describe('NotesListComponent', () => {
   let component: NotesListComponent;

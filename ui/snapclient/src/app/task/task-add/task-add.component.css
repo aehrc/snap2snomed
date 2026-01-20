@@ -7,7 +7,7 @@ h3 {
   color: #555555;
 }
 
-.mat-card-actions {
+.mat-mdc-card-actions {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

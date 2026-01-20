@@ -2,12 +2,12 @@ table {
     width: 100%;
 }
 
-.mat-header-cell {
+.mat-mdc-header-cell {
     padding: 0 5px 0 0;
     color: #4b6b85;
 }
 
-.mat-dialog-actions {
+.mat-mdc-dialog-actions {
     justify-content: flex-end;
 }
 

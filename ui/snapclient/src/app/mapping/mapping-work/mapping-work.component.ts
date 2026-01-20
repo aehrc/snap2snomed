@@ -25,14 +25,14 @@ import {
   selectMappingError
 } from '../../store/mapping-feature/mapping.selectors';
 import {Task, TaskType} from '../../_models/task';
-import {MatLegacySelect as MatSelect} from '@angular/material/legacy-select';
+import {MatSelect} from '@angular/material/select';
 import {ErrorInfo} from '../../errormessage/errormessage.component';
 import {LoadMapping, LoadMapView, LoadTaskView, ViewContext} from '../../store/mapping-feature/mapping.actions';
 import {AuthService} from '../../_services/auth.service';
 import {Subscription} from 'rxjs';
 import {Mapping} from 'src/app/_models/mapping';
 import {Sort} from '@angular/material/sort';
-import {LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
+import {PageEvent} from '@angular/material/paginator';
 import {MapView, MapViewFilter, Page} from 'src/app/_models/map_row';
 import {ServiceUtils} from 'src/app/_utils/service_utils';
 import {MappingTableComponent, TableColumn, TableParams} from '../mapping-table/mapping-table.component';
@@ -47,13 +47,13 @@ import {selectConceptHierarcy} from 'src/app/store/fhir-feature/fhir.selectors';
 import {ConceptHierarchy} from 'src/app/store/fhir-feature/fhir.actions';
 import {FhirService} from 'src/app/_services/fhir.service';
 import {MapService} from 'src/app/_services/map.service';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDialog} from '@angular/material/dialog';
 import {BulkchangeComponent, BulkChangeDialogData, getResultMessage} from '../bulkchange/bulkchange.component';
 import {ResultsdialogComponent} from 'src/app/resultsdialog/resultsdialog.component';
 import {MatBottomSheet, MatBottomSheetConfig} from '@angular/material/bottom-sheet';
 import {User} from '../../_models/user';
-import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 const enum TaskMode {
   AUTHOR_TABLE = 'AUTHOR_TABLE_VIEW',

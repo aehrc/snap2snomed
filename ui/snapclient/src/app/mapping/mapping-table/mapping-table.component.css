@@ -12,19 +12,19 @@
   cursor: pointer;
 }
 
-.mat-row:hover:not(.clicked-row) .mat-cell {
+.mat-mdc-row:hover:not(.clicked-row) .mat-mdc-cell {
   background-color: #dcf1fc;
 }
 
-.clicked-row .mat-cell {
+.clicked-row .mat-mdc-cell {
   background-color: deepskyblue;
 }
 
-.compact-table .mat-row {
+.compact-table .mat-mdc-row {
   height: 30px;
 }
 
-.mat-header-cell {
+.mat-mdc-header-cell {
   padding: 0 5px 0 0;
   color: #4b6b85;
 }
@@ -52,7 +52,7 @@
 
 .mat-column-filter-sourceCode, .mat-column-filter-targetCode,
 .mat-column-bulk-source-code, .mat-column-bulk-target-code,
-.mat-column-filter-sourceCode .mat-form-field, .mat-column-filter-targetCode .mat-form-field,
+.mat-column-filter-sourceCode .mat-mdc-form-field, .mat-column-filter-targetCode .mat-form-field,
 .mat-column-sourceCode, .mat-column-targetCode {
   width: 100px;
   max-width: 150px; /* wide enough for an 18 digit SNOMED code */
@@ -65,10 +65,12 @@
   min-width: 120px;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
 .mat-column-filter-sourceDisplay .mat-form-field-type-mat-input {
   width: 95% !important;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
 .mat-column-filter-targetDisplay .mat-form-field-type-mat-input {
   width: 95% !important;
 }
@@ -83,23 +85,23 @@ mat-column-bulk-noMap,
   width: 60px;
 }
 
-::ng-deep .mat-column-filter-noMap .mat-form-field{
+::ng-deep .mat-column-filter-noMap .mat-mdc-form-field{
   width: 60px;
 }
 
-::ng-deep .mat-column-filter-targetOutOfScope .mat-form-field{
+::ng-deep .mat-column-filter-targetOutOfScope .mat-mdc-form-field{
   width: 60px;
 }
 
-::ng-deep .mat-column-filter-flagged .mat-form-field{
+::ng-deep .mat-column-filter-flagged .mat-mdc-form-field{
   width: 60px;
 }
 
-::ng-deep .mat-column-filter-notes .mat-form-field{
+::ng-deep .mat-column-filter-notes .mat-mdc-form-field{
   width: 60px;
 }
 
-::ng-deep .mat-column-filter-lastAuthorReviewer .mat-form-field {
+::ng-deep .mat-column-filter-lastAuthorReviewer .mat-mdc-form-field {
   width: 60px;
 }
 
@@ -113,20 +115,21 @@ mat-column-bulk-noMap,
   text-align: left;
 }
 
-::ng-deep .mat-column-filter-relationship .mat-form-field,
+::ng-deep .mat-column-filter-relationship .mat-mdc-form-field,
 ::ng-deep .mat-column-filter-status .mat-form-field {
   width: 120px;
 }
 
-.mat-standard-chip {
+.mat-mdc-standard-chip {
   height: auto;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 #table-mapping ::ng-deep .mat-form-field-wrapper {
   padding-bottom: 0!important;
 }
 
-td.mat-cell {
+td.mat-mdc-cell {
   padding: 0 5px;
 }
 
@@ -134,6 +137,7 @@ td.mat-cell {
   border-collapse: collapse;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
 ::ng-deep .highlight-check .mat-checkbox-inner-container .mat-checkbox-persistent-ripple {
   opacity: .1;
   background-color: blueviolet !important;
@@ -150,11 +154,11 @@ td.mat-cell {
   padding-right: 30px;
 }
 
-.mat-stroked-button {
+.mat-mdc-outlined-button {
   color: #4a4a4a;
 }
 
-.mat-icon-button {
+.mat-mdc-icon-button {
   width:30px !important;
   height:30px !important;
   line-height: 30px !important;

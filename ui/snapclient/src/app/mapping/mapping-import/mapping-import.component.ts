@@ -15,7 +15,7 @@
  */
 
 import {AfterViewChecked, ChangeDetectionStrategy, Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {TranslateService} from '@ngx-translate/core';
 import {map, mergeMap} from 'rxjs/operators';
 import {ServiceUtils} from '../../_utils/service_utils';
@@ -25,7 +25,7 @@ import {IAppState} from '../../store/app.state';
 import {APP_CONFIG, AppConfig} from '../../app.config';
 import {ErrorInfo} from '../../errormessage/errormessage.component';
 import {MappingImportSource} from 'src/app/_models/mapping_import_source';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
+import { MatSelectChange } from '@angular/material/select';
 
 // export interface HeaderDetails {
 //   source_code_col_index: number;

@@ -1,6 +1,6 @@
 <div class="taskcard" #taskcard *ngIf="task">
   <div class="task-card">
-    <mat-card (click)="taskMapping()" [ngClass]="isAssigned(task) ? 'available' : 'not-available'">
+    <mat-card appearance="outlined" (click)="taskMapping()" [ngClass]="isAssigned(task) ? 'available' : 'not-available'">
       <app-errormessage #errorMessage [error]="error" (click)="$event.stopPropagation()"></app-errormessage>
       <mat-card-header>
         <mat-card-title>

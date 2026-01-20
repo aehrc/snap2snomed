@@ -38,7 +38,7 @@ import {selectTaskDeleteError} from '../../store/task-feature/task.selectors';
 import {CompleteTask, DeleteTask} from '../../store/task-feature/task.actions';
 import {TaskService} from '../../_services/task.service';
 import {ConfirmDialogComponent, DialogType} from '../../dialog/confirm-dialog/confirm-dialog.component';
-import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
+import {MatDialog} from '@angular/material/dialog';
 import {AuthService} from '../../_services/auth.service';
 
 export enum TaskAction {

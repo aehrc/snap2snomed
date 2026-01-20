@@ -2,9 +2,9 @@
   <mat-card-header>
     <mat-card-title>{{'TASK.CONFLICTS_TITLE' | translate }}</mat-card-title>
   </mat-card-header>
-  <mat-card>
+  <mat-card appearance="outlined">
     <div class="conflictmessage" *ngIf="existingConflicts > 0">
-      <mat-chip>{{existingConflicts}}</mat-chip>
+      <mat-chip-option>{{existingConflicts}}</mat-chip-option>
       {{ 'TASK.EXISTING_TASK' | translate : {taskType: data.task?.type} }}
       <div class="assign-select" *ngIf="data.isOwner">
         <mat-slide-toggle class="slide"
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="conflictmessage" *ngIf="roleConflicts > 0">
-      <mat-chip>{{roleConflicts}}</mat-chip>
+      <mat-chip-option>{{roleConflicts}}</mat-chip-option>
       {{ 'TASK.ROLE_CONFLICT_TASK' | translate : {oppositeType: getTaskOppositeType()} }}
       <div class="assign-select" *ngIf="data.isOwner">
         <mat-slide-toggle class="slide" matTooltip="{{ 'TASK.ALLOW_SAME_AUTHOR_REVIEWER_TOOLTIP' | translate }}"

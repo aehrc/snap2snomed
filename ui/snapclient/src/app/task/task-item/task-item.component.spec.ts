@@ -31,7 +31,7 @@ import {TrimPipe} from '../../_utils/trim_pipe';
 import {DebugElement} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {By} from '@angular/platform-browser';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 describe('TaskItemComponent', () => {
   let component: TaskItemComponent;

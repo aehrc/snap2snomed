@@ -33,15 +33,15 @@
   background-color: #e6e6e6;
 }
 
-.mat-cell, .mat-header-cell {
+.mat-mdc-cell, .mat-mdc-header-cell {
   padding: 10px;
 }
 
-.mat-cell > button {
+.mat-mdc-cell > button {
   margin: 2px 3px;
 }
 
-.mat-cell > .mat-icon-button {
+.mat-mdc-cell > .mat-mdc-icon-button {
   border-radius: 4px;
   width: 62px;
 }
@@ -74,7 +74,7 @@
   width: 10%;
 }
 
-.mat-form-field {
+.mat-mdc-form-field {
   font-size: 12px;
   margin-left: 10px;
   margin-top: 6px;
@@ -82,7 +82,7 @@
   z-index: 3;
 }
 
-.mat-row {
+.mat-mdc-row {
   height: 61px;
   cursor: pointer;
 }
@@ -122,7 +122,7 @@ table {
   }
 }
 
-.mat-row:hover .mat-cell {
+.mat-mdc-row:hover .mat-mdc-cell {
   background-color: #dcf1fc;
 }
 
