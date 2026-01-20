@@ -73,19 +73,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "snapclient:build",
-            "ssl": true
+            "ssl": true,
+            "buildTarget": "snapclient:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "snapclient:build:production"
+              "buildTarget": "snapclient:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "snapclient:build"
+            "buildTarget": "snapclient:build"
           }
         },
         "test": {
