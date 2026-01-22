@@ -288,7 +288,7 @@
   optionalDependencies:
     lmdb "3.4.4"
 
-"@angular/cdk@~21.1.1", "@angular/cdk@21.1.1":
+"@angular/cdk@^11.2.13", "@angular/cdk@~21.1.1", "@angular/cdk@21.1.1":
   version "21.1.1"
   resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-21.1.1.tgz"
   integrity sha512-lzscv+A6FCQdyWIr0t0QHXEgkLzS9wJwgeOOOhtxbixxxuk7xVXdcK/jnswE1Maugh1m696jUkOhZpffks3psA==
@@ -321,7 +321,7 @@
     yargs "18.0.0"
     zod "4.3.5"
 
-"@angular/common@^21.0.0", "@angular/common@^21.0.0 || ^22.0.0", "@angular/common@>= 14.x <= 21.x", "@angular/common@>=10.0.0", "@angular/common@>=20.0.0", "@angular/common@>=9.0.0", "@angular/common@~21.1.1", "@angular/common@21.1.1":
+"@angular/common@^21.0.0", "@angular/common@^21.0.0 || ^22.0.0", "@angular/common@>= 14.x <= 21.x", "@angular/common@>=10.0.0", "@angular/common@>=20.0.0", "@angular/common@>=9.0.0", "@angular/common@~11.2.13", "@angular/common@~21.1.1", "@angular/common@21.1.1":
   version "21.1.1"
   resolved "https://registry.npmjs.org/@angular/common/-/common-21.1.1.tgz"
   integrity sha512-Di2I6TooHdKun3SqRr45o4LbWJq/ZdwUt3fg0X3obPYaP/f6TrFQ4TMjcl03EfPufPtoQx6O+d32rcWVLhDxyw==
@@ -354,7 +354,7 @@
   resolved "https://registry.npmjs.org/@angular/compiler/-/compiler-9.0.0.tgz"
   integrity sha512-ctjwuntPfZZT2mNj2NDIVu51t9cvbhl/16epc5xEwyzyDt76pX9UgwvY+MbXrf/C/FWwdtmNtfP698BKI+9leQ==
 
-"@angular/core@^21.0.0", "@angular/core@^21.0.0 || ^22.0.0", "@angular/core@>= 14.x <= 21.x", "@angular/core@>=13.0.0", "@angular/core@>=20.0.0", "@angular/core@>=9.0.0", "@angular/core@~21.1.1", "@angular/core@21.1.1":
+"@angular/core@^21.0.0", "@angular/core@^21.0.0 || ^22.0.0", "@angular/core@>= 14.x <= 21.x", "@angular/core@>=13.0.0", "@angular/core@>=20.0.0", "@angular/core@>=9.0.0", "@angular/core@~11.2.13", "@angular/core@~21.1.1", "@angular/core@21.1.1":
   version "21.1.1"
   resolved "https://registry.npmjs.org/@angular/core/-/core-21.1.1.tgz"
   integrity sha512-KFRCEhsi02pY1EqJ5rnze4mzSaacqh14D8goDhtmARiUH0tefaHR+uKyu4bKSrWga2T/ExG0DJX52LhHRs2qSw==
@@ -384,7 +384,7 @@
     tinyglobby "^0.2.12"
     yargs "^18.0.0"
 
-"@angular/material@^21.1.1":
+"@angular/material@^11.2.13", "@angular/material@^21.1.1":
   version "21.1.1"
   resolved "https://registry.npmjs.org/@angular/material/-/material-21.1.1.tgz"
   integrity sha512-flRS8Mqf41n5lhrG/D0iPl2zyhhEZBaASFjCMSk5idUWMfwdYlKtCaJ3iRFClIixBUwGPrp8ivjBGKsRGfM/Zw==
@@ -1233,6 +1233,13 @@
   version "1.5.0"
   resolved "https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
+
+"@csiro/shrimp-hierarchy-view@^0.0.7":
+  version "0.0.7"
+  resolved "https://pkgs.dev.azure.com/aehrc/ontoserver/_packaging/aehrc-npm/npm/registry/@csiro/shrimp-hierarchy-view/-/shrimp-hierarchy-view-0.0.7.tgz"
+  integrity sha1-aItEM72nn7v/c1VyIgzJ3T5G0wU=
+  dependencies:
+    tslib "^2.0.0"
 
 "@discoveryjs/json-ext@0.6.3":
   version "0.6.3"
