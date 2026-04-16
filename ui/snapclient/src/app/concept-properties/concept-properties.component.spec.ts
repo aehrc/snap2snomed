@@ -35,8 +35,7 @@ describe('ConceptPropertiesComponent', () => {
     imports: [TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClientTestingModule]
+                useFactory: HttpLoaderFactory
             }
         })],
     providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },

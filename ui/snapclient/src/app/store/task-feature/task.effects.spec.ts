@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import {TestBed} from '@angular/core/testing';
 import {provideMockActions} from '@ngrx/effects/testing';
-import {Observable} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 import {RouterTestingModule} from '@angular/router/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {provideMockStore} from '@ngrx/store/testing';
@@ -28,7 +28,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 
 
 describe('TaskEffects', () => {
-  let actions$: Observable<any>;
+  let actions$: Observable<any> = EMPTY;
   let effects: TaskEffects;
 
   const initialState = initialAppState;

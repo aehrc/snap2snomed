@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ export class MappingDetailsCardComponent {
 
   @Output() clicked = new EventEmitter();
 
-  outOfScopeTargetCount: number | string = "";
+  outOfScopeTargetCount: number = 0;
 
   constructor(private translate: TranslateService,
               private router: Router,

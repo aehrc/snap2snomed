@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,8 @@
  */
 
 const { writeFile } = require('fs');
-const { argv } = require('yargs');
+const yargs = require('yargs/yargs');
+const argv = yargs(process.argv.slice(2)).parse();
 // read environment variables from .env file
 require('dotenv').config();
 // read the command line arguments passed with yargs

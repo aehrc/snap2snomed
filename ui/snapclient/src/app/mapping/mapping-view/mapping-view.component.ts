@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@ import {saveAs} from 'file-saver';
 import {User} from '../../_models/user';
 import {selectTaskList} from '../../store/task-feature/task.selectors';
 import {AssignedWorkComponent} from '../../task/assigned-work/assigned-work.component';
-import {MatTableFilter} from 'mat-table-filter';
 import { HttpParams } from '@angular/common/http';
 import {ErrorInfo} from '../../errormessage/errormessage.component';
 import {ServiceUtils} from '../../_utils/service_utils';
@@ -68,7 +67,6 @@ import { MappingNotesComponent } from '../mapping-table-notes/mapping-notes.comp
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { TableColumn } from '../mapping-table/mapping-table.component';
 import { TargetChangedService } from 'src/app/_services/target-changed.service';
-import { cloneDeep } from 'lodash';
 
 @Component({
     selector: 'app-mapping-view',
@@ -181,7 +179,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
   currentUser: User = new User(); // loaded in home.component.ts onActivate
   paging: MapViewPaging;
   filterEntity: MapViewFilter;
-  filterType: MatTableFilter;
+  // filterType: MatTableFilter; TODO: replace post Angular upgrade
   filterParams: HttpParams = new HttpParams();
   relationships: MapRowRelationship[];
   statuses: MapRowStatus[];
@@ -197,7 +195,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
   reconcilePageSize = 10;
   reconcileCurrentPage = 0;
 
-  private timeout: NodeJS.Timeout | null = null;
+  private timeout: ReturnType<typeof setTimeout> | null = null;
 
   // tslint:disable-next-line:variable-name
   private _filterEnabled = false;
@@ -227,7 +225,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.paging = new MapViewPaging();
     this.filterEntity = new MapViewFilter();
-    this.filterType = MatTableFilter.ANYWHERE;
+    // this.filterType = MatTableFilter.ANYWHERE; TODO: replace post Angular upgrade
     this.relationships = mapRowRelationships;
     this.statuses = mapRowStatuses;
     this.isAdmin = this.authService.isAdmin();

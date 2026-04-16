@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import {AuthService} from '../_services/auth.service';
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {AcceptTermsComponent} from "../accept-terms/accept-terms.component";
 import {IAuthState} from "../store/auth-feature/auth.reducer";
-
 
 @Component({
     selector: 'app-home',

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import {DraggableDirective} from 'src/app/_directives/draggable.directive';
 import {FhirService} from "../../_services/fhir.service";
 import {of} from "rxjs";
 import { UntypedFormBuilder } from '@angular/forms';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TargetRelationshipComponent', () => {
   let component: TargetRelationshipComponent;
@@ -97,7 +97,7 @@ describe('TargetRelationshipComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClientTestingModule]
+                deps: [HttpClient]
             }
         })],
     providers: [

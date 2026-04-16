@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import {SourceCode} from '../../_models/source_code';
 import {Source} from '../../_models/source';
 import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SourceDetailComponent', () => {
   let component: SourceDetailComponent;
@@ -51,7 +51,7 @@ describe('SourceDetailComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClientTestingModule]
+                deps: [HttpClient]
             }
         })],
     providers: [

@@ -85,7 +85,7 @@
   <div class="container-panels">
     <div class="container-row">
       <div class="search-view card-col">
-        <app-concept-search [scope]="task.mapping?.toScope || ''" [version]="task.mapping?.toVersion || ''"
+        <app-concept-search [scope]="task.mapping.toScope" [version]="task.mapping.toVersion || ''"
           [initial]="source.display" [autosuggest]="source.display">
           <span class="search-title">{{'MAP.SEARCH_TARGET' | translate}}</span>
         </app-concept-search>
@@ -105,7 +105,7 @@
             @if (loadingHierarchy) {
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
             } @else {
-              <lib-shrimp-hierarchy [rows]="nodes" (selected)="onSelected($event)"></lib-shrimp-hierarchy>
+              <!-- lib-shrimp-hierarchy: temporarily disabled (awaiting Angular 21-compatible release) -->
             }
           </div>
         }
@@ -128,7 +128,7 @@
             <app-target-relationship [task]="task" [targetRows]="mapRows" [source]="getSource()" [sourceNavSet]="selectedRowset"
               (newTargetEvent)="saveTarget($event)"
               [disableActions]="isEditDisabled()"
-              [disableFlagging]="writeDisableUtils.isFlaggingDisabled(this.task?.type, toMapRowStatus(source.status))"
+              [disableFlagging]="writeDisableUtils.isFlaggingDisabled(this.task.type, toMapRowStatus(source.status))"
               (removeTargetEvent)="removeTarget($event)"
               (flagEvent)="updateFlag($event)"
             ></app-target-relationship>
@@ -140,7 +140,7 @@
                 <mat-icon>navigate_before</mat-icon>
               </button>
               <mat-button-toggle-group (change)="updateStatus($event.value)" [(ngModel)]="source.status"
-                [disabled]="writeDisableUtils.isStatusSelectionDisabled(this.task?.type, toMapRowStatus(source.status))"
+                [disabled]="writeDisableUtils.isStatusSelectionDisabled(this.task.type, toMapRowStatus(source.status))"
                 aria-label="Status" name="status">
                 @for (status of getStatusList(); track status) {
                   <mat-button-toggle [value]="status"
@@ -156,7 +156,7 @@
             </mat-card-footer>
           </mat-card>
         </div>
-        <app-concept-properties class="tab-view card-col" [version]="task.mapping?.toVersion || ''">
+        <app-concept-properties class="tab-view card-col" [version]="task.mapping.toVersion || ''">
         </app-concept-properties>
       </div>
       <div class="container-row">

@@ -27,7 +27,7 @@
                             matTooltip="{{'AUTOMAP.AUTOMAP_TOOLTIP' | translate}}"
                             matTooltipShowDelay="1000"
                             (click)="launchAutomap()"
-                          [disabled]="isAdmin && currentUser?.id !== task.assignee?.id">{{'AUTOMAP.AUTOMAP' | translate}}</button>
+                          [disabled]="isAdmin && currentUser?.id !== task.assignee.id">{{'AUTOMAP.AUTOMAP' | translate}}</button>
                         </span>
                       } @else {
                         <app-automap [mapping]="mapping"
@@ -39,7 +39,7 @@
                   }
                   <button mat-stroked-button
                     (click)="clickBulkChange()"
-                    [disabled]="(isAdmin && currentUser?.id !== task.assignee?.id) ||  !hasSelectedRows()">
+                    [disabled]="(isAdmin && currentUser?.id !== task.assignee.id) ||  !hasSelectedRows()">
                     {{'TABLE.BULK_CHANGE' | translate}}
                   </button>
                 </div>
@@ -50,8 +50,8 @@
           <div class="search-container" layout="row">
             <div class="search-view card-col">
               <app-concept-search [active]="!opened"
-                [scope]="mapping?.toScope || ''"
-                [version]="mapping?.toVersion || ''"
+                [scope]="mapping.toScope || ''"
+                [version]="mapping.toVersion || ''"
                 [initial]="targetConceptSearchText">
                 <span class="search-title">{{'MAP.SEARCH_TARGET' | translate}}</span>
               </app-concept-search>
@@ -72,15 +72,13 @@
                   @if (loadingHierarchy) {
                     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                   } @else {
-                    <lib-shrimp-hierarchy
-                      [rows]="nodes"
-                    (selected)="onSelected($event)"></lib-shrimp-hierarchy>
+                    <!-- lib-shrimp-hierarchy: temporarily disabled (awaiting Angular 21-compatible release) -->
                   }
                 </div>
               }
             </div>
             <div class="properties-view card-col">
-              <app-concept-properties [active]="!opened" [version]="mapping?.toVersion || ''">
+              <app-concept-properties [active]="!opened" [version]="mapping.toVersion || ''">
               </app-concept-properties>
             </div>
           </div>

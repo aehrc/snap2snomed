@@ -24,7 +24,7 @@
               </div>
             } @else {
               <p>
-                <mat-chip-option color="accent" selected>
+                <mat-chip-option color="accent" selected [hideSingleSelectionIndicator]="true">
                   <mat-icon>warning</mat-icon>
                 {{'MAP.NO_MY_TASKS' | translate}}</mat-chip-option>
               </p>
@@ -86,8 +86,7 @@
       <mat-sidenav-container autosize>
         <mat-sidenav-content>
           <div class="container-table">
-            <table id="table-mapping" mat-table matTableFilter class="compact-table"
-              [exampleEntity]="filterEntity" [filterType]="filterType"
+            <table id="table-mapping" mat-table class="compact-table"
               [dataSource]="page.data" matSort fixedLayout="false">
               <!-- ID Column -->
               <app-mapping-table-selector
@@ -485,9 +484,9 @@
                           </table>
                           <mat-paginator class="bottom-paginator"
                             #paginator class="mat-paginator-sticky"
-                            [length]="page?.totalElements || 0"
-                            [pageIndex]="paging?.pageIndex"
-                            [pageSize]="paging?.pageSize"
+                            [length]="page.totalElements || 0"
+                            [pageIndex]="paging.pageIndex"
+                            [pageSize]="paging.pageSize"
                             [showFirstLastButtons]="true"
                             [pageSizeOptions]="[10, 20, 50, 100, 250]">
                           </mat-paginator>

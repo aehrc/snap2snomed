@@ -47,8 +47,7 @@ describe('AutomapComponent', () => {
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClientTestingModule]
+                useFactory: HttpLoaderFactory
             }
         })],
     providers: [{ provide: MatDialogRef, useValue: mockDialogRef },

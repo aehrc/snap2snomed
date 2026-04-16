@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-23 SNOMED International
+ * Copyright © 2022-2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,9 +40,8 @@ import {selectCurrentView} from 'src/app/store/mapping-feature/mapping.selectors
 import {MapViewParams, SourceNavigationService, SourceNavSet} from 'src/app/_services/source-navigation.service';
 import {Subscription} from 'rxjs';
 import {ViewContext} from 'src/app/store/mapping-feature/mapping.actions';
-import {ConceptNode} from '@csiro/shrimp-hierarchy-view';
 import {SelectionService} from 'src/app/_services/selection.service';
-import {Coding} from '../../store/fhir-feature/fhir.reducer';
+import {Coding, ConceptNode} from '../../store/fhir-feature/fhir.reducer';
 import {selectConceptHierarcy} from 'src/app/store/fhir-feature/fhir.selectors';
 import {ConceptHierarchy} from 'src/app/store/fhir-feature/fhir.actions';
 import {StatusUtils} from '../../_utils/status_utils';
@@ -75,7 +74,7 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
   source!: SourceRow;
   nodes: ConceptNode<Coding>[] = [];
   loadingHierarchy = false;
-  private timeout: NodeJS.Timeout | null = null;
+  private timeout: ReturnType<typeof setTimeout>| null = null;
   hierarchyView = 'tree';
   mapRows: MapView[] = [];
   rowId: string | null = null;

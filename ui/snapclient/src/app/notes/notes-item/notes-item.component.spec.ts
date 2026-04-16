@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2062 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import {LastupdatedPipe} from '../../_utils/lastupdated_pipe';
 import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {GravatarComponent} from '../../user/gravatar/gravatar.component';
 import {NotesItemComponent} from './notes-item.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('NotesItemComponent', () => {
   let component: NotesItemComponent;
@@ -67,7 +67,7 @@ describe('NotesItemComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClientTestingModule]
+                deps: [HttpClient]
             }
         })],
     providers: [

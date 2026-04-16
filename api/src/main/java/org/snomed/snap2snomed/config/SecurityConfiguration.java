@@ -51,7 +51,7 @@ public class SecurityConfiguration {
   String authLoginResponseType = "code";
 
   @NotBlank
-  String authLoginScope = "email+openid+profile";
+  String authLoginScope = "email openid profile";
 
   @NotBlank
   String adminGroup = "AdminGroup";

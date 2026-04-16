@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import {selectAuthState} from './store/auth-feature/auth.selectors';
 import {TranslateService} from '@ngx-translate/core';
 import {APP_CONFIG, AppConfig} from './app.config';
 import {ErrorInfo} from './errormessage/errormessage.component';
+
 
 @Component({
     selector: 'app-root',
@@ -80,7 +81,7 @@ export class AppComponent implements OnInit {
     AppComponent.translator = this.translate;
     this.translate.setDefaultLang(this.config.defaultLang);
     const supportedLangs = ['en', 'fr', 'nl', 'hu', 'sv'];
-    const userLang = this.translate.getBrowserLang(); // TODO - Get from user profile when ready
+    const userLang = this.translate.getBrowserLang() ?? this.config.defaultLang; // TODO - Get from user profile when ready
     const lang = supportedLangs.indexOf(userLang) >= 0 ? userLang : this.config.defaultLang;
     this.translate.addLangs(supportedLangs);
     this.translate.use(lang);
