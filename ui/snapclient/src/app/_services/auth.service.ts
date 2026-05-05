@@ -27,7 +27,7 @@ import {LogOut} from '../store/auth-feature/auth.actions';
 import {selectAssignedTasks, selectAuthorizedProjects} from '../store/app.selectors';
 import {ActivatedRouteSnapshot} from '@angular/router';
 import {ServiceUtils} from '../_utils/service_utils';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import {selectMappingLoading} from '../store/mapping-feature/mapping.selectors';
 import {map} from "rxjs/operators";
 import {MapService} from "./map.service";
@@ -181,7 +181,7 @@ export class AuthService {
     let admin = false;
     this.store.select(selectToken).subscribe((state) => {
       if (state && state.id_token) {
-        const decoded = jwt_decode(state.id_token);
+        const decoded = jwtDecode(state.id_token);
         // @ts-ignore
         const groups = decoded['cognito:groups'] ?? null;
         if (groups) {
@@ -196,7 +196,7 @@ export class AuthService {
     let expired = true;
     this.store.select(selectToken).subscribe((state) => {
       if (state && state.id_token) {
-        const decoded = jwt_decode(state.id_token);
+        const decoded = jwtDecode(state.id_token);
         // @ts-ignore
         const expireTime = decoded['exp'] ?? null;
         if (expireTime) {
@@ -211,7 +211,7 @@ export class AuthService {
     let expired = true;
     this.store.select(selectToken).subscribe((state) => {
       if (state && state.access_token) {
-        const decoded = jwt_decode(state.access_token);
+        const decoded = jwtDecode(state.access_token);
         // @ts-ignore
         const expireTime = decoded['exp'] ?? null;
         if (expireTime) {
