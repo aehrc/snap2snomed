@@ -32,7 +32,7 @@ import {DebugElement} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {By} from '@angular/platform-browser';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskItemComponent', () => {
   let component: TaskItemComponent;
@@ -59,7 +59,7 @@ describe('TaskItemComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [TranslateService,

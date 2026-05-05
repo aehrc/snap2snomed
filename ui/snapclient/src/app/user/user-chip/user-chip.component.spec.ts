@@ -32,7 +32,7 @@ import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {User} from '../../_models/user';
 import {By} from '@angular/platform-browser';
 import {GravatarComponent} from '../gravatar/gravatar.component';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('UserChipComponent', () => {
   let component: UserChipComponent;
@@ -53,7 +53,7 @@ describe('UserChipComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [

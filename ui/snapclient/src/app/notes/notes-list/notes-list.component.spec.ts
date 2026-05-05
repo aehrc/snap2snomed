@@ -46,7 +46,7 @@ import {FormsModule} from '@angular/forms';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ErrorNotifier} from "../../errorhandler/errornotifier";
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('NotesListComponent', () => {
   let component: NotesListComponent;
@@ -76,7 +76,7 @@ describe('NotesListComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [

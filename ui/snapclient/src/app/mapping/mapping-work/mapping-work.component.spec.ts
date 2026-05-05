@@ -48,7 +48,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import {MappingDetailsCardComponent} from '../mapping-details-card/mapping-details-card.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 describe('MappingWorkComponent', () => {
@@ -81,7 +81,7 @@ describe('MappingWorkComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [

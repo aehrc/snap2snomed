@@ -27,7 +27,7 @@ import {DebugElement} from '@angular/core';
 import {RouterTestingModule} from '@angular/router/testing';
 import {By} from '@angular/platform-browser';
 import {MatIconModule} from '@angular/material/icon';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('NotauthorizedComponent', () => {
   let component: NotauthorizedComponent;
@@ -45,7 +45,7 @@ describe('NotauthorizedComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [

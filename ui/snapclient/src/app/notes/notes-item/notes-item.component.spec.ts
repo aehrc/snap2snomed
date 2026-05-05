@@ -43,7 +43,7 @@ import {LastupdatedPipe} from '../../_utils/lastupdated_pipe';
 import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {GravatarComponent} from '../../user/gravatar/gravatar.component';
 import {NotesItemComponent} from './notes-item.component';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('NotesItemComponent', () => {
   let component: NotesItemComponent;
@@ -67,7 +67,7 @@ describe('NotesItemComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [

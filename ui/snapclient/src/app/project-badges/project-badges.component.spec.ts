@@ -23,7 +23,7 @@ import {HttpLoaderFactory} from "../app.module";
 import {APP_CONFIG} from "../app.config";
 import {provideMockStore} from "@ngrx/store/testing";
 import {initialAppState} from "../store/app.state";
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ProjectBadgesComponent', () => {
   let component: ProjectBadgesComponent;
@@ -36,7 +36,7 @@ describe('ProjectBadgesComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },

@@ -46,7 +46,7 @@ import {ScannedActionsSubject} from '@ngrx/store';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { MappingTableSelectorComponent } from 'src/app/mapping/mapping-table-selector/mapping-table-selector.component';
 import {InitialsPipe} from '../../_utils/initialize_pipe';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskAddComponent', () => {
   let component: TaskAddComponent;
@@ -85,7 +85,7 @@ describe('TaskAddComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [TranslateService, ScannedActionsSubject,

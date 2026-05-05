@@ -22,7 +22,7 @@ import {HttpLoaderFactory} from '../app.module';
 import {SelectionService} from '../_services/selection.service';
 
 import { TreeViewComponent } from './tree-view.component';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TreeViewComponent', () => {
   let component: TreeViewComponent;
@@ -36,7 +36,7 @@ describe('TreeViewComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [TranslateService, SelectionService,

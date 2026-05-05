@@ -33,7 +33,7 @@ import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AssignedWorkComponent', () => {
   let component: AssignedWorkComponent;
@@ -65,7 +65,7 @@ describe('AssignedWorkComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
+                deps: [HttpBackend]
             }
         })],
     providers: [TranslateService,
