@@ -98,12 +98,12 @@ describe('NotesItemComponent', () => {
   });
 
   it('should contain notes card', () => {
-    el = fixture.debugElement.query(By.css('.mat-card'));
+    el = fixture.debugElement.query(By.css('.mat-mdc-card'));
     expect(el).toBeTruthy();
   });
 
   it('should contain notes text', () => {
-    el = fixture.debugElement.query(By.css('.mat-card p'));
+    el = fixture.debugElement.query(By.css('.mat-mdc-card p'));
     expect(el).toBeTruthy();
     expect(el.nativeElement.textContent).toBe('Test notes');
   });

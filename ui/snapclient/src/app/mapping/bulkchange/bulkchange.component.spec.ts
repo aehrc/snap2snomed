@@ -98,7 +98,7 @@ describe('BulkchangeComponent', () => {
 
   it('should show header for selections', () => {
     fixture.detectChanges();
-    const el = fixture.debugElement.query(By.css('.mat-dialog-title'));
+    const el = fixture.debugElement.query(By.css('.mat-mdc-dialog-title'));
     expect(el.nativeElement.textContent).toContain('BULKCHANGEDIALOG.SELECTED');
   });
 
@@ -107,7 +107,7 @@ describe('BulkchangeComponent', () => {
     fixture.detectChanges();
     let el = fixture.debugElement.query(By.css('.alert-warning'));
     expect(el).toBeTruthy();
-    el = fixture.debugElement.query(By.css('.mat-form-field'));
+    el = fixture.debugElement.query(By.css('.mat-mdc-form-field'));
     expect(el).toBeFalsy();
     el = fixture.debugElement.query(By.css('button.mat-primary'));
     expect(el.attributes['ng-reflect-disabled']).toEqual('false');
@@ -133,7 +133,7 @@ describe('BulkchangeComponent', () => {
     fixture.detectChanges();
     let el = fixture.debugElement.query(By.css('.alert-warning'));
     expect(el).toBeTruthy();
-    el = fixture.debugElement.query(By.css('.mat-form-field'));
+    el = fixture.debugElement.query(By.css('.mat-mdc-form-field'));
     expect(el).toBeFalsy();
     el = fixture.debugElement.query(By.css('button.mat-primary'));
     expect(el.attributes['ng-reflect-disabled']).toEqual('false');

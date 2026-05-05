@@ -210,7 +210,7 @@ describe('MappingViewComponent', () => {
 
     el.triggerEventHandler('click', null);
 
-    const menu = fixture.debugElement.query(By.css('.mat-menu-panel'));
+    const menu = fixture.debugElement.query(By.css('.mat-mdc-menu-panel'));
     expect(menu).toBeTruthy();
 
     expect(menu.nativeElement.textContent).toBe(
