@@ -52,7 +52,8 @@ import {ProjectRolesComponent} from '../../project-roles/project-roles.component
 import {MatTableModule} from '@angular/material/table';
 import {Project} from '../../_models/project';
 import {selectAuthorizedProjects} from '../../store/app.selectors';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 describe('MappingAddComponent', () => {
   let component: MappingAddComponent;
@@ -98,10 +99,12 @@ describe('MappingAddComponent', () => {
         MatCheckboxModule,
         MatSnackBarModule,
         MatTableModule,
+        MatButtonToggleModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory
+                useFactory: HttpLoaderFactory,
+                deps: [HttpBackend]
             }
         })],
     providers: [
