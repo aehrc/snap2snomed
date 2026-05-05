@@ -82,13 +82,13 @@ describe('TaskItemComponent', () => {
   });
 
   it('should create if task is defined', () => {
-    component.task = task;
+    fixture.componentRef.setInput('task', task);
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('should show Author icon if task is AUTHOR', async () => {
-    component.task = task;
+    fixture.componentRef.setInput('task', task);
     fixture.detectChanges();
     el = fixture.debugElement.query(By.css('.mat-icon'));
     expect(el.nativeElement.textContent).toBe('edit');

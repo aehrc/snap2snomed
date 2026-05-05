@@ -112,7 +112,7 @@ describe('MappingWorkComponent', () => {
   });
 
   it('should show map title', () => {
-    component.task = task;
+    fixture.componentRef.setInput('task', task);
     fixture.detectChanges();
     el = fixture.debugElement.query(By.css('h2#map-title'));
     expect(el.nativeElement.textContent).toBe(task.mapping.project.title + ' - (MAP.SINGLE_MAP)');

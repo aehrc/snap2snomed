@@ -104,7 +104,7 @@ describe('TaskCardComponent', () => {
   });
 
   it('should not contain tasks when null passed', () => {
-    component.task = null;
+    fixture.componentRef.setInput('task', null);
     fixture.detectChanges();
     expect(component.task).toBeFalsy();
   });
@@ -112,7 +112,7 @@ describe('TaskCardComponent', () => {
   it('should contain tasks when string passed', () => {
     const newTask = new Task('1', TaskType.AUTHOR, 'testtask', mapping, user, '1-10', 10,
       'now', 'now', false, false);
-    component.task = newTask;
+    fixture.componentRef.setInput('task', newTask);
     fixture.detectChanges();
     el = fixture.debugElement.query(By.css('.task-card'));
     expect(el).toBeTruthy();
