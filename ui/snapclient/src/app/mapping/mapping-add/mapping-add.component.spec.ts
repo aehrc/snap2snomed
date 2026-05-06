@@ -168,11 +168,13 @@ describe('MappingAddComponent', () => {
   });
 
   it('form should be valid with all fields', () => {
-    component.mappingModel = mapping;
-    fixture.detectChanges();
+    component.formGroup.controls.title.setValue('TEST');
+    component.formGroup.controls.mapVersion.setValue('1.0');
+    component.formGroup.controls.sourceId.setValue('1');
+    component.formGroup.controls.toEdition.setValue('SNOMED International');
+    component.formGroup.controls.toVersion.setValue('http://snomed.info/sct/900000000000207008/version/20240901');
+    component.formGroup.controls.toScope.setValue('*');
     expect(component.formGroup).toBeTruthy();
-    fixture.whenStable().then(() => {
-      expect(component.formGroup?.valid).toBeTruthy();
-    });
+    expect(component.formGroup?.valid).toBeTruthy();
   });
 });

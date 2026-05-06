@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, tick, TestBed} from '@angular/core/testing';
 
 import {MappingWorkComponent} from './mapping-work.component';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -114,10 +114,12 @@ describe('MappingWorkComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show map title', () => {
+  it('should show map title', fakeAsync(() => {
     component.task = task;
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     el = fixture.debugElement.query(By.css('h2#map-title'));
     expect(el.nativeElement.textContent).toBe(task.mapping.project.title + ' - (MAP.SINGLE_MAP)');
-  });
+  }));
 });

@@ -34,7 +34,7 @@ describe('ErrormessageComponent', () => {
   let translateService: TranslateService;
   let el: DebugElement;
 
-  beforeEach(async () => {
+  beforeEach(fakeAsync(async () => {
     await TestBed.configureTestingModule({
       imports: [
         NoopAnimationsModule,
@@ -58,7 +58,9 @@ describe('ErrormessageComponent', () => {
 
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+    tick();
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

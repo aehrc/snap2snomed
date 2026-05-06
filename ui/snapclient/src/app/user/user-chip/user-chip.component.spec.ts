@@ -78,7 +78,7 @@ describe('UserChipComponent', () => {
   });
 
   it('should show user initials since no email therefore no gravatar', fakeAsync(() => {
-    component.user = user;
+    fixture.componentRef.setInput('user', user);
     const expected = user.givenName[0].toUpperCase() + user.familyName[0].toUpperCase();
     fixture.detectChanges();
     tick();

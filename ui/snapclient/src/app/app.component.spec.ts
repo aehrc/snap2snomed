@@ -94,7 +94,6 @@ describe('AppComponent', () => {
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.componentInstance;
     app.translate = translateService;
-    app.ngOnInit();
     fixture.detectChanges();
   });
 
@@ -127,8 +126,7 @@ describe('AppComponent', () => {
 
 
   it('should not render login button when user is authenticated', () => {
-    spyOn(testAuthService, 'isAuthenticated').and.returnValue(true);
-    app.isAuthenticated = true;
+    store.setState({...initialAppState, auth: {...initialAppState.auth, isAuthenticated: true}});
     fixture.detectChanges();
     el = fixture.debugElement.query(By.css('button'));
     expect(el).toBeFalsy();
