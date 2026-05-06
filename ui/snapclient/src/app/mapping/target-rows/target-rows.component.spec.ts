@@ -29,7 +29,7 @@ import {APP_CONFIG} from '../../app.config';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {IAppState, initialAppState} from '../../store/app.state';
 import {DebugElement} from '@angular/core';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TargetRowsComponent', () => {
   let component: TargetRowsComponent;
@@ -50,7 +50,7 @@ describe('TargetRowsComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [

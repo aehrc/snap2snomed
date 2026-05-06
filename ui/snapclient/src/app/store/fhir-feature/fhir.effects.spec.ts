@@ -27,7 +27,7 @@ import { APP_CONFIG } from '../../app.config';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
 import {testRoutes} from '../../auth.guard.spec';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('FhirEffects', () => {
   let actions$: Observable<any> = EMPTY;
@@ -44,7 +44,7 @@ describe('FhirEffects', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [

@@ -28,7 +28,7 @@ import {of} from 'rxjs';
 import {By} from '@angular/platform-browser';
 import {HttpLoaderFactory} from './app.module';
 import {APP_CONFIG} from './app.config';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 export class TranslateServiceStub {
 
@@ -74,7 +74,7 @@ describe('AppComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [

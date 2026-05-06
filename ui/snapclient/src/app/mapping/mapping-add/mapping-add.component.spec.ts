@@ -52,7 +52,7 @@ import {ProjectRolesComponent} from '../../project-roles/project-roles.component
 import {MatTableModule} from '@angular/material/table';
 import {Project} from '../../_models/project';
 import {selectAuthorizedProjects} from '../../store/app.selectors';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 describe('MappingAddComponent', () => {
@@ -104,7 +104,7 @@ describe('MappingAddComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [

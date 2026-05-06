@@ -39,7 +39,7 @@ import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import { APP_CONFIG } from '../../app.config';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SourceImportComponent', () => {
   let component: SourceImportComponent;
@@ -70,7 +70,7 @@ describe('SourceImportComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [{ provide: APP_CONFIG, useValue: {} },

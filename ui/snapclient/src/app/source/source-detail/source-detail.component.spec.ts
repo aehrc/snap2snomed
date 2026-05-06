@@ -29,7 +29,7 @@ import {SourceCode} from '../../_models/source_code';
 import {Source} from '../../_models/source';
 import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SourceDetailComponent', () => {
   let component: SourceDetailComponent;
@@ -51,7 +51,7 @@ describe('SourceDetailComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [

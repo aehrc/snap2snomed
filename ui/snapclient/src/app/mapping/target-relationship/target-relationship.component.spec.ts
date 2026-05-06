@@ -41,7 +41,7 @@ import {DraggableDirective} from 'src/app/_directives/draggable.directive';
 import {FhirService} from "../../_services/fhir.service";
 import {of} from "rxjs";
 import { UntypedFormBuilder } from '@angular/forms';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TargetRelationshipComponent', () => {
   let component: TargetRelationshipComponent;
@@ -97,7 +97,7 @@ describe('TargetRelationshipComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [

@@ -20,7 +20,7 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { HttpLoaderFactory } from '../app.module';
 
 import { TargetVersionComponent } from './target-version.component';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TargetVersionComponent', () => {
   let component: TargetVersionComponent;
@@ -33,7 +33,7 @@ describe('TargetVersionComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [TranslateService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]

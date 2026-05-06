@@ -23,7 +23,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
 import {AuthService} from './_services/auth.service';
 import {AuthGuard} from './auth.guard';
-import { HTTP_INTERCEPTORS, HttpBackend, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {EffectsModule} from '@ngrx/effects';
@@ -132,8 +132,8 @@ import { MappingNotesComponent } from './mapping/mapping-table-notes/mapping-not
 import { ResizeColumnComponent } from './column-resize/resize-column.component';
 
 // AoT requires an exported function for factories
-export function HttpLoaderFactory(httpBackend: HttpBackend): TranslateHttpLoader {
-  return new TranslateHttpLoader(httpBackend);
+export function HttpLoaderFactory(httpClient: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(httpClient);
 }
 
 
@@ -202,7 +202,7 @@ export function HttpLoaderFactory(httpBackend: HttpBackend): TranslateHttpLoader
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             },
         }),
         MatDialogModule,

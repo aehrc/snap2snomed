@@ -24,7 +24,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpLoaderFactory } from '../app.module';
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('FooterComponent', () => {
   let component: FooterComponent;
@@ -38,7 +38,7 @@ describe('FooterComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [

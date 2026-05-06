@@ -32,7 +32,7 @@ import {APP_CONFIG} from '../app.config';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import { HttpBackend, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 
 describe('HomeComponent', () => {
@@ -58,7 +58,7 @@ describe('HomeComponent', () => {
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
-                deps: [HttpBackend]
+                deps: [HttpClient]
             }
         })],
     providers: [
