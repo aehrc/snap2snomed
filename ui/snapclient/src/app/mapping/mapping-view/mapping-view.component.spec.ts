@@ -19,7 +19,7 @@ import { MappingViewComponent } from './mapping-view.component';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { IAppState, initialAppState } from '../../store/app.state';
-import { ChangeDetectorRef, DebugElement } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import { User } from '../../_models/user';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -123,18 +123,17 @@ describe('MappingViewComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(fakeAsync(() => {
     store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(MappingViewComponent);
     component = fixture.componentInstance;
 
-    const changeDetectorRef =
-      fixture.debugElement.injector.get(ChangeDetectorRef);
-
     component.allSourceDetails = [];
 
-    fixture.detectChanges(); // triggers ngOnInit safely
-  });
+    fixture.detectChanges(); // triggers ngOnInit, starts debounceTime(200) timer
+    tick(201);               // let debounceTime(200) fire so this.mapping gets set
+    fixture.detectChanges(); // re-render with mapping set
+  }));
 
   afterEach(() => {
     fixture.destroy();

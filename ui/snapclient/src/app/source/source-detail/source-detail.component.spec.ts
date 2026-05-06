@@ -30,6 +30,8 @@ import {Source} from '../../_models/source';
 import {By} from '@angular/platform-browser';
 import {DebugElement} from '@angular/core';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {MatIconModule} from '@angular/material/icon';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 describe('SourceDetailComponent', () => {
   let component: SourceDetailComponent;
@@ -47,6 +49,8 @@ describe('SourceDetailComponent', () => {
     declarations: [SourceDetailComponent],
     imports: [RouterTestingModule,
         BrowserAnimationsModule,
+        MatIconModule,
+        ClipboardModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
