@@ -15,7 +15,7 @@
  */
 
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, tick, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -91,21 +91,27 @@ describe('BulkchangeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show warning if mapview is set', () => {
+  it('should show warning if mapview is set', fakeAsync(() => {
     component.isMapView = true;
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('.alert-warning'));
     expect(el).toBeTruthy();
-  });
+  }));
 
-  it('should show header for selections', () => {
+  it('should show header for selections', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('.mat-mdc-dialog-title'));
     expect(el.nativeElement.textContent).toContain('BULKCHANGEDIALOG.SELECTED');
-  });
+  }));
 
-  it('should hide relationship and status selection - on clear no map', () => {
+  it('should hide relationship and status selection - on clear no map', fakeAsync(() => {
     component.setClearNoMap(true);
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     let el = fixture.debugElement.query(By.css('.alert-warning'));
     expect(el).toBeTruthy();
@@ -113,10 +119,12 @@ describe('BulkchangeComponent', () => {
     expect(el).toBeFalsy();
     el = fixture.debugElement.query(By.css('button.mat-primary'));
     expect(el.attributes['ng-reflect-disabled']).toEqual('false');
-  });
+  }));
 
-  it('should hide relationship selection and status - on no map', () => {
+  it('should hide relationship selection and status - on no map', fakeAsync(() => {
     component.setNoMap(true);
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('.alert-warning'));
     expect(el).toBeTruthy();
@@ -127,11 +135,13 @@ describe('BulkchangeComponent', () => {
     const el3 = fixture.debugElement.query(By.css('button.mat-primary'));
     console.log(el3.attributes['ng-reflect-disabled']);
     expect(el3.attributes['ng-reflect-disabled']).toEqual('false');
-  });
+  }));
 
-  it('should hide relationship and status selection - on clear targets', () => {
+  it('should hide relationship and status selection - on clear targets', fakeAsync(() => {
     component.clearTarget = true;
     component.clearTargetClicked(true);
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     let el = fixture.debugElement.query(By.css('.alert-warning'));
     expect(el).toBeTruthy();
@@ -139,20 +149,24 @@ describe('BulkchangeComponent', () => {
     expect(el).toBeFalsy();
     el = fixture.debugElement.query(By.css('button.mat-primary'));
     expect(el.attributes['ng-reflect-disabled']).toEqual('false');
-  });
+  }));
 
-  it('should enable ok when selecting relationship', () => {
+  it('should enable ok when selecting relationship', fakeAsync(() => {
     component.changedRelationship='EQUIVALENT';
     fixture.detectChanges();
-    let el = fixture.debugElement.query(By.css('button.mat-primary'));
-    expect(el.attributes['ng-reflect-disabled']).toEqual('false');
-  });
-
-  it('should enable ok when selecting status', () => {
-    component.changedStatus='MAPPED';
+    tick();
     fixture.detectChanges();
     let el = fixture.debugElement.query(By.css('button.mat-primary'));
     expect(el.attributes['ng-reflect-disabled']).toEqual('false');
-  });
+  }));
+
+  it('should enable ok when selecting status', fakeAsync(() => {
+    component.changedStatus='MAPPED';
+    fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
+    let el = fixture.debugElement.query(By.css('button.mat-primary'));
+    expect(el.attributes['ng-reflect-disabled']).toEqual('false');
+  }));
 
 });

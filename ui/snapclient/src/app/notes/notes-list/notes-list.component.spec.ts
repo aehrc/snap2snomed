@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, tick, TestBed} from '@angular/core/testing';
 
 import {NotesListComponent} from './notes-list.component';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -124,12 +124,14 @@ describe('NotesListComponent', () => {
     expect(el.nativeElement.disabled).toBeTruthy();
   });
 
-  it('should show send button - enabled', () => {
+  it('should show send button - enabled', fakeAsync(() => {
     expect(component.newNote).toBeTruthy();
     if (component.newNote) {
       component.newNote.noteText = 'tests';
       fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector('#notes button').disabled).toBeFalsy();
     }
-  });
+  }));
 });

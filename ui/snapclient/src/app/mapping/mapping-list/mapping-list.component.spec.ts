@@ -48,6 +48,7 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatBadgeModule} from '@angular/material/badge';
@@ -91,6 +92,7 @@ describe('MappingListComponent', () => {
         MatSnackBarModule,
         MatSidenavModule,
         MatFormFieldModule,
+        MatInputModule,
         MatLabel,
         MatSelectModule,
         MatPaginatorModule,

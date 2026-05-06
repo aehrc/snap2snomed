@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, fakeAsync, flush, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, tick, TestBed} from '@angular/core/testing';
 
-import {MockStore, provideMockStore} from '@ngrx/store/testing';
+import {provideMockStore} from '@ngrx/store/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import {HttpLoaderFactory} from '../../app.module';
 import {APP_CONFIG} from '../../app.config';
-import {IAppState, initialAppState} from '../../store/app.state';
-import {selectTaskList, selectTaskSaveError} from '../../store/task-feature/task.selectors';
+import {initialAppState} from '../../store/app.state';
+import {selectTaskList} from '../../store/task-feature/task.selectors';
 import {By} from '@angular/platform-browser';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TaskAddComponent} from './task-add.component';
@@ -52,7 +52,6 @@ describe('TaskAddComponent', () => {
   let component: TaskAddComponent;
   let fixture: ComponentFixture<TaskAddComponent>;
   let translateService: TranslateService;
-  let store: MockStore<IAppState>;
   let loader: HarnessLoader;
 
   const user = new User();
@@ -100,7 +99,6 @@ describe('TaskAddComponent', () => {
         }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
       .compileComponents();
-    store = TestBed.inject(MockStore);
     translateService = TestBed.inject(TranslateService);
     fixture = TestBed.createComponent(TaskAddComponent);
     component = fixture.componentInstance;
@@ -119,48 +117,57 @@ describe('TaskAddComponent', () => {
     expect(el).toBeFalsy();
   });
 
-  it('should create form if task is set', () => {
+  it('should create form if task is set', fakeAsync(() => {
     component.task = task;
     component.isMember = true;
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('form')).nativeElement;
     expect(el).toBeTruthy();
-  });
+  }));
 
-  it('should create cancel button', () => {
+  it('should create cancel button', fakeAsync(() => {
     component.task = task;
     component.isMember = true;
     fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('button[type="cancel"]')).nativeElement;
     expect(el).toBeTruthy();
-  });
+  }));
 
-  it('should show submit button when valid', () => {
+  it('should show submit button when valid', fakeAsync(() => {
     component.task = task;
     component.isMember = true;
     component.assignRows = 'ALL';
     fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
     expect(el).toBeTruthy();
-  });
+  }));
 
-  it('should show rows selected if SELECTED option', () => {
+  it('should show rows selected if SELECTED option', fakeAsync(() => {
     component.task = task;
     component.isMember = true;
     component.assignRows = 'SELECTED';
     fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('.selected-rows')).nativeElement;
     expect(el).toBeTruthy();
+  }));
 
-  });
-
-  it('should set default assignee in dropdown', async () => {
+  it('should set default assignee in dropdown', fakeAsync(async () => {
     component.task = task;
     component.currentUser = user;
     component.members = [user];
     component.isMember = true;
     component.isOwner = true;
 
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     expect(component.task?.assignee.id).toEqual(component.currentUser.id);
     const matSelect = await loader.getHarness(MatSelectHarness.with({selector: '#assignee'}));
@@ -172,17 +179,20 @@ describe('TaskAddComponent', () => {
     // const text = `${user.givenName} ${user.familyName}`;
     // const defaultOption = await matSelect.getOptions({text});
     // expect(defaultOption).toBeTruthy();
-  });
+  }));
 
-  it('should set default description if none', () => {
+  it('should set default description if none', fakeAsync(() => {
     component.task = task;
     component.isMember = true;
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     expect(component.task).toBeTruthy();
     expect(component.task.description).toEqual('');
     const el = fixture.debugElement.query(By.css('#assignRows'));
     el.nativeElement.dispatchEvent(new Event('change'));
+    tick();
     fixture.detectChanges();
     expect(component.task?.description?.length).toBeGreaterThan(1);
-  });
+  }));
 });

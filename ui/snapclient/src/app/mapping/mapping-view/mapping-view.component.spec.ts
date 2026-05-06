@@ -133,6 +133,8 @@ describe('MappingViewComponent', () => {
     fixture.detectChanges(); // triggers ngOnInit, starts debounceTime(200) timer
     tick(201);               // let debounceTime(200) fire so this.mapping gets set
     fixture.detectChanges(); // re-render with mapping set
+    tick();                  // allow Material chip/button tabindex to settle
+    fixture.detectChanges(); // stable final state
   }));
 
   afterEach(() => {
@@ -149,13 +151,15 @@ describe('MappingViewComponent', () => {
     expect(el).toBeTruthy();
   });
 
-  it('should show BULK EDIT button', () => {
+  it('should show BULK EDIT button', fakeAsync(() => {
     const currentUser = component.currentUser;
 
     try {
       mapping.project.owners = [user];
       component.currentUser = user;
 
+      fixture.detectChanges();
+      tick();
       fixture.detectChanges();
 
       el = fixture.debugElement.query(By.css('#bulk-change'));
@@ -165,15 +169,17 @@ describe('MappingViewComponent', () => {
       component.currentUser = currentUser;
       mapping.project.owners = [];
     }
-  });
+  }));
 
-  it('should show VALIDATE button', () => {
+  it('should show VALIDATE button', fakeAsync(() => {
     const currentUser = component.currentUser;
 
     try {
       mapping.project.owners = [user];
       component.currentUser = user;
 
+      fixture.detectChanges();
+      tick();
       fixture.detectChanges();
 
       el = fixture.debugElement.query(By.css('#validate-targets'));
@@ -183,7 +189,7 @@ describe('MappingViewComponent', () => {
       component.currentUser = currentUser;
       mapping.project.owners = [];
     }
-  });
+  }));
 
   it('should show Map title', () => {
     el = fixture.debugElement.query(By.css('h2'));

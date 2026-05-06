@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, tick, TestBed} from '@angular/core/testing';
 
 import {TaskCreateComponent} from './task-create.component';
 import {By} from '@angular/platform-browser';
@@ -107,17 +107,21 @@ describe('TaskCreateComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show sliders if its owner', () => {
+  it('should show sliders if its owner', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('.assign-select')).nativeElement;
     expect(el).toBeTruthy();
-  });
+  }));
 
-  it('should not show sliders if its member', () => {
+  it('should not show sliders if its member', fakeAsync(() => {
     component.data.task = task;
     component.data.isOwner = false;
     fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
     const el = fixture.debugElement.query(By.css('.assign-select'));
     expect(el).toBeFalsy();
-  });
+  }));
 });

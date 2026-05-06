@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, fakeAsync, TestBed, flush, discardPeriodicTasks} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, tick, TestBed, flush, discardPeriodicTasks} from '@angular/core/testing';
 
 import {TargetRelationshipComponent} from './target-relationship.component';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -146,28 +146,35 @@ describe('TargetRelationshipComponent', () => {
     expect(emitSpy).toHaveBeenCalledOnceWith(target);
   });
 
-  it('should not add duplicate target', async() => {
+  it('should not add duplicate target', fakeAsync(async() => {
     component.targetRows.push(target);
     spyOn(fhirService, 'getEnglishFsn').and.returnValue(of('Test English FSN'));
 
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     expect(component.targetRows.length).toEqual(1);
     expect(component.source).toBeTruthy();
     // Add same targetCode
     component.addSelection(targetCode, targetDisplay, targetSystem, relationship);
     await fixture.whenStable();
+    tick();
     fixture.detectChanges();
     expect(component.targetRows.length).toEqual(1);
     expect(component.error.message).toEqual('ERROR.DUPLICATE_TARGET_ERROR');
-  });
+  }));
 
   it('should remove target', fakeAsync(() => {
     spyOn(component.removeTargetEvent, 'emit');
     component.targetRows.push(target);
     fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
     expect(component.targetRows.length).toEqual(1);
     // delete target
     component.removeTarget(target);
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     expect(component.removeTargetEvent.emit).toHaveBeenCalledOnceWith(target);
   }));
@@ -195,6 +202,8 @@ describe('TargetRelationshipComponent', () => {
 
   it('button should not add duplicated selection', fakeAsync(() => {
     fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
 
     const code = '1234567';
     const display = 'This is a test selection';
@@ -202,6 +211,9 @@ describe('TargetRelationshipComponent', () => {
     component.targetRows.push(new MapView('', '', sourceId, sourceIndex, sourceCode, sourceDisplay, code, display, relationship,
       'DRAFT', false, null, null, null, null, null, null, false, false, undefined, undefined, null));
     selectionService.select({code, display});
+    fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
 
     spyOn(fhirService, 'getEnglishFsn').and.returnValue(of('Test English FSN'));
     fixture.whenStable().then(() => {
