@@ -37,6 +37,13 @@ import {MapRowStatus} from '../../_models/map_row';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatTreeModule} from '@angular/material/tree';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatChipsModule} from '@angular/material/chips';
+import {FormsModule} from '@angular/forms';
+import {ClipboardModule} from '@angular/cdk/clipboard';
+import {NO_ERRORS_SCHEMA} from '@angular/core';
 import {TreeViewComponent} from '../../tree-view/tree-view.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
@@ -71,12 +78,19 @@ describe('MappingDetailComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
     declarations: [MappingDetailComponent, TreeViewComponent],
+    schemas: [NO_ERRORS_SCHEMA],
     imports: [RouterTestingModule,
         BrowserAnimationsModule,
         MatDialogModule,
         MatTooltipModule,
         MatCheckboxModule,
         MatTreeModule,
+        MatCardModule,
+        MatIconModule,
+        MatButtonToggleModule,
+        MatChipsModule,
+        FormsModule,
+        ClipboardModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

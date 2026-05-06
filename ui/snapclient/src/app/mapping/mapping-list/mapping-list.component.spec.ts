@@ -46,6 +46,15 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTableModule} from "@angular/material/table";
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {ProjectBadgesComponent} from '../../project-badges/project-badges.component';
+import {UserChipComponent} from '../../user/user-chip/user-chip.component';
+import {GravatarComponent} from '../../user/gravatar/gravatar.component';
 
 describe('MappingListComponent', () => {
   let component: MappingListComponent;
@@ -63,7 +72,10 @@ describe('MappingListComponent', () => {
         MappingListComponent,
         InitialsPipe,
         LastupdatedPipe,
-        ErrormessageComponent
+        ErrormessageComponent,
+        ProjectBadgesComponent,
+        UserChipComponent,
+        GravatarComponent
     ],
     imports: [RouterTestingModule,
         MatButtonModule,
@@ -77,6 +89,13 @@ describe('MappingListComponent', () => {
         MatChipsModule,
         NoopAnimationsModule,
         MatSnackBarModule,
+        MatSidenavModule,
+        MatFormFieldModule,
+        MatLabel,
+        MatSelectModule,
+        MatPaginatorModule,
+        MatBadgeModule,
+        MatTooltipModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
