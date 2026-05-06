@@ -81,7 +81,7 @@ describe('MappingDetailsCardComponent', () => {
     .compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(fakeAsync(() => {
 
     mapping = new Mapping();
     mapping.id = '2';
@@ -104,7 +104,9 @@ describe('MappingDetailsCardComponent', () => {
     component = fixture.componentInstance;
     component.mapping = mapping;
     fixture.detectChanges();
-  });
+    tick();
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

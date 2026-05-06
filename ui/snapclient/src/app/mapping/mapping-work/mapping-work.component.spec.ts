@@ -28,7 +28,7 @@ import {selectCurrentMapping, selectMappingError} from '../../store/mapping-feat
 import {Task, TaskType} from '../../_models/task';
 import {User} from '../../_models/user';
 import {Mapping} from '../../_models/mapping';
-import {DebugElement} from '@angular/core';
+import {DebugElement, NO_ERRORS_SCHEMA} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import {MappingTableComponent} from '../mapping-table/mapping-table.component';
@@ -99,7 +99,8 @@ describe('MappingWorkComponent', () => {
         }), TranslateService,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
       .compileComponents();
     store = TestBed.inject(MockStore);
@@ -114,7 +115,7 @@ describe('MappingWorkComponent', () => {
   });
 
   it('should show map title', () => {
-    fixture.componentRef.setInput('task', task);
+    component.task = task;
     fixture.detectChanges();
     el = fixture.debugElement.query(By.css('h2#map-title'));
     expect(el.nativeElement.textContent).toBe(task.mapping.project.title + ' - (MAP.SINGLE_MAP)');
