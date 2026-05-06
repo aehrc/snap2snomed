@@ -36,6 +36,7 @@ import {MatSelectHarness} from '@angular/material/select/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InitialsPipe} from '../_utils/initialize_pipe';
 import {UserChipComponent} from '../user/user-chip/user-chip.component';
+import {GravatarComponent} from '../user/gravatar/gravatar.component';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ProjectRolesComponent', () => {
@@ -47,7 +48,7 @@ describe('ProjectRolesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [ProjectRolesComponent, InitialsPipe, UserChipComponent],
+    declarations: [ProjectRolesComponent, InitialsPipe, UserChipComponent, GravatarComponent],
     imports: [MatTableModule,
         MatSelectModule,
         MatSortModule,

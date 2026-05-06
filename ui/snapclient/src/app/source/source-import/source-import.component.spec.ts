@@ -37,6 +37,8 @@ import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-b
 import {By} from '@angular/platform-browser';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import { APP_CONFIG } from '../../app.config';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -65,6 +67,8 @@ describe('SourceImportComponent', () => {
         NoopAnimationsModule,
         MatSnackBarModule,
         MatCheckboxModule,
+        MatExpansionModule,
+        MatIconModule,
         MatTooltipModule,
         TranslateModule.forRoot({
             loader: {

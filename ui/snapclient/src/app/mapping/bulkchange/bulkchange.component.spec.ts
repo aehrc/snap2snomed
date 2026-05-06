@@ -44,9 +44,9 @@ describe('BulkchangeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
     declarations: [BulkchangeComponent,
-        ErrormessageComponent,
-        MatLabel],
+        ErrormessageComponent],
     imports: [MatDialogModule,
+        MatLabel,
         BrowserAnimationsModule,
         MatDialogModule,
         MatButtonModule,

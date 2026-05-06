@@ -30,6 +30,7 @@ import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {IAppState, initialAppState} from '../../store/app.state';
 import {DebugElement} from '@angular/core';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {MatTableModule} from '@angular/material/table';
 
 describe('TargetRowsComponent', () => {
   let component: TargetRowsComponent;
@@ -46,6 +47,7 @@ describe('TargetRowsComponent', () => {
         MatSelectModule,
         MatSnackBarModule,
         MatTooltipModule,
+        MatTableModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

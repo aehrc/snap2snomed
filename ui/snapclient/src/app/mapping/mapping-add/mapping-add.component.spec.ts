@@ -45,6 +45,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
+import {GravatarComponent} from '../../user/gravatar/gravatar.component';
 import {FhirService} from 'src/app/_services/fhir.service';
 import {APP_CONFIG} from 'src/app/app.config';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -80,7 +81,7 @@ describe('MappingAddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [MappingAddComponent, ErrormessageComponent, ProjectRolesComponent, UserChipComponent],
+    declarations: [MappingAddComponent, ErrormessageComponent, ProjectRolesComponent, UserChipComponent, GravatarComponent],
     imports: [RouterTestingModule,
         BrowserAnimationsModule,
         FormsModule,

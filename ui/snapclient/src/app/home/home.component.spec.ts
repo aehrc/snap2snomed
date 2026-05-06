@@ -33,6 +33,9 @@ import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {GravatarComponent} from '../user/gravatar/gravatar.component';
+import {ErrormessageComponent} from '../errormessage/errormessage.component';
+import {BreadcrumbComponent} from 'xng-breadcrumb';
 
 
 describe('HomeComponent', () => {
@@ -49,11 +52,12 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [HomeComponent],
+    declarations: [HomeComponent, GravatarComponent, ErrormessageComponent],
     imports: [RouterTestingModule,
         MatMenuModule,
         MatIconModule,
         MatDialogModule,
+        BreadcrumbComponent,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

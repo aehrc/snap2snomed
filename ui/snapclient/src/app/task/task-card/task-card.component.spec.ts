@@ -40,6 +40,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {RouterTestingModule} from '@angular/router/testing';
 import {UserChipComponent} from '../../user/user-chip/user-chip.component';
+import {GravatarComponent} from '../../user/gravatar/gravatar.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {ScannedActionsSubject} from '@ngrx/store';
@@ -61,7 +62,7 @@ describe('TaskCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [TaskCardComponent, InitialsPipe, ErrormessageComponent, UserChipComponent],
+    declarations: [TaskCardComponent, InitialsPipe, ErrormessageComponent, UserChipComponent, GravatarComponent],
     imports: [RouterTestingModule,
         TranslateModule.forRoot({
             loader: {

@@ -32,6 +32,10 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatRadioModule} from '@angular/material/radio';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MatCardModule} from '@angular/material/card';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {FormsModule} from '@angular/forms';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskCreateComponent', () => {
@@ -54,6 +58,10 @@ describe('TaskCreateComponent', () => {
         MatSlideToggleModule,
         MatRadioModule,
         MatDialogModule,
+        MatCardModule,
+        MatChipsModule,
+        MatTooltipModule,
+        FormsModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
