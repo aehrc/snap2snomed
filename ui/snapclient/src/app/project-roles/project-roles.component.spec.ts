@@ -31,6 +31,8 @@ import {MatInputModule} from '@angular/material/input';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 import {MatSortModule} from '@angular/material/sort';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {MatSelectHarness} from '@angular/material/select/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -57,6 +59,8 @@ describe('ProjectRolesComponent', () => {
         // Hmm these two needed for the mat-selects to have text ??
         FormsModule,
         ReactiveFormsModule,
+        MatChipsModule,
+        MatTooltipModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

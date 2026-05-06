@@ -23,6 +23,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatChipsModule} from '@angular/material/chips';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
 import {APP_CONFIG} from '../../app.config';
@@ -49,6 +50,7 @@ describe('UserChipComponent', () => {
         MatSelectModule,
         MatSnackBarModule,
         MatTooltipModule,
+        MatChipsModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

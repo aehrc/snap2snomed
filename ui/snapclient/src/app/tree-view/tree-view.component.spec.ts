@@ -23,6 +23,7 @@ import {SelectionService} from '../_services/selection.service';
 
 import { TreeViewComponent } from './tree-view.component';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { MatTreeModule } from '@angular/material/tree';
 
 describe('TreeViewComponent', () => {
   let component: TreeViewComponent;
@@ -32,6 +33,7 @@ describe('TreeViewComponent', () => {
     await TestBed.configureTestingModule({
     declarations: [TreeViewComponent],
     imports: [
+      MatTreeModule,
       TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

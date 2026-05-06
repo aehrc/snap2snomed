@@ -35,6 +35,9 @@ import {By} from '@angular/platform-browser';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MapRowStatus} from '../../_models/map_row';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatTreeModule} from '@angular/material/tree';
+import {TreeViewComponent} from '../../tree-view/tree-view.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingDetailComponent', () => {
@@ -67,11 +70,13 @@ describe('MappingDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [MappingDetailComponent],
+    declarations: [MappingDetailComponent, TreeViewComponent],
     imports: [RouterTestingModule,
         BrowserAnimationsModule,
         MatDialogModule,
         MatTooltipModule,
+        MatCheckboxModule,
+        MatTreeModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

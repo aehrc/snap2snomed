@@ -25,6 +25,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
@@ -59,6 +60,7 @@ describe('BulkchangeComponent', () => {
         ReactiveFormsModule,
         MatInputModule,
         MatSelectModule,
+        MatIconModule,
         NoopAnimationsModule,
         TranslateModule.forRoot({
             loader: {
