@@ -68,8 +68,10 @@ describe('MappingWorkComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
     declarations: [MappingWorkComponent, ErrormessageComponent, MappingTableComponent, TaskItemComponent, TrimPipe, LastupdatedPipe,
-        MatSort, MatPaginator, MappingDetailsCardComponent],
+        MappingDetailsCardComponent],
     imports: [RouterTestingModule,
+        MatSort,
+        MatPaginator,
         BrowserAnimationsModule,
         MatSelectModule,
         MatSnackBarModule,

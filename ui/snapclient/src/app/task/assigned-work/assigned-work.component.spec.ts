@@ -33,6 +33,10 @@ import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatCardModule} from '@angular/material/card';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatIconModule} from '@angular/material/icon';
+import {MatBadgeModule} from '@angular/material/badge';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AssignedWorkComponent', () => {
@@ -61,6 +65,10 @@ describe('AssignedWorkComponent', () => {
         MatSnackBarModule,
         MatTabsModule,
         MatTooltipModule,
+        MatCardModule,
+        MatPaginatorModule,
+        MatIconModule,
+        MatBadgeModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

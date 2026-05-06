@@ -72,8 +72,6 @@ describe('MappingViewComponent', () => {
         MappingViewComponent,
         InitialsPipe,
         LastupdatedPipe,
-        MatSort,
-        MatPaginator,
         ErrormessageComponent,
         BulkchangeComponent,
         MappingDetailsCardComponent,
@@ -81,6 +79,8 @@ describe('MappingViewComponent', () => {
       ],
       imports: [
         RouterTestingModule,
+        MatSort,
+        MatPaginator,
         MatButtonModule,
         MatDividerModule,
         MatIconModule,

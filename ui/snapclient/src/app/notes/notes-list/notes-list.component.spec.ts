@@ -47,6 +47,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ErrorNotifier} from "../../errorhandler/errornotifier";
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {DroppableDirective} from '../../_directives/droppable.directive';
+import {NotesItemComponent} from '../notes-item/notes-item.component';
 
 describe('NotesListComponent', () => {
   let component: NotesListComponent;
@@ -59,7 +61,7 @@ describe('NotesListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [NotesListComponent],
+    declarations: [NotesListComponent, DroppableDirective, NotesItemComponent],
     imports: [RouterTestingModule,
         MatButtonModule,
         MatIconModule,

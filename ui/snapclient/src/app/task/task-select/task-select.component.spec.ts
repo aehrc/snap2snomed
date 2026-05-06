@@ -45,6 +45,7 @@ import {TrimPipe} from '../../_utils/trim_pipe';
 import {MatIconModule} from '@angular/material/icon';
 import {RouterTestingModule} from '@angular/router/testing';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 
 describe('TaskSelectComponent', () => {
   let component: TaskSelectComponent;
@@ -64,7 +65,7 @@ describe('TaskSelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [TaskSelectComponent, TaskItemComponent, TrimPipe],
+    declarations: [TaskSelectComponent, TaskItemComponent, TrimPipe, ErrormessageComponent],
     imports: [RouterTestingModule,
         NoopAnimationsModule,
         MatTabsModule,

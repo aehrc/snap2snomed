@@ -35,7 +35,8 @@ import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {MatSelectHarness} from '@angular/material/select/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InitialsPipe} from '../_utils/initialize_pipe';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {UserChipComponent} from '../user/user-chip/user-chip.component';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ProjectRolesComponent', () => {
   let component: ProjectRolesComponent;
@@ -46,7 +47,7 @@ describe('ProjectRolesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [ProjectRolesComponent, InitialsPipe],
+    declarations: [ProjectRolesComponent, InitialsPipe, UserChipComponent],
     imports: [MatTableModule,
         MatSelectModule,
         MatSortModule,
@@ -58,7 +59,8 @@ describe('ProjectRolesComponent', () => {
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
             }
         })],
     providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },

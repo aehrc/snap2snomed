@@ -24,7 +24,21 @@ import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate
 import {HttpLoaderFactory} from '../app.module';
 import {DebugElement} from '@angular/core';
 import {By} from '@angular/platform-browser';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatTableModule} from '@angular/material/table';
+import {ErrormessageComponent} from '../errormessage/errormessage.component';
+import {ConceptListComponent} from './concept-list/concept-list.component';
+import {ConceptAutosuggestComponent} from './concept-autosuggest/concept-autosuggest.component';
+import {DroppableDirective} from '../_directives/droppable.directive';
+import {DraggableDirective} from '../_directives/draggable.directive';
 
 describe('ConceptSearchComponent', () => {
   let component: ConceptSearchComponent;
@@ -33,11 +47,29 @@ describe('ConceptSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [ConceptSearchComponent],
-    imports: [TranslateModule.forRoot({
+    declarations: [
+        ConceptSearchComponent,
+        ErrormessageComponent,
+        ConceptListComponent,
+        ConceptAutosuggestComponent,
+        DroppableDirective,
+        DraggableDirective
+    ],
+    imports: [
+        NoopAnimationsModule,
+        ReactiveFormsModule,
+        MatCardModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTableModule,
+        TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
             }
         })],
     providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },
@@ -61,10 +93,7 @@ describe('ConceptSearchComponent', () => {
     expect(el).toBeTruthy();
     el.triggerEventHandler('click', null);
     fixture.detectChanges();
-
-    fixture.whenStable().then(() => {
-      expect(component.searchControl.value).toBe('');
-    });
+    expect(component.searchControl.value).toBe('');
   });
 
 

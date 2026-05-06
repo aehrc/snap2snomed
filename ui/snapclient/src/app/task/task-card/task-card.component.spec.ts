@@ -30,7 +30,7 @@ import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {IAppState, initialAppState} from '../../store/app.state';
 import {selectTaskSaveError} from '../../store/task-feature/task.selectors';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
-import {MatCheckbox, MatCheckboxModule} from '@angular/material/checkbox';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
@@ -61,7 +61,7 @@ describe('TaskCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [TaskCardComponent, InitialsPipe, ErrormessageComponent, MatCheckbox, UserChipComponent],
+    declarations: [TaskCardComponent, InitialsPipe, ErrormessageComponent, UserChipComponent],
     imports: [RouterTestingModule,
         TranslateModule.forRoot({
             loader: {

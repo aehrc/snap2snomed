@@ -54,6 +54,7 @@ import {Project} from '../../_models/project';
 import {selectAuthorizedProjects} from '../../store/app.selectors';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {UserChipComponent} from '../../user/user-chip/user-chip.component';
 
 describe('MappingAddComponent', () => {
   let component: MappingAddComponent;
@@ -79,7 +80,7 @@ describe('MappingAddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [MappingAddComponent, ErrormessageComponent, ProjectRolesComponent],
+    declarations: [MappingAddComponent, ErrormessageComponent, ProjectRolesComponent, UserChipComponent],
     imports: [RouterTestingModule,
         BrowserAnimationsModule,
         FormsModule,

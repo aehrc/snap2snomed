@@ -135,16 +135,15 @@ describe('TargetRelationshipComponent', () => {
   });
 
   it('should add target', async() => {
-    spyOn(component.newTargetEvent, 'emit');
+    const emitSpy = spyOn(component.newTargetEvent, 'emit');
     spyOn(fhirService, 'getEnglishFsn').and.returnValue(of(targetDisplay));
 
     expect(component.targetRows.length).toEqual(0);
 
     component.addSelection(targetCode, targetDisplay, targetSystem, relationship);
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(component.newTargetEvent.emit).toHaveBeenCalledOnceWith(target);
-    });
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(emitSpy).toHaveBeenCalledOnceWith(target);
   });
 
   it('should not add duplicate target', async() => {
@@ -156,11 +155,10 @@ describe('TargetRelationshipComponent', () => {
     expect(component.source).toBeTruthy();
     // Add same targetCode
     component.addSelection(targetCode, targetDisplay, targetSystem, relationship);
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(component.targetRows.length).toEqual(1);
-      expect(component.error.message).toEqual('ERROR.DUPLICATE_TARGET_ERROR');
-    });
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(component.targetRows.length).toEqual(1);
+    expect(component.error.message).toEqual('ERROR.DUPLICATE_TARGET_ERROR');
   });
 
   it('should remove target', fakeAsync(() => {
@@ -180,7 +178,7 @@ describe('TargetRelationshipComponent', () => {
     const code = '1234567';
     const display = 'This is a test selection';
 
-    spyOn(component.newTargetEvent, 'emit');
+    const emitSpy = spyOn(component.newTargetEvent, 'emit');
     spyOn(fhirService, 'getEnglishFsn').and.returnValue(of(display));
 
     selectionService.select({code, display});
@@ -190,11 +188,9 @@ describe('TargetRelationshipComponent', () => {
     const calledWith = new MapView('', '', sourceId, sourceIndex, sourceCode, sourceDisplay, code, display, relationship,
       'DRAFT', false, null, null, null, null, null, null, false, false, undefined, undefined, null);
 
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      expect(component.newTargetEvent.emit).toHaveBeenCalledWith(calledWith);
-    });
-
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(emitSpy).toHaveBeenCalledWith(calledWith);
   });
 
   it('button should not add duplicated selection', fakeAsync(() => {

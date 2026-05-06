@@ -23,7 +23,10 @@ import { HttpLoaderFactory } from '../app.module';
 import { initialAppState } from '../store/app.state';
 
 import { ConceptPropertiesComponent } from './concept-properties.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
 
 describe('ConceptPropertiesComponent', () => {
   let component: ConceptPropertiesComponent;
@@ -32,10 +35,15 @@ describe('ConceptPropertiesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
     declarations: [ConceptPropertiesComponent],
-    imports: [TranslateModule.forRoot({
+    imports: [
+        MatCardModule,
+        MatTabsModule,
+        MatTableModule,
+        TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
-                useFactory: HttpLoaderFactory
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
             }
         })],
     providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },
