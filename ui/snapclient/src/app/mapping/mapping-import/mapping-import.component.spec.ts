@@ -33,6 +33,7 @@ import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-b
 import { APP_CONFIG } from '../../app.config';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 import { MappingImportComponent } from './mapping-import.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -62,6 +63,7 @@ describe('MappingImportComponent', () => {
         MatSnackBarModule,
         MatCheckboxModule,
         MatTooltipModule,
+        MatIconModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

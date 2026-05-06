@@ -58,6 +58,10 @@ import {BulkchangeComponent} from '../bulkchange/bulkchange.component';
 import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {MappingTableSelectorComponent} from '../mapping-table-selector/mapping-table-selector.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {DroppableDirective} from '../../_directives/droppable.directive';
+import {DraggableDirective} from '../../_directives/draggable.directive';
+import {ResizeColumnComponent} from '../../column-resize/resize-column.component';
+import {MatBadgeModule} from '@angular/material/badge';
 
 describe('MappingTableComponent', () => {
   let component: MappingTableComponent;
@@ -78,7 +82,10 @@ describe('MappingTableComponent', () => {
         LastupdatedPipe,
         ErrormessageComponent,
         BulkchangeComponent,
-        MappingTableSelectorComponent],
+        MappingTableSelectorComponent,
+        DroppableDirective,
+        DraggableDirective,
+        ResizeColumnComponent],
     imports: [RouterTestingModule,
         MatSort,
         MatPaginator,
@@ -102,6 +109,7 @@ describe('MappingTableComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         MatBottomSheetModule,
+        MatBadgeModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

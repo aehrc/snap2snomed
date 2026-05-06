@@ -25,6 +25,8 @@ import {By} from '@angular/platform-browser';
 import {ErrorDetail} from '../_models/error_detail';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 describe('ErrormessageComponent', () => {
   let component: ErrormessageComponent;
@@ -37,6 +39,8 @@ describe('ErrormessageComponent', () => {
       imports: [
         NoopAnimationsModule,
         MatSnackBarModule,
+        MatTableModule,
+        MatSortModule,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,

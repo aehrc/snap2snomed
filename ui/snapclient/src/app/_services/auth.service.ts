@@ -85,7 +85,7 @@ export class AuthService {
       // Redirect to AWS Cognito hosted UI
       window.location.href = href;
     } else {
-      throwError({error: `Login unsuccessful - missing URL ${this.baseUrl}`});
+      throwError(() => ({error: `Login unsuccessful - missing URL ${this.baseUrl}`}));
     }
   }
 
@@ -181,12 +181,14 @@ export class AuthService {
     let admin = false;
     this.store.select(selectToken).subscribe((state) => {
       if (state && state.id_token) {
-        const decoded = jwtDecode(state.id_token);
-        // @ts-ignore
-        const groups = decoded['cognito:groups'] ?? null;
-        if (groups) {
-          admin = groups.indexOf(this.config.adminGroup) >= 0;
-        }
+        try {
+          const decoded = jwtDecode(state.id_token);
+          // @ts-ignore
+          const groups = decoded['cognito:groups'] ?? null;
+          if (groups) {
+            admin = groups.indexOf(this.config.adminGroup) >= 0;
+          }
+        } catch { }
       }
     }).unsubscribe();
     return admin;
@@ -196,12 +198,14 @@ export class AuthService {
     let expired = true;
     this.store.select(selectToken).subscribe((state) => {
       if (state && state.id_token) {
-        const decoded = jwtDecode(state.id_token);
-        // @ts-ignore
-        const expireTime = decoded['exp'] ?? null;
-        if (expireTime) {
-          expired = (expireTime*1000) < Date.now();
-        }
+        try {
+          const decoded = jwtDecode(state.id_token);
+          // @ts-ignore
+          const expireTime = decoded['exp'] ?? null;
+          if (expireTime) {
+            expired = (expireTime*1000) < Date.now();
+          }
+        } catch { }
       }
     }).unsubscribe();
     return expired;
@@ -211,12 +215,14 @@ export class AuthService {
     let expired = true;
     this.store.select(selectToken).subscribe((state) => {
       if (state && state.access_token) {
-        const decoded = jwtDecode(state.access_token);
-        // @ts-ignore
-        const expireTime = decoded['exp'] ?? null;
-        if (expireTime) {
-          expired = (expireTime*1000) < Date.now();
-        }
+        try {
+          const decoded = jwtDecode(state.access_token);
+          // @ts-ignore
+          const expireTime = decoded['exp'] ?? null;
+          if (expireTime) {
+            expired = (expireTime*1000) < Date.now();
+          }
+        } catch { }
       }
     }).unsubscribe();
     return expired;
@@ -246,7 +252,7 @@ export class AuthService {
         }
       });
     } else {
-      throwError({error: 'Token is missing'});
+      throwError(() => ({error: 'Token is missing'}));
     }
     const url = `${this.baseUrl}/oauth2/token`;
     return this.http.post<TokenMsg>(url, body.toString(), {headers});

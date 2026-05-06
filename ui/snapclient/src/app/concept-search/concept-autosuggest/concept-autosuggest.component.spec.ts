@@ -23,7 +23,9 @@ import {HttpLoaderFactory} from 'src/app/app.module';
 import {initialAppState} from 'src/app/store/app.state';
 
 import {ConceptAutosuggestComponent} from './concept-autosuggest.component';
+import {ConceptListComponent} from '../concept-list/concept-list.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {MatTableModule} from '@angular/material/table';
 
 describe('ConceptAutosuggestComponent', () => {
   let component: ConceptAutosuggestComponent;
@@ -31,8 +33,9 @@ describe('ConceptAutosuggestComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [ConceptAutosuggestComponent],
-    imports: [TranslateModule.forRoot({
+    declarations: [ConceptAutosuggestComponent, ConceptListComponent],
+    imports: [MatTableModule,
+        TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory

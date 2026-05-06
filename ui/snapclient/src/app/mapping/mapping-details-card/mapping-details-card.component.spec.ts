@@ -29,6 +29,11 @@ import { Project } from 'src/app/_models/project';
 import {LastupdatedPipe} from 'src/app/_utils/lastupdated_pipe';
 
 import { MappingDetailsCardComponent } from './mapping-details-card.component';
+import { TargetVersionComponent } from 'src/app/target-version/target-version.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingDetailsCardComponent', () => {
@@ -43,9 +48,15 @@ describe('MappingDetailsCardComponent', () => {
     await TestBed.configureTestingModule({
     declarations: [
         MappingDetailsCardComponent,
-        LastupdatedPipe
+        LastupdatedPipe,
+        TargetVersionComponent
     ],
     imports: [RouterTestingModule.withRoutes([]),
+        NoopAnimationsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatLabel,
+        MatSelectModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
