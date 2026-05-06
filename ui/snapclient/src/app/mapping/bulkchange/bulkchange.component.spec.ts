@@ -70,7 +70,7 @@ describe('BulkchangeComponent', () => {
         })],
     providers: [
         { provide: MatDialogRef, useValue: {} },
-        { provide: MAT_DIALOG_DATA, useValue: { selectedRows: ['a'] } },
+        { provide: MAT_DIALOG_DATA, useValue: { selectedRows: ['a'], isMapView: true } },
         { provide: APP_CONFIG, useValue: {} },
         MatSnackBar,
         TranslateService,
@@ -81,11 +81,13 @@ describe('BulkchangeComponent', () => {
     .compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(fakeAsync(() => {
     fixture = TestBed.createComponent(BulkchangeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+    tick();
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

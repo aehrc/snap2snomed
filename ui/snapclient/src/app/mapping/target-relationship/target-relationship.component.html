@@ -22,7 +22,7 @@
             <mat-selection-list>
               @for (row of filterRows(relationship); track row) {
                 <mat-option (click)="click(row)">
-                  <span [appDraggable]="{data:row, zones:['relationshipZone']}"
+                  <span [appDraggable]="{data:row, zones:draggableZones}"
                     class="row-target">
                     @if (isReconcileTask() && row.targetLastAuthor) {
                       <app-user-chip id="targetLastAuthorUserChip" [user]="row.targetLastAuthor"

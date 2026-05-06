@@ -98,7 +98,7 @@ describe('NotesListComponent', () => {
       .compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(fakeAsync(() => {
     fixture = TestBed.createComponent(NotesListComponent);
     component = fixture.componentInstance;
     const row = {
@@ -107,7 +107,9 @@ describe('NotesListComponent', () => {
     } as MapRow;
     component.newNote = new Note(null, '', new User(), '', '', row, NoteCategory.USER);
     fixture.detectChanges();
-  });
+    tick();
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

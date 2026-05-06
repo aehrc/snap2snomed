@@ -60,6 +60,8 @@ export class TargetRelationshipComponent implements OnInit {
   @Output() flagEvent = new EventEmitter<MapView>();
   @Output() noReplacementEvent = new EventEmitter<MapView>();
 
+  readonly draggableZones = ['relationshipZone'];
+
   writeDisableUtils = WriteDisableUtils;
   toMapRowStatus = toMapRowStatus;
 
