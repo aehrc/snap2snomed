@@ -103,7 +103,8 @@ describe('TaskCreateComponent', () => {
         "status": 400
       }
     } as any;
-    fixture.detectChanges();
+    // detectChanges intentionally not called here - each test calls it after setting its own inputs
+    // to avoid NG0100 from @if embedded views with [(ngModel)] being created mid-lifecycle
   });
 
   it('should create', () => {

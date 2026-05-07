@@ -129,7 +129,9 @@ describe('NotesListComponent', () => {
   it('should show send button - enabled', fakeAsync(() => {
     expect(component.newNote).toBeTruthy();
     if (component.newNote) {
-      component.newNote.noteText = 'tests';
+      const textarea = fixture.debugElement.query(By.css('textarea'));
+      textarea.nativeElement.value = 'tests';
+      textarea.triggerEventHandler('input', {target: textarea.nativeElement});
       fixture.detectChanges();
       tick();
       fixture.detectChanges();
