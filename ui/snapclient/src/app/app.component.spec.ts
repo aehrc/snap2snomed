@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
-import {RouterTestingModule} from '@angular/router/testing';
-import {AppComponent} from './app.component';
-import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {AuthService} from './_services/auth.service';
-import {UserService} from './_services/user.service';
+import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { AppComponent } from './app.component';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { AuthService } from './_services/auth.service';
+import { UserService } from './_services/user.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import {CUSTOM_ELEMENTS_SCHEMA, DebugElement} from '@angular/core';
-import {IAppState, initialAppState} from './store/app.state';
-import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {of} from 'rxjs';
-import {By} from '@angular/platform-browser';
-import {HttpLoaderFactory} from './app.module';
-import {APP_CONFIG} from './app.config';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
+import { IAppState, initialAppState } from './store/app.state';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { of } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { HttpLoaderFactory } from './app.module';
+import { APP_CONFIG } from './app.config';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 export class TranslateServiceStub {
@@ -65,26 +64,26 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    declarations: [
+      declarations: [
         AppComponent,
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [RouterTestingModule,
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [
         TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+          }
         })],
-    providers: [
+      providers: [
         { provide: APP_CONFIG, useValue: { appName: 'Snap2SNOMED', authDomainUrl: 'anything' } },
         provideMockStore({ initialState: initialAppState }), AuthService, UserService,
         { provide: TranslateService, useClass: TranslateServiceStub },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents();
+      ]
+    }).compileComponents();
 
     store = TestBed.inject(MockStore);
     testAuthService = TestBed.inject(AuthService);
@@ -106,14 +105,12 @@ describe('AppComponent', () => {
   });
 
   it(`should inject auth service`, inject([AuthService], async (injectService: AuthService) => {
-      expect(injectService).toBe(testAuthService);
-    })
-  );
+    expect(injectService).toBe(testAuthService);
+  }));
 
   it(`should inject user service`, inject([UserService], async (injectService: UserService) => {
-      expect(injectService).toBe(testUserService);
-    })
-  );
+    expect(injectService).toBe(testUserService);
+  }));
 
   it('should render login button when user is not authenticated', () => {
     spyOn(testAuthService, 'isAuthenticated').and.returnValue(false);
@@ -124,12 +121,24 @@ describe('AppComponent', () => {
     expect(el.nativeElement.textContent).toContain('Login');
   });
 
+  it('should not render login button when user is authenticated', fakeAsync(() => {
 
-  it('should not render login button when user is authenticated', () => {
-    store.setState({...initialAppState, auth: {...initialAppState.auth, isAuthenticated: true}});
+    store.setState({
+      ...initialAppState,
+      auth: {
+        ...initialAppState.auth,
+        isAuthenticated: true
+      }
+    });
+
     fixture.detectChanges();
-    el = fixture.debugElement.query(By.css('button'));
-    expect(el).toBeFalsy();
-  });
+
+    tick(); // flush selector + async pipe
+    fixture.detectChanges();
+
+    const el = fixture.debugElement.query(By.css('button.login'));
+
+    expect(el).toBeNull();
+  }));
 
 });

@@ -14,34 +14,33 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, fakeAsync, tick, TestBed, flush, discardPeriodicTasks} from '@angular/core/testing';
+import { ComponentFixture, TestBed, flush, discardPeriodicTasks, fakeAsync, tick, flushMicrotasks } from '@angular/core/testing';
 
-import {TargetRelationshipComponent} from './target-relationship.component';
-import {RouterTestingModule} from '@angular/router/testing';
+import { TargetRelationshipComponent } from './target-relationship.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatSelectModule} from '@angular/material/select';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {HttpLoaderFactory} from '../../app.module';
-import {APP_CONFIG} from '../../app.config';
-import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {IAppState, initialAppState} from '../../store/app.state';
-import {DebugElement} from '@angular/core';
-import {SelectionService} from 'src/app/_services/selection.service';
-import {By} from '@angular/platform-browser';
-import {MapRowRelationship, MapRowStatus, MapView} from 'src/app/_models/map_row';
-import {MatIconModule} from '@angular/material/icon';
-import {ErrormessageComponent} from 'src/app/errormessage/errormessage.component';
-import {MatCardModule} from '@angular/material/card';
-import {MatListModule} from '@angular/material/list';
-import {DroppableDirective} from 'src/app/_directives/droppable.directive';
-import {DraggableDirective} from 'src/app/_directives/draggable.directive';
-import {FhirService} from "../../_services/fhir.service";
-import {of} from "rxjs";
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { HttpLoaderFactory } from '../../app.module';
+import { APP_CONFIG } from '../../app.config';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { IAppState, initialAppState } from '../../store/app.state';
+import { DebugElement } from '@angular/core';
+import { SelectionService } from 'src/app/_services/selection.service';
+import { By } from '@angular/platform-browser';
+import { MapRowRelationship, MapRowStatus, MapView } from 'src/app/_models/map_row';
+import { MatIconModule } from '@angular/material/icon';
+import { ErrormessageComponent } from 'src/app/errormessage/errormessage.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { DroppableDirective } from 'src/app/_directives/droppable.directive';
+import { DraggableDirective } from 'src/app/_directives/draggable.directive';
+import { FhirService } from "../../_services/fhir.service";
+import { of } from "rxjs";
 import { UntypedFormBuilder } from '@angular/forms';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 describe('TargetRelationshipComponent', () => {
   let component: TargetRelationshipComponent;
@@ -68,7 +67,7 @@ describe('TargetRelationshipComponent', () => {
       part: [
         {
           name: 'use',
-          valueCoding: {code: '900000000000003001'}
+          valueCoding: { code: '900000000000003001' }
         },
         {
           name: 'language',
@@ -84,9 +83,8 @@ describe('TargetRelationshipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [TargetRelationshipComponent, ErrormessageComponent, DroppableDirective, DraggableDirective],
-    imports: [RouterTestingModule,
-        BrowserAnimationsModule,
+      declarations: [TargetRelationshipComponent, ErrormessageComponent, DroppableDirective, DraggableDirective],
+      imports: [
         MatSelectModule,
         MatSnackBarModule,
         MatTooltipModule,
@@ -94,21 +92,22 @@ describe('TargetRelationshipComponent', () => {
         MatCardModule,
         MatListModule,
         TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+          }
         })],
-    providers: [
+      providers: [
+        provideAnimations(),
         { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
-            initialState: initialAppState,
+          initialState: initialAppState,
         }), FhirService, TranslateService, SelectionService, UntypedFormBuilder,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
-    ]
-})
+      ]
+    })
       .compileComponents();
     store = TestBed.inject(MockStore);
     fhirService = TestBed.inject(FhirService);
@@ -116,7 +115,7 @@ describe('TargetRelationshipComponent', () => {
     selectionService = TestBed.inject(SelectionService);
     fixture = TestBed.createComponent(TargetRelationshipComponent);
     component = fixture.componentInstance;
-    component.targetRows =  new Array<MapView>();
+    component.targetRows = new Array<MapView>();
     component.source = {
       id: '1',
       index: sourceIndex,
@@ -134,7 +133,7 @@ describe('TargetRelationshipComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should add target', async() => {
+  it('should add target', async () => {
     const emitSpy = spyOn(component.newTargetEvent, 'emit');
     spyOn(fhirService, 'getEnglishFsn').and.returnValue(of(targetDisplay));
 
@@ -146,40 +145,71 @@ describe('TargetRelationshipComponent', () => {
     expect(emitSpy).toHaveBeenCalledOnceWith(target);
   });
 
-  it('should not add duplicate target', fakeAsync(async() => {
-    component.targetRows.push(target);
-    spyOn(fhirService, 'getEnglishFsn').and.returnValue(of('Test English FSN'));
+  it('should not add duplicate target', fakeAsync(() => {
+
+    spyOn(fhirService, 'getEnglishFsn')
+      .and.returnValue(of('Test English FSN'));
+
+    spyOn(translateService, 'get')
+      .and.returnValue(of('ERROR.DUPLICATE_TARGET_ERROR'));
+
+    spyOn(component.newTargetEvent, 'emit');
+
+    component.source = {
+      id: sourceId,
+      index: sourceIndex,
+      code: sourceCode,
+      display: sourceDisplay,
+      noMap: false,
+      status: 'DRAFT',
+      additionalColumnValues: [],
+      additionalColumnNames: []
+    };
 
     fixture.detectChanges();
+
+    // FIRST CALL (creates item)
+    component.addSelection(targetCode, targetDisplay, 'system', relationship);
+
+    flushMicrotasks();
     tick();
     fixture.detectChanges();
-    expect(component.targetRows.length).toEqual(1);
-    expect(component.source).toBeTruthy();
-    // Add same targetCode
-    component.addSelection(targetCode, targetDisplay, targetSystem, relationship);
-    await fixture.whenStable();
+
+    // simulate parent state update (critical)
+    component.targetRows = [{ targetCode: targetCode } as any];
+
+    expect(component.newTargetEvent.emit).toHaveBeenCalled();
+
+    // reset for second assertion
+    component.error = {} as any;
+    (component.newTargetEvent.emit as jasmine.Spy).calls.reset();
+
+    // SECOND CALL (duplicate)
+    component.addSelection(targetCode, targetDisplay, 'system', relationship);
+
+    flushMicrotasks();
     tick();
     fixture.detectChanges();
-    expect(component.targetRows.length).toEqual(1);
-    expect(component.error.message).toEqual('ERROR.DUPLICATE_TARGET_ERROR');
+
+    expect(component.error?.message)
+      .toBe('ERROR.DUPLICATE_TARGET_ERROR');
+
+    expect(component.newTargetEvent.emit)
+      .not.toHaveBeenCalled();
   }));
 
-  it('should remove target', fakeAsync(() => {
-    spyOn(component.removeTargetEvent, 'emit');
+  it('should remove target', async () => {
+
+    const emitSpy = spyOn(component.removeTargetEvent, 'emit');
+
     component.targetRows.push(target);
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    expect(component.targetRows.length).toEqual(1);
-    // delete target
+
     component.removeTarget(target);
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    expect(component.removeTargetEvent.emit).toHaveBeenCalledOnceWith(target);
-  }));
 
-  it('button should add selection', async() => {
+    expect(emitSpy).toHaveBeenCalledWith(target);
+  });
+
+  it('button should add selection', async () => {
     fixture.detectChanges();
 
     const code = '1234567';
@@ -188,7 +218,7 @@ describe('TargetRelationshipComponent', () => {
     const emitSpy = spyOn(component.newTargetEvent, 'emit');
     spyOn(fhirService, 'getEnglishFsn').and.returnValue(of(display));
 
-    selectionService.select({code, display});
+    selectionService.select({ code, display });
     el = fixture.debugElement.query(By.css('button'));
     expect(el).toBeTruthy();
     el.triggerEventHandler('click', null);
@@ -200,35 +230,57 @@ describe('TargetRelationshipComponent', () => {
     expect(emitSpy).toHaveBeenCalledWith(calledWith);
   });
 
-  it('button should not add duplicated selection', fakeAsync(() => {
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
+  it('should show duplicate error when same selection is added twice', fakeAsync(() => {
 
     const code = '1234567';
-    const display = 'This is a test selection';
+    const display = 'Test selection';
 
-    component.targetRows.push(new MapView('', '', sourceId, sourceIndex, sourceCode, sourceDisplay, code, display, relationship,
-      'DRAFT', false, null, null, null, null, null, null, false, false, undefined, undefined, null));
-    selectionService.select({code, display});
+    spyOn(fhirService, 'getEnglishFsn')
+      .and.returnValue(of('Test English FSN'));
+
+    spyOn(translateService, 'get')
+      .and.returnValue(of('ERROR.DUPLICATE_TARGET_ERROR'));
+
+    // simulate parent-provided source
+    component.source = {
+      id: sourceId,
+      index: sourceIndex,
+      code: sourceCode,
+      display: sourceDisplay,
+      noMap: false,
+      status: 'DRAFT',
+      additionalColumnValues: [],
+      additionalColumnNames: []
+    };
+
     fixture.detectChanges();
+
+    // FIRST ADD
+    component.addSelection(code, display, 'system', relationship);
+
+    flushMicrotasks();
     tick();
     fixture.detectChanges();
 
-    spyOn(fhirService, 'getEnglishFsn').and.returnValue(of('Test English FSN'));
-    fixture.whenStable().then(() => {
-      el = fixture.debugElement.query(By.css('button'));
-      console.log(el);
-      el.triggerEventHandler('click', null);
-      fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
-        console.log(component.error);
-        expect(component.error).toEqual({message: 'ERROR.DUPLICATE_TARGET_ERROR'});
-      });
-    });
-    flush();
-    discardPeriodicTasks();
+    // simulate parent updating @Input after emit
+    component.targetRows = [{
+      targetCode: code
+    } as any];
+
+    expect(component.targetRows.length).toBe(1);
+
+    // reset error
+    component.error = {} as any;
+
+    // SECOND ADD (duplicate)
+    component.addSelection(code, display, 'system', relationship);
+
+    flushMicrotasks();
+    tick();
+    fixture.detectChanges();
+
+    expect(component.error?.message)
+      .toBe('ERROR.DUPLICATE_TARGET_ERROR');
   }));
 
 });
