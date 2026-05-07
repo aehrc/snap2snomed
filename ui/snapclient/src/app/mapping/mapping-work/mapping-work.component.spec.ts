@@ -40,7 +40,6 @@ import { TrimPipe } from '../../_utils/trim_pipe';
 import { LastupdatedPipe } from '../../_utils/lastupdated_pipe';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TaskItemComponent } from '../../task/task-item/task-item.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -48,6 +47,9 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MappingDetailsCardComponent } from '../mapping-details-card/mapping-details-card.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 describe('MappingWorkComponent', () => {
@@ -71,9 +73,10 @@ describe('MappingWorkComponent', () => {
             declarations: [MappingWorkComponent, ErrormessageComponent, MappingTableComponent, TaskItemComponent, TrimPipe, LastupdatedPipe,
                 MappingDetailsCardComponent],
             imports: [
+                MatSortModule,
+                MatPaginatorModule,
                 MatSort,
                 MatPaginator,
-                BrowserAnimationsModule,
                 MatSelectModule,
                 MatSnackBarModule,
                 MatTooltipModule,
@@ -88,6 +91,7 @@ describe('MappingWorkComponent', () => {
                     }
                 })],
             providers: [
+                provideRouter([]),
                 { provide: APP_CONFIG, useValue: {} },
                 provideMockStore({
                     initialState: initialAppState,
@@ -108,7 +112,6 @@ describe('MappingWorkComponent', () => {
         translateService = TestBed.inject(TranslateService);
         fixture = TestBed.createComponent(MappingWorkComponent);
         component = fixture.componentInstance;
-        fixture.detectChanges();
     });
 
     it('should create', () => {
