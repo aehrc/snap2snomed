@@ -21,8 +21,8 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { IAppState, initialAppState } from '../../store/app.state';
 import { DebugElement } from '@angular/core';
 import { User } from '../../_models/user';
-import { RouterTestingModule } from '@angular/router/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,14 +33,23 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { HttpLoaderFactory } from '../../app.module';
-import { selectCurrentMapping, selectMappingError, selectSelectedRows } from '../../store/mapping-feature/mapping.selectors';
+import { selectCurrentMapping, selectMappingError, selectMappingLoading, selectSelectedRows } from '../../store/mapping-feature/mapping.selectors';
 import { selectCurrentUser } from '../../store/auth-feature/auth.selectors';
+import { selectMappingFileLoading } from '../../store/source-feature/source.selectors';
 import { Mapping } from '../../_models/mapping';
 
 import { InitialsPipe } from '../../_utils/initialize_pipe';
@@ -52,6 +61,8 @@ import { MappingDetailsCardComponent } from '../mapping-details-card/mapping-det
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { APP_CONFIG } from '../../app.config';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 describe('MappingViewComponent', () => {
   let component: MappingViewComponent;
@@ -78,7 +89,8 @@ describe('MappingViewComponent', () => {
         MappingTableSelectorComponent
       ],
       imports: [
-        RouterTestingModule,
+        MatSortModule,
+        MatPaginatorModule,
         MatSort,
         MatPaginator,
         MatButtonModule,
@@ -132,8 +144,10 @@ describe('MappingViewComponent', () => {
 
     fixture.detectChanges(); // triggers ngOnInit, starts debounceTime(200) timer
     tick(201);               // let debounceTime(200) fire so this.mapping gets set
-    fixture.detectChanges(); // re-render with mapping set
-    tick();                  // allow Material chip/button tabindex to settle
+    fixture.detectChanges(); // re-render with mapping set; creates @if(mapping) embedded view with ngModels
+    tick();                  // drain ngModel _updateValue promises and Material init microtasks
+    fixture.detectChanges(); // settle ngModel-driven state changes
+    tick();                  // drain any further async callbacks (e.g. from LoadTasksForMap dispatch)
     fixture.detectChanges(); // stable final state
   }));
 
