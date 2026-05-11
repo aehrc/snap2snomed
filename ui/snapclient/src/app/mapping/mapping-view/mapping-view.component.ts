@@ -106,7 +106,9 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
   // @ts-ignore
   @ViewChild(MappingTableSelectorComponent, {static: false})
   set concent(selector: MappingTableSelectorComponent) {
-    this.mappingTableSelector = selector;
+    // Defer so the @ViewChild resolution doesn't cause NG0100 in dev mode:
+    // the verification pass would see undefined→instance within one CD cycle.
+    Promise.resolve().then(() => this.mappingTableSelector = selector);
   }
 
   page: Page = new Page();

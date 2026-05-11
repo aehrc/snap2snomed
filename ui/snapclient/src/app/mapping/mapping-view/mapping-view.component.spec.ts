@@ -40,6 +40,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
@@ -58,8 +59,6 @@ import { ErrormessageComponent } from '../../errormessage/errormessage.component
 import { BulkchangeComponent } from '../bulkchange/bulkchange.component';
 import { MappingTableSelectorComponent } from '../mapping-table-selector/mapping-table-selector.component';
 import { MappingDetailsCardComponent } from '../mapping-details-card/mapping-details-card.component';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { APP_CONFIG } from '../../app.config';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -91,8 +90,6 @@ describe('MappingViewComponent', () => {
       imports: [
         MatSortModule,
         MatPaginatorModule,
-        MatSort,
-        MatPaginator,
         MatButtonModule,
         MatDividerModule,
         MatIconModule,
@@ -100,6 +97,15 @@ describe('MappingViewComponent', () => {
         MatToolbarModule,
         MatCardModule,
         MatChipsModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatCheckboxModule,
+        MatSlideToggleModule,
+        MatTooltipModule,
+        FormsModule,
         NoopAnimationsModule,
         MatSnackBarModule,
         MatDialogModule,
@@ -107,11 +113,13 @@ describe('MappingViewComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: HttpLoaderFactory
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
           }
         })
       ],
       providers: [
+        provideRouter([{ path: 'map-view/:id', component: MappingViewComponent }]),
         { provide: APP_CONFIG, useValue: {} },
         {
           provide: ActivatedRoute,
@@ -126,10 +134,13 @@ describe('MappingViewComponent', () => {
             { selector: selectMappingError, value: 'MockError' },
             { selector: selectCurrentMapping, value: mapping },
             { selector: selectCurrentUser, value: user },
-            { selector: selectSelectedRows, value: null }
+            { selector: selectSelectedRows, value: null },
+            { selector: selectMappingLoading, value: false },
+            { selector: selectMappingFileLoading, value: false }
           ]
         }),
         TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     }).compileComponents();
@@ -141,14 +152,15 @@ describe('MappingViewComponent', () => {
     component = fixture.componentInstance;
 
     component.allSourceDetails = [];
+    // Pre-set mapping so @if(mapping) embedded view is created in the first detectChanges
+    // rather than mid-cycle during a later one — avoids NG0100 from in-flight creation
+    component.mapping = mapping;
 
-    fixture.detectChanges(); // triggers ngOnInit, starts debounceTime(200) timer
-    tick(201);               // let debounceTime(200) fire so this.mapping gets set
-    fixture.detectChanges(); // re-render with mapping set; creates @if(mapping) embedded view with ngModels
-    tick();                  // drain ngModel _updateValue promises and Material init microtasks
-    fixture.detectChanges(); // settle ngModel-driven state changes
-    tick();                  // drain any further async callbacks (e.g. from LoadTasksForMap dispatch)
-    fixture.detectChanges(); // stable final state
+    fixture.detectChanges(); // ngOnInit, @if(mapping) view created (mapping already truthy)
+    tick(201);               // fire debounceTime(200): selectCurrentMapping subscription fires
+    fixture.detectChanges(); // update cycle with stable embedded view
+    tick();                  // drain microtasks (ngModel, router navigation)
+    fixture.detectChanges(); // settle final state
   }));
 
   afterEach(() => {
@@ -165,45 +177,44 @@ describe('MappingViewComponent', () => {
     expect(el).toBeTruthy();
   });
 
-  it('should show BULK EDIT button', fakeAsync(() => {
-    const currentUser = component.currentUser;
-
-    try {
+  // Owner-only tests: recreate the component with isOwner()=true from the start so
+  // @if(isOwner()) views are stable on the first detectChanges and never cause NG0100.
+  describe('as owner', () => {
+    beforeEach(fakeAsync(() => {
+      fixture.destroy();               // destroy the non-owner component from outer beforeEach
       mapping.project.owners = [user];
+
+      fixture = TestBed.createComponent(MappingViewComponent);
+      component = fixture.componentInstance;
+      store = TestBed.inject(MockStore);
+
+      component.allSourceDetails = [];
+      component.mapping = mapping;
       component.currentUser = user;
 
       fixture.detectChanges();
+      tick(201);
+      fixture.detectChanges();
       tick();
       fixture.detectChanges();
+    }));
 
+    afterEach(() => {
+      mapping.project.owners = [];
+    });
+
+    it('should show BULK EDIT button', () => {
       el = fixture.debugElement.query(By.css('#bulk-change'));
       expect(el.nativeElement.textContent).toBe(' TABLE.BULK_CHANGE ');
       expect(el).toBeTruthy();
-    } finally {
-      component.currentUser = currentUser;
-      mapping.project.owners = [];
-    }
-  }));
+    });
 
-  it('should show VALIDATE button', fakeAsync(() => {
-    const currentUser = component.currentUser;
-
-    try {
-      mapping.project.owners = [user];
-      component.currentUser = user;
-
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
-
+    it('should show VALIDATE button', () => {
       el = fixture.debugElement.query(By.css('#validate-targets'));
       expect(el.nativeElement.textContent).toBe(' MAP.VALIDATE_TARGETS ');
       expect(el).toBeTruthy();
-    } finally {
-      component.currentUser = currentUser;
-      mapping.project.owners = [];
-    }
-  }));
+    });
+  });
 
   it('should show Map title', () => {
     el = fixture.debugElement.query(By.css('h2'));
@@ -222,7 +233,7 @@ describe('MappingViewComponent', () => {
   });
 
   it('should show Export Menu button and menu', () => {
-    el = fixture.debugElement.query(By.css('.mat-menu-trigger'));
+    el = fixture.debugElement.query(By.css('.mat-mdc-menu-trigger'));
     expect(el).toBeTruthy();
 
     expect(el.nativeElement.textContent).toBe('MAP.EXPORT');
