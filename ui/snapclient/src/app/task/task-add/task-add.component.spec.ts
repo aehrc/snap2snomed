@@ -19,7 +19,6 @@ import {ComponentFixture, fakeAsync, tick, TestBed} from '@angular/core/testing'
 import {provideMockStore} from '@ngrx/store/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import {HttpLoaderFactory} from '../../app.module';
 import {APP_CONFIG} from '../../app.config';
@@ -68,7 +67,7 @@ describe('TaskAddComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
     declarations: [TaskAddComponent, ErrormessageComponent, MappingTableSelectorComponent, InitialsPipe],
-    imports: [NoopAnimationsModule,
+    imports: [
         MatTabsModule,
         FormsModule,
         MatCardModule,
@@ -107,6 +106,10 @@ describe('TaskAddComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -117,82 +120,71 @@ describe('TaskAddComponent', () => {
     expect(el).toBeFalsy();
   });
 
-  it('should create form if task is set', fakeAsync(() => {
-    component.task = task;
-    component.isMember = true;
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    const el = fixture.debugElement.query(By.css('form')).nativeElement;
-    expect(el).toBeTruthy();
-  }));
+  // Tests that need the form rendered: pre-set task and isMember before the first
+  // detectChanges so @if(task && isMember) is stable from the initial render and
+  // never causes NG0100 by transitioning mid-cycle.
+  describe('with task', () => {
+    beforeEach(fakeAsync(() => {
+      fixture.destroy();
+      fixture = TestBed.createComponent(TaskAddComponent);
+      component = fixture.componentInstance;
+      component.translate = translateService;
+      loader = TestbedHarnessEnvironment.loader(fixture);
+      component.task = task;
+      component.isMember = true;
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+    }));
 
-  it('should create cancel button', fakeAsync(() => {
-    component.task = task;
-    component.isMember = true;
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    const el = fixture.debugElement.query(By.css('button[type="cancel"]')).nativeElement;
-    expect(el).toBeTruthy();
-  }));
+    it('should create form if task is set', () => {
+      const el = fixture.debugElement.query(By.css('form')).nativeElement;
+      expect(el).toBeTruthy();
+    });
 
-  it('should show submit button when valid', fakeAsync(() => {
-    component.task = task;
-    component.isMember = true;
-    component.assignRows = 'ALL';
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    const el = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
-    expect(el).toBeTruthy();
-  }));
+    it('should create cancel button', () => {
+      const el = fixture.debugElement.query(By.css('button[type="cancel"]')).nativeElement;
+      expect(el).toBeTruthy();
+    });
 
-  it('should show rows selected if SELECTED option', fakeAsync(() => {
-    component.task = task;
-    component.isMember = true;
-    component.assignRows = 'SELECTED';
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    const el = fixture.debugElement.query(By.css('.selected-rows')).nativeElement;
-    expect(el).toBeTruthy();
-  }));
+    it('should show submit button when valid', fakeAsync(() => {
+      component.assignRows = 'ALL';
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      const el = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+      expect(el).toBeTruthy();
+    }));
 
-  it('should set default assignee in dropdown', fakeAsync(async () => {
-    component.task = task;
-    component.currentUser = user;
-    component.members = [user];
-    component.isMember = true;
-    component.isOwner = true;
+    it('should show rows selected if SELECTED option', fakeAsync(() => {
+      component.assignRows = 'SELECTED';
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      const el = fixture.debugElement.query(By.css('.selected-rows')).nativeElement;
+      expect(el).toBeTruthy();
+    }));
 
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    expect(component.task?.assignee.id).toEqual(component.currentUser.id);
-    const matSelect = await loader.getHarness(MatSelectHarness.with({selector: '#assignee'}));
-    expect(matSelect).toBeTruthy();
-    // Click the select element host TODO NOT WORKING
-    // await (await matSelect.host()).click();
-    // const actual = (await matSelect.getOptions()).length;
-    // expect(actual).toBe(1);
-    // const text = `${user.givenName} ${user.familyName}`;
-    // const defaultOption = await matSelect.getOptions({text});
-    // expect(defaultOption).toBeTruthy();
-  }));
+    it('should set default assignee in dropdown', fakeAsync(async () => {
+      component.currentUser = user;
+      component.members = [user];
+      component.isOwner = true;
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      expect(component.task?.assignee.id).toEqual(component.currentUser.id);
+      const matSelect = await loader.getHarness(MatSelectHarness.with({selector: '#assignee'}));
+      expect(matSelect).toBeTruthy();
+    }));
 
-  it('should set default description if none', fakeAsync(() => {
-    component.task = task;
-    component.isMember = true;
-    fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    expect(component.task).toBeTruthy();
-    expect(component.task.description).toEqual('');
-    const el = fixture.debugElement.query(By.css('#assignRows'));
-    el.nativeElement.dispatchEvent(new Event('change'));
-    tick();
-    fixture.detectChanges();
-    expect(component.task?.description?.length).toBeGreaterThan(1);
-  }));
+    it('should set default description if none', fakeAsync(() => {
+      expect(component.task).toBeTruthy();
+      expect(component.task!.description).toEqual('');
+      const el = fixture.debugElement.query(By.css('#assignRows'));
+      el.nativeElement.dispatchEvent(new Event('change'));
+      tick();
+      fixture.detectChanges();
+      expect(component.task?.description?.length).toBeGreaterThan(1);
+    }));
+  });
 });
