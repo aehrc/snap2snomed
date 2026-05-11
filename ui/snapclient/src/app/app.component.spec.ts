@@ -28,6 +28,7 @@ import { By } from '@angular/platform-browser';
 import { HttpLoaderFactory } from './app.module';
 import { APP_CONFIG } from './app.config';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 export class TranslateServiceStub {
 
@@ -77,6 +78,7 @@ describe('AppComponent', () => {
           }
         })],
       providers: [
+        { provide: ActivatedRoute, useValue: { snapshot: {}, params: of({}), queryParams: of({}), data: of({})} },
         { provide: APP_CONFIG, useValue: { appName: 'Snap2SNOMED', authDomainUrl: 'anything' } },
         provideMockStore({ initialState: initialAppState }), AuthService, UserService,
         { provide: TranslateService, useClass: TranslateServiceStub },

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ComponentFixture, fakeAsync, tick, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MappingWorkComponent } from './mapping-work.component';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -38,8 +38,6 @@ import { selectTaskList } from '../../store/task-feature/task.selectors';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TrimPipe } from '../../_utils/trim_pipe';
 import { LastupdatedPipe } from '../../_utils/lastupdated_pipe';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { TaskItemComponent } from '../../task/task-item/task-item.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -75,8 +73,6 @@ describe('MappingWorkComponent', () => {
             imports: [
                 MatSortModule,
                 MatPaginatorModule,
-                MatSort,
-                MatPaginator,
                 MatSelectModule,
                 MatSnackBarModule,
                 MatTooltipModule,
