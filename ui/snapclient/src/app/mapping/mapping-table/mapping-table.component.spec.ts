@@ -16,14 +16,14 @@
 
 import {ComponentFixture, discardPeriodicTasks, fakeAsync, flush, inject, TestBed} from '@angular/core/testing';
 import {MappingTableComponent} from './mapping-table.component';
-import {RouterTestingModule} from '@angular/router/testing';
+import {provideRouter} from '@angular/router';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
 import {APP_CONFIG} from '../../app.config';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {IAppState, initialAppState} from '../../store/app.state';
-import {selectCurrentMapping, selectSelectedRows} from '../../store/mapping-feature/mapping.selectors';
+import {selectCurrentMapping, selectCurrentView, selectSelectedRows} from '../../store/mapping-feature/mapping.selectors';
 import {Mapping} from '../../_models/mapping';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
@@ -34,8 +34,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatChipsModule} from '@angular/material/chips';
 import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {LastupdatedPipe} from '../../_utils/lastupdated_pipe';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginatorModule} from '@angular/material/paginator';
 import {ErrormessageComponent} from '../../errormessage/errormessage.component';
 import {MapRowRelationship, MapView, Page} from 'src/app/_models/map_row';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -46,7 +45,6 @@ import {MapService} from 'src/app/_services/map.service';
 import {Task, TaskType} from 'src/app/_models/task';
 import {User} from 'src/app/_models/user';
 import {MatTableModule} from '@angular/material/table';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -62,6 +60,7 @@ import {DroppableDirective} from '../../_directives/droppable.directive';
 import {DraggableDirective} from '../../_directives/draggable.directive';
 import {ResizeColumnComponent} from '../../column-resize/resize-column.component';
 import {MatBadgeModule} from '@angular/material/badge';
+import { MatSortModule } from '@angular/material/sort';
 
 describe('MappingTableComponent', () => {
   let component: MappingTableComponent;
@@ -86,11 +85,9 @@ describe('MappingTableComponent', () => {
         DroppableDirective,
         DraggableDirective,
         ResizeColumnComponent],
-    imports: [RouterTestingModule,
-        MatSort,
-        MatPaginator,
-        MatButtonModule,
+    imports: [MatButtonModule,
         MatDividerModule,
+        MatSortModule,
         MatIconModule,
         MatMenuModule,
         MatToolbarModule,
@@ -102,7 +99,6 @@ describe('MappingTableComponent', () => {
         MatTableModule,
         MatTooltipModule,
         MatCheckboxModule,
-        NoopAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         MatSelectModule,
@@ -126,6 +122,7 @@ describe('MappingTableComponent', () => {
             ],
         }), TranslateService,
         { provide: MapService, useValue: mockMapService },
+        provideRouter([]),
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
     ]
@@ -150,6 +147,7 @@ describe('MappingTableComponent', () => {
       '5678', 'testtarget2', 'EQUIVALENT', 'DRAFT', false, null,
       null, null, null, null, null, false, false, undefined, [], null));
     const page = new Page(mapViews, 0, 20, 2, 1);
+    store.overrideSelector(selectCurrentView, page);
     mockMapService.getMapView.and.returnValue(
       of({
         content: mapViews,
