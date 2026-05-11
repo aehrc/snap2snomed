@@ -322,7 +322,7 @@ export const reconcileStatuses: MapRowStatus[] = [
   MapRowStatus.MAPPED
 ]
 
-export const mapRowStatuses: MapRowStatus[] = authorStatuses.concat(reviewStatuses).concat(reconcileStatuses);
+export const mapRowStatuses: MapRowStatus[] = [...new Set(authorStatuses.concat(reviewStatuses).concat(reconcileStatuses))];
 
 export const mapRowRelationships = [
   MapRowRelationship.EQUIVALENT,

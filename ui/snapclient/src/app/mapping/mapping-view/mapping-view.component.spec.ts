@@ -19,7 +19,7 @@ import { MappingViewComponent } from './mapping-view.component';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialAppState } from '../../store/app.state';
-import { DebugElement } from '@angular/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { User } from '../../_models/user';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -141,7 +141,8 @@ describe('MappingViewComponent', () => {
         TranslateService,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting()
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 

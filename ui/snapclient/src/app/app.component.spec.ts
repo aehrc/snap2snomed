@@ -116,16 +116,18 @@ describe('AppComponent', () => {
   }));
 
   it('should render login button when user is not authenticated', () => {
-    spyOn(testAuthService, 'isAuthenticated').and.returnValue(false);
-    app.isAuthenticated = false;
-    fixture.detectChanges();
+    // isAuthenticated is already false from the store's initialAppState set in beforeEach.
+    // A second detectChanges() is not needed and triggers NG0100 in strict mode.
     el = fixture.debugElement.query(By.css('button'));
     expect(el).toBeTruthy();
     expect(el.nativeElement.textContent).toContain('Login');
   });
 
   it('should not render login button when user is authenticated', fakeAsync(() => {
-
+    // Destroy the unauthenticated fixture and set authenticated state before creating a new
+    // component. ngOnInit then subscribes with isAuthenticated=true on the very first render,
+    // so there is no false→true transition mid-cycle that would trigger NG0100.
+    fixture.destroy();
     store.setState({
       ...initialAppState,
       auth: {
@@ -133,10 +135,11 @@ describe('AppComponent', () => {
         isAuthenticated: true
       }
     });
-
+    fixture = TestBed.createComponent(AppComponent);
+    app = fixture.componentInstance;
+    app.translate = translateService;
     fixture.detectChanges();
-
-    tick(); // flush selector + async pipe
+    tick();
     fixture.detectChanges();
 
     const el = fixture.debugElement.query(By.css('button.login'));

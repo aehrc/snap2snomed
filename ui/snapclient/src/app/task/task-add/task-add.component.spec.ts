@@ -48,6 +48,7 @@ import {ScannedActionsSubject} from '@ngrx/store';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { MappingTableSelectorComponent } from 'src/app/mapping/mapping-table-selector/mapping-table-selector.component';
 import {InitialsPipe} from '../../_utils/initialize_pipe';
+import {UserChipComponent} from '../../user/user-chip/user-chip.component';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskAddComponent', () => {
@@ -69,7 +70,7 @@ describe('TaskAddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [TaskAddComponent, ErrormessageComponent, MappingTableSelectorComponent, InitialsPipe],
+    declarations: [TaskAddComponent, ErrormessageComponent, MappingTableSelectorComponent, InitialsPipe, UserChipComponent],
     imports: [
         MatTabsModule,
         FormsModule,
