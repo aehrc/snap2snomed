@@ -30,14 +30,14 @@ export class StatusUtils {
    * Under Reconciliation (Dual Mapping)
    */
   static inReconcileState(status: MapRowStatus): boolean {
-    return authorStatuses.includes(status) && status !== MapRowStatus.MAPPED;
+    return reconcileStatuses.includes(status) && status !== MapRowStatus.MAPPED;
   }
 
   /**
    * Under Review or Completed Review
    */
   static inReviewedState(status: MapRowStatus): boolean {
-    return authorStatuses.includes(status) && status !== MapRowStatus.REJECTED;
+    return reviewStatuses.includes(status) && status !== MapRowStatus.REJECTED;
   }
 
   /**
