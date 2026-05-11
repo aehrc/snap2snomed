@@ -17,8 +17,8 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
 import { MappingViewComponent } from './mapping-view.component';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { IAppState, initialAppState } from '../../store/app.state';
+import { provideMockStore } from '@ngrx/store/testing';
+import { initialAppState } from '../../store/app.state';
 import { DebugElement } from '@angular/core';
 import { User } from '../../_models/user';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
@@ -66,7 +66,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 describe('MappingViewComponent', () => {
   let component: MappingViewComponent;
   let fixture: ComponentFixture<MappingViewComponent>;
-  let store: MockStore<IAppState>;
   let el: DebugElement;
 
   const user = new User();
@@ -134,7 +133,7 @@ describe('MappingViewComponent', () => {
             { selector: selectMappingError, value: 'MockError' },
             { selector: selectCurrentMapping, value: mapping },
             { selector: selectCurrentUser, value: user },
-            { selector: selectSelectedRows, value: null },
+            { selector: selectSelectedRows, value: [] },
             { selector: selectMappingLoading, value: false },
             { selector: selectMappingFileLoading, value: false }
           ]
@@ -147,7 +146,6 @@ describe('MappingViewComponent', () => {
   }));
 
   beforeEach(fakeAsync(() => {
-    store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(MappingViewComponent);
     component = fixture.componentInstance;
 
@@ -186,7 +184,6 @@ describe('MappingViewComponent', () => {
 
       fixture = TestBed.createComponent(MappingViewComponent);
       component = fixture.componentInstance;
-      store = TestBed.inject(MockStore);
 
       component.allSourceDetails = [];
       component.mapping = mapping;

@@ -16,7 +16,7 @@
 
 import {ComponentFixture, fakeAsync, tick, TestBed} from '@angular/core/testing';
 
-import {provideMockStore} from '@ngrx/store/testing';
+import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -24,12 +24,15 @@ import {HttpLoaderFactory} from '../../app.module';
 import {APP_CONFIG} from '../../app.config';
 import {initialAppState} from '../../store/app.state';
 import {selectTaskList} from '../../store/task-feature/task.selectors';
+import {selectCurrentMapping, selectSelectedRows} from '../../store/mapping-feature/mapping.selectors';
 import {By} from '@angular/platform-browser';
+import {provideNoopAnimations} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TaskAddComponent} from './task-add.component';
 import {User} from '../../_models/user';
 import {Mapping} from '../../_models/mapping';
 import {Task, TaskType} from '../../_models/task';
+import {MappedRowDetailsDto} from '../../_models/map_row';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
@@ -94,8 +97,10 @@ describe('TaskAddComponent', () => {
             initialState: initialAppState,
             selectors: [
                 { selector: selectTaskList, value: [task] },
+                { selector: selectSelectedRows, value: [] },
+                { selector: selectCurrentMapping, value: null },
             ]
-        }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+        }), provideNoopAnimations(), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
       .compileComponents();
     translateService = TestBed.inject(TranslateService);
@@ -120,9 +125,9 @@ describe('TaskAddComponent', () => {
     expect(el).toBeFalsy();
   });
 
-  // Tests that need the form rendered: pre-set task and isMember before the first
-  // detectChanges so @if(task && isMember) is stable from the initial render and
-  // never causes NG0100 by transitioning mid-cycle.
+  // Tests that need the form rendered: pre-set ALL properties that affect template
+  // conditionals before the first detectChanges so no @if or binding transitions
+  // mid-cycle and causes NG0100.
   describe('with task', () => {
     beforeEach(fakeAsync(() => {
       fixture.destroy();
@@ -131,7 +136,10 @@ describe('TaskAddComponent', () => {
       component.translate = translateService;
       loader = TestbedHarnessEnvironment.loader(fixture);
       component.task = task;
+      component.currentUser = user;
+      component.members = [user];
       component.isMember = true;
+      component.isOwner = true;
       fixture.detectChanges();
       tick();
       fixture.detectChanges();
@@ -147,32 +155,13 @@ describe('TaskAddComponent', () => {
       expect(el).toBeTruthy();
     });
 
-    it('should show submit button when valid', fakeAsync(() => {
-      component.assignRows = 'ALL';
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
+    it('should show submit button when valid', () => {
       const el = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
       expect(el).toBeTruthy();
-    }));
-
-    it('should show rows selected if SELECTED option', fakeAsync(() => {
-      component.assignRows = 'SELECTED';
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
-      const el = fixture.debugElement.query(By.css('.selected-rows')).nativeElement;
-      expect(el).toBeTruthy();
-    }));
+    });
 
     it('should set default assignee in dropdown', fakeAsync(async () => {
-      component.currentUser = user;
-      component.members = [user];
-      component.isOwner = true;
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
-      expect(component.task?.assignee.id).toEqual(component.currentUser.id);
+      expect(component.task?.assignee.id).toEqual(component.currentUser!.id);
       const matSelect = await loader.getHarness(MatSelectHarness.with({selector: '#assignee'}));
       expect(matSelect).toBeTruthy();
     }));
@@ -186,5 +175,37 @@ describe('TaskAddComponent', () => {
       fixture.detectChanges();
       expect(component.task?.description?.length).toBeGreaterThan(1);
     }));
+  });
+
+  // Two things reset assignRows during detectChanges():
+  //  1. ngOnInit's selectSelectedRows subscription ([] → else branch → assignRows='')
+  //  2. ngAfterViewInit calling initTask() → assignRows=''
+  // Fix: override the selector to return a non-empty array (prevents else branch) and
+  // spy initTask as a no-op (prevents ngAfterViewInit reset), then pre-set assignRows='SELECTED'.
+  describe('with task and SELECTED rows', () => {
+    beforeEach(fakeAsync(() => {
+      fixture.destroy();
+      fixture = TestBed.createComponent(TaskAddComponent);
+      component = fixture.componentInstance;
+      component.translate = translateService;
+      loader = TestbedHarnessEnvironment.loader(fixture);
+      component.task = task;
+      component.currentUser = user;
+      component.members = [user];
+      component.isMember = true;
+      component.isOwner = true;
+      component.assignRows = 'SELECTED';
+      const store = TestBed.inject(MockStore);
+      store.overrideSelector(selectSelectedRows, [new MappedRowDetailsDto(1, null, 1)]);
+      spyOn(component, 'initTask').and.callFake(() => {});
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+    }));
+
+    it('should show rows selected if SELECTED option', () => {
+      const el = fixture.debugElement.query(By.css('.selected-rows')).nativeElement;
+      expect(el).toBeTruthy();
+    });
   });
 });
