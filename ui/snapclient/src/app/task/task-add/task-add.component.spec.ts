@@ -23,7 +23,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {HttpLoaderFactory} from '../../app.module';
 import {APP_CONFIG} from '../../app.config';
 import {initialAppState} from '../../store/app.state';
-import {selectTaskList} from '../../store/task-feature/task.selectors';
+import {selectTaskList, selectTaskSaveError} from '../../store/task-feature/task.selectors';
 import {selectCurrentMapping, selectSelectedRows} from '../../store/mapping-feature/mapping.selectors';
 import {By} from '@angular/platform-browser';
 import {provideNoopAnimations} from '@angular/platform-browser/animations';
@@ -50,6 +50,7 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/
 import { MappingTableSelectorComponent } from 'src/app/mapping/mapping-table-selector/mapping-table-selector.component';
 import {InitialsPipe} from '../../_utils/initialize_pipe';
 import {UserChipComponent} from '../../user/user-chip/user-chip.component';
+import {GravatarComponent} from '../../user/gravatar/gravatar.component';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TaskAddComponent', () => {
@@ -71,7 +72,7 @@ describe('TaskAddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [TaskAddComponent, ErrormessageComponent, MappingTableSelectorComponent, InitialsPipe, UserChipComponent],
+    declarations: [TaskAddComponent, ErrormessageComponent, MappingTableSelectorComponent, InitialsPipe, UserChipComponent, GravatarComponent],
     imports: [
         MatTabsModule,
         FormsModule,
@@ -102,6 +103,7 @@ describe('TaskAddComponent', () => {
                 { selector: selectTaskList, value: [task] },
                 { selector: selectSelectedRows, value: [] },
                 { selector: selectCurrentMapping, value: null },
+                { selector: selectTaskSaveError, value: null },
             ]
         }), provideNoopAnimations(), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
