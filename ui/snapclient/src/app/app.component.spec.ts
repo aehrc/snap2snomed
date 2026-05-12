@@ -29,6 +29,7 @@ import { HttpLoaderFactory } from './app.module';
 import { APP_CONFIG } from './app.config';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ActivatedRoute, provideRouter } from '@angular/router';
+import { selectAuthState } from './store/auth-feature/auth.selectors';
 
 export class TranslateServiceStub {
 
@@ -81,7 +82,10 @@ describe('AppComponent', () => {
         { provide: ActivatedRoute, useValue: { snapshot: {}, params: of({}), queryParams: of({}), data: of({})} },
         { provide: APP_CONFIG, useValue: { appName: 'Snap2SNOMED', authDomainUrl: 'anything' } },
         provideRouter([]),
-        provideMockStore({ initialState: initialAppState }), AuthService, UserService,
+        provideMockStore({
+          initialState: initialAppState,
+          selectors: [{ selector: selectAuthState, value: initialAppState.auth }]
+        }), AuthService, UserService,
         { provide: TranslateService, useClass: TranslateServiceStub },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
@@ -128,13 +132,7 @@ describe('AppComponent', () => {
     // component. ngOnInit then subscribes with isAuthenticated=true on the very first render,
     // so there is no false→true transition mid-cycle that would trigger NG0100.
     fixture.destroy();
-    store.setState({
-      ...initialAppState,
-      auth: {
-        ...initialAppState.auth,
-        isAuthenticated: true
-      }
-    });
+    store.overrideSelector(selectAuthState, { isAuthenticated: true, user: null, currentuser: null, errorMessage: null });
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.componentInstance;
     app.translate = translateService;
