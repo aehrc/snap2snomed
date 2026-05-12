@@ -61,6 +61,7 @@ import {DraggableDirective} from '../../_directives/draggable.directive';
 import {ResizeColumnComponent} from '../../column-resize/resize-column.component';
 import {MatBadgeModule} from '@angular/material/badge';
 import { MatSortModule } from '@angular/material/sort';
+import {MatDialog} from '@angular/material/dialog';
 
 describe('MappingTableComponent', () => {
   let component: MappingTableComponent;
@@ -68,6 +69,7 @@ describe('MappingTableComponent', () => {
   let translateService: TranslateService;
   let store: MockStore<IAppState>;
   let el: DebugElement;
+  let dialog: MatDialog;
   const mockMapService = jasmine.createSpyObj('MapService', ['getMapView', 'updateMapView', 'updateNoMap']);
 
   const mapping = new Mapping();
@@ -133,6 +135,7 @@ describe('MappingTableComponent', () => {
   // beforeEach(() => {
     store = TestBed.inject(MockStore);
     translateService = TestBed.inject(TranslateService);
+    dialog = TestBed.inject(MatDialog);
     fixture = TestBed.createComponent(MappingTableComponent);
     component = fixture.componentInstance;
     component.translate = translateService;
@@ -186,6 +189,11 @@ describe('MappingTableComponent', () => {
     component.mappingTableSelector.cdRef.detectChanges();
     fixture.detectChanges();
     component.page = page;
+  });
+
+  afterEach(() => {
+    dialog.closeAll();
+    fixture.destroy();
   });
 
   it('should create', () => {

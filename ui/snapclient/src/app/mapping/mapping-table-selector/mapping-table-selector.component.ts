@@ -220,7 +220,7 @@ export class MappingTableSelectorComponent implements OnInit, OnDestroy, AfterVi
   }
 
   checkSelected(row: MapView): boolean {
-    return this.selectedRows.filter(selectedRow => {
+    return (this.selectedRows ?? []).filter(selectedRow => {
       return selectedRow.sourceIndex === parseInt(row.sourceIndex)
       && (row.targetId ? selectedRow.mapRowTargetId === parseInt(row.targetId) : true)}).length > 0;
   }

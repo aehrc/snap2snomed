@@ -44,6 +44,7 @@ import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {ScannedActionsSubject} from '@ngrx/store';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import { MappingTableSelectorComponent } from 'src/app/mapping/mapping-table-selector/mapping-table-selector.component';
@@ -82,6 +83,7 @@ describe('TaskAddComponent', () => {
         ReactiveFormsModule,
         MatSnackBarModule,
         MatSlideToggleModule,
+        MatTooltipModule,
         MatDialogModule,
         TranslateModule.forRoot({
             loader: {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, flushMicrotasks, tick, waitForAsync } from '@angular/core/testing';
 import { MappingViewComponent } from './mapping-view.component';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -147,10 +147,14 @@ describe('MappingViewComponent', () => {
   }));
 
   beforeEach(fakeAsync(() => {
+    // Defensive reset: clear owners in case a previous test leaked state
+    mapping.project.owners = [];
+
     fixture = TestBed.createComponent(MappingViewComponent);
     component = fixture.componentInstance;
 
     component.allSourceDetails = [];
+    component.currentUser = user;
     // Pre-set mapping so @if(mapping) embedded view is created in the first detectChanges
     // rather than mid-cycle during a later one — avoids NG0100 from in-flight creation
     component.mapping = mapping;
@@ -181,6 +185,8 @@ describe('MappingViewComponent', () => {
   describe('as owner', () => {
     beforeEach(fakeAsync(() => {
       fixture.destroy();               // destroy the non-owner component from outer beforeEach
+      flushMicrotasks();               // drain any pending microtasks from destroyed fixture
+      tick();                          // drain any pending macrotasks
       mapping.project.owners = [user];
 
       fixture = TestBed.createComponent(MappingViewComponent);
