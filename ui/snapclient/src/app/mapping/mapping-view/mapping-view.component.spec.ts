@@ -16,13 +16,12 @@
 
 import { ComponentFixture, TestBed, fakeAsync, flushMicrotasks, tick, waitForAsync } from '@angular/core/testing';
 import { MappingViewComponent } from './mapping-view.component';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService, TranslateFakeLoader } from '@ngx-translate/core';
 import { provideMockStore } from '@ngrx/store/testing';
 import { initialAppState } from '../../store/app.state';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { User } from '../../_models/user';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { MapService } from '../../_services/map.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -47,11 +46,12 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
-import { HttpLoaderFactory } from '../../app.module';
-import { selectCurrentMapping, selectMappingError, selectMappingLoading, selectSelectedRows } from '../../store/mapping-feature/mapping.selectors';
+import { selectCurrentMapping, selectCurrentView, selectMappingError, selectMappingLoading, selectSelectedRows } from '../../store/mapping-feature/mapping.selectors';
 import { selectCurrentUser } from '../../store/auth-feature/auth.selectors';
-import { selectMappingFileLoading } from '../../store/source-feature/source.selectors';
+import { selectMappingFile, selectMappingFileError, selectMappingFileLoading, selectMappingFileSuccess } from '../../store/source-feature/source.selectors';
+import { selectTaskList } from '../../store/task-feature/task.selectors';
 import { Mapping } from '../../_models/mapping';
+import { Page } from '../../_models/map_row';
 
 import { InitialsPipe } from '../../_utils/initialize_pipe';
 import { LastupdatedPipe } from '../../_utils/lastupdated_pipe';
@@ -74,6 +74,10 @@ describe('MappingViewComponent', () => {
   const mapping = new Mapping();
   mapping.id = '1';
   mapping.project.title = 'Test Map';
+
+  const mockMapService = {
+    getTagCount: () => of({ page: { totalElements: 0 } })
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -112,8 +116,7 @@ describe('MappingViewComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClient]
+            useClass: TranslateFakeLoader
           }
         })
       ],
@@ -127,20 +130,24 @@ describe('MappingViewComponent', () => {
             queryParams: of({})
           }
         },
+        { provide: MapService, useValue: mockMapService },
         provideMockStore({
           initialState: initialAppState,
           selectors: [
             { selector: selectMappingError, value: 'MockError' },
             { selector: selectCurrentMapping, value: mapping },
+            { selector: selectCurrentView, value: new Page() },
+            { selector: selectTaskList, value: [] },
             { selector: selectCurrentUser, value: user },
             { selector: selectSelectedRows, value: [] },
+            { selector: selectMappingFile, value: null },
+            { selector: selectMappingFileSuccess, value: null },
+            { selector: selectMappingFileError, value: null },
             { selector: selectMappingLoading, value: false },
             { selector: selectMappingFileLoading, value: false }
           ]
         }),
-        TranslateService,
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting()
+        TranslateService
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -167,6 +174,16 @@ describe('MappingViewComponent', () => {
   }));
 
   afterEach(() => {
+    selectCurrentView.clearResult();
+    selectCurrentMapping.clearResult();
+    selectTaskList.clearResult();
+    selectMappingFile.clearResult();
+    selectMappingFileSuccess.clearResult();
+    selectMappingFileLoading.clearResult();
+    selectMappingFileError.clearResult();
+    selectMappingLoading.clearResult();
+    selectMappingError.clearResult();
+    selectSelectedRows.clearResult();
     fixture.destroy();
   });
 
@@ -183,10 +200,10 @@ describe('MappingViewComponent', () => {
   // Owner-only tests: recreate the component with isOwner()=true from the start so
   // @if(isOwner()) views are stable on the first detectChanges and never cause NG0100.
   describe('as owner', () => {
-    beforeEach(fakeAsync(() => {
-      fixture.destroy();               // destroy the non-owner component from outer beforeEach
-      flushMicrotasks();               // drain any pending microtasks from destroyed fixture
-      tick();                          // drain any pending macrotasks
+    beforeEach(async () => {
+      fixture.destroy();
+      
+      // Set owners BEFORE creating fixture so @if(isOwner()) is true on initial render
       mapping.project.owners = [user];
 
       fixture = TestBed.createComponent(MappingViewComponent);
@@ -197,11 +214,10 @@ describe('MappingViewComponent', () => {
       component.currentUser = user;
 
       fixture.detectChanges();
-      tick(201);
+      await fixture.whenStable();      // Allow translate pipe and Material to settle
       fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
-    }));
+      await fixture.whenStable();      // Final settle for tooltip bindings
+    });
 
     afterEach(() => {
       mapping.project.owners = [];
