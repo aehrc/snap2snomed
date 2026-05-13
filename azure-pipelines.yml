@@ -39,7 +39,7 @@ stages:
           - task: npmAuthenticate@0
             inputs:
               workingFile: ui/snapclient/.npmrc
-          - task: Maven@3
+          - task: Maven@4
             displayName: Build
             inputs:
               mavenPomFile: 'pom.xml'
@@ -52,7 +52,7 @@ stages:
               publishJUnitResults: true
               testResultsFiles: '**/*/TEST*-*.xml'
               goals: 'clean verify -Pazure-devops -DskipUITests=$(skipUITests)'
-          - task: PublishCodeCoverageResults@1
+          - task: PublishCodeCoverageResults@2
             displayName: Publish Code Coverage
             inputs:
               enabled: $(enableCodeCoverage)
