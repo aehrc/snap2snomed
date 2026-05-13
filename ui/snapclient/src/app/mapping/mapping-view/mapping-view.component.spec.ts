@@ -48,7 +48,7 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { HttpLoaderFactory } from '../../app.module';
-import { selectCurrentMapping, selectMappingError, selectMappingLoading, selectSelectedRows } from '../../store/mapping-feature/mapping.selectors';
+import { selectCurrentMapping, selectCurrentView, selectMappingError, selectMappingLoading, selectSelectedRows } from '../../store/mapping-feature/mapping.selectors';
 import { selectCurrentUser } from '../../store/auth-feature/auth.selectors';
 import { selectMappingFileLoading } from '../../store/source-feature/source.selectors';
 import { Mapping } from '../../_models/mapping';
@@ -132,6 +132,7 @@ describe('MappingViewComponent', () => {
           selectors: [
             { selector: selectMappingError, value: 'MockError' },
             { selector: selectCurrentMapping, value: mapping },
+            { selector: selectCurrentView, value: null },
             { selector: selectCurrentUser, value: user },
             { selector: selectSelectedRows, value: [] },
             { selector: selectMappingLoading, value: false },
