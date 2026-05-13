@@ -150,7 +150,12 @@ export class ProjectRolesComponent implements OnInit {
     [this.usernameFilterControl, this.emailFilterControl].forEach((control) => {
       this.subscription.add(control.valueChanges
         .pipe(debounceTime(this.debounce), distinctUntilChanged())
-        .subscribe(() => {
+        .subscribe((value) => {
+          if (control === this.usernameFilterControl) {
+            this.filterValues.username = value ?? '';
+          } else if (control === this.emailFilterControl) {
+            this.filterValues.email = value ?? '';
+          }
           this.applyFilter();
         }));
     });
