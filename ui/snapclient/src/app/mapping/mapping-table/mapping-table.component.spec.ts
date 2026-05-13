@@ -192,6 +192,9 @@ describe('MappingTableComponent', () => {
   });
 
   afterEach(() => {
+    // clearResult() removes setResult(page) without triggering release() cascade.
+    // Without this, selectCurrentView leaks into mapping-view tests causing NG0100.
+    selectCurrentView.clearResult();
     dialog.closeAll();
     fixture.destroy();
   });

@@ -39,7 +39,7 @@ import {
 } from '../../_models/map_row';
 import {TranslateService} from '@ngx-translate/core';
 import {MapService} from '../../_services/map.service';
-import {debounceTime, startWith, tap} from 'rxjs/operators';
+import {debounceTime, tap} from 'rxjs/operators';
 import {merge, Subscription} from 'rxjs';
 import {MatSort} from '@angular/material/sort';
 import {Task, TaskType} from '../../_models/task';
@@ -424,7 +424,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       })
     );
-    self.subscription.add(this.store.select(selectCurrentView).pipe(startWith(null)).subscribe(
+    self.subscription.add(this.store.select(selectCurrentView).subscribe(
       (page) => {
         if (page) {
 
@@ -573,7 +573,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadTaskList(): void {
     const self = this;
-    this.subscription.add(self.store.select(selectTaskList).pipe(startWith(null), debounceTime(200)).subscribe(
+    this.subscription.add(self.store.select(selectTaskList).pipe(debounceTime(200)).subscribe(
       data => {
         if (data) { // cannot ignore empty lists here as it could indicate all tasks being removed
 
