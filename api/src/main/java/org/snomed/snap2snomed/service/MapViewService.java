@@ -26,8 +26,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
 import org.snomed.snap2snomed.controller.MapViewRestController;
 import org.snomed.snap2snomed.controller.dto.MappedRowDetailsDto;

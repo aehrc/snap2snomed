@@ -40,10 +40,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import javax.validation.Validator;
-import javax.xml.bind.DatatypeConverter;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Validator;
+import java.util.HexFormat;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -333,8 +333,8 @@ public class CodeSetImportService {
           String code;
           // If delimiter is null we only read lines and auto-generate ids
           if (importDetails.getDelimiter() == null) {
-            code = DatatypeConverter.printHexBinary(md.digest(csvRecord.get(importDetails.getDisplayColumnIndex()).getBytes()))
-                .toLowerCase().trim();
+            code = HexFormat.of().formatHex(md.digest(csvRecord.get(importDetails.getDisplayColumnIndex()).getBytes()))
+                .trim();
             importDetails.setDisplayColumnIndex(0);
           } else {
             code = csvRecord.get(importDetails.getCodeColumnIndex()).trim();
