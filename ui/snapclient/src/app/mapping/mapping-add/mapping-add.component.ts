@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {IAppState} from '../../store/app.state';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { IAppState } from '../../store/app.state';
 import {
   AddMapping,
   ClearErrors,
@@ -24,37 +24,37 @@ import {
   DeleteMapping,
   UpdateMapping
 } from '../../store/mapping-feature/mapping.actions';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import {
   selectAddEditMappingSuccess,
   selectMappingError,
   selectMappingLoading
 } from '../../store/mapping-feature/mapping.selectors';
-import {selectCurrentUser} from '../../store/auth-feature/auth.selectors';
-import {Mapping} from '../../_models/mapping';
-import {SourceImportComponent} from '../../source/source-import/source-import.component';
-import {MatDialog} from '@angular/material/dialog';
-import {selectMappingFile, selectSourceList, selectSourceState} from '../../store/source-feature/source.selectors';
-import {ImportMappingFileParams, InitSelectedSource, LoadSources} from 'src/app/store/source-feature/source.actions';
-import {Source} from 'src/app/_models/source';
-import {FhirService, Release} from 'src/app/_services/fhir.service';
-import {LoadReleases} from 'src/app/store/fhir-feature/fhir.actions';
-import {selectFhirError, selectReleaseList} from 'src/app/store/fhir-feature/fhir.selectors';
-import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {cloneDeep} from 'lodash';
-import {ErrorInfo} from 'src/app/errormessage/errormessage.component';
-import {FormUtils} from '../../_utils/form_utils';
-import {MappingImportComponent} from '../mapping-import/mapping-import.component';
-import {MappingImportSource} from 'src/app/_models/mapping_import_source';
-import {selectAuthorizedProjects} from '../../store/app.selectors';
-import {Project} from '../../_models/project';
+import { selectCurrentUser } from '../../store/auth-feature/auth.selectors';
+import { Mapping } from '../../_models/mapping';
+import { SourceImportComponent } from '../../source/source-import/source-import.component';
+import { MatDialog } from '@angular/material/dialog';
+import { selectMappingFile, selectSourceList, selectSourceState } from '../../store/source-feature/source.selectors';
+import { ImportMappingFileParams, InitSelectedSource, LoadSources } from 'src/app/store/source-feature/source.actions';
+import { Source } from 'src/app/_models/source';
+import { FhirService, Release } from 'src/app/_services/fhir.service';
+import { LoadReleases } from 'src/app/store/fhir-feature/fhir.actions';
+import { selectFhirError, selectReleaseList } from 'src/app/store/fhir-feature/fhir.selectors';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { cloneDeep } from 'lodash';
+import { ErrorInfo } from 'src/app/errormessage/errormessage.component';
+import { FormUtils } from '../../_utils/form_utils';
+import { MappingImportComponent } from '../mapping-import/mapping-import.component';
+import { MappingImportSource } from 'src/app/_models/mapping_import_source';
+import { selectAuthorizedProjects } from '../../store/app.selectors';
+import { Project } from '../../_models/project';
 import { MatSelectChange } from '@angular/material/select';
 
 @Component({
-    selector: 'app-mapping-add',
-    templateUrl: './mapping-add.component.html',
-    styleUrls: ['./mapping-add.component.css'],
-    standalone: false
+  selector: 'app-mapping-add',
+  templateUrl: './mapping-add.component.html',
+  styleUrls: ['./mapping-add.component.css'],
+  standalone: false
 })
 export class MappingAddComponent implements OnInit {
   private width = '1000px';
@@ -65,7 +65,7 @@ export class MappingAddComponent implements OnInit {
   editionVersions: Release[] = []; // versions of the selected edition (often a country)
   existingMapVersions: string[] | null = null;
   loading = false;
-  selectedEdition : string = "";
+  selectedEdition: string = "";
   mappingFile: ImportMappingFileParams | undefined | null;
 
   MAX_TITLE = FormUtils.MAX_TITLE;
@@ -204,14 +204,28 @@ export class MappingAddComponent implements OnInit {
         this.mappingFile = undefined;
       }
     });
+
+    this.applyModeToDualMapMode();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.mode) {
+      this.applyModeToDualMapMode();
+    }
     // clear all errors when drawer is closed
     if (changes.drawerOpen && changes.drawerOpen.currentValue === false && changes.drawerOpen.previousValue === true) {
       this.warnDelete = false;
       this.error = {};
       this.store.dispatch(new ClearErrors());
+    }
+  }
+
+  private applyModeToDualMapMode(): void {
+    const control = this.formGroup.controls.dualMapMode;
+    if (this.mode !== 'FORM.CREATE') {
+      control.disable();
+    } else {
+      control.enable();
     }
   }
 
@@ -259,7 +273,7 @@ export class MappingAddComponent implements OnInit {
     );
     self.store.select(selectFhirError).subscribe((error) => {
       if (error != null) {
-        self.translate.get('ERROR.BACKEND_ISSUES' ,{url: error.url}).subscribe((res: string) => self.createOrAppendError(res));
+        self.translate.get('ERROR.BACKEND_ISSUES', { url: error.url }).subscribe((res: string) => self.createOrAppendError(res));
         self.error.detail = error;
       }
     });
