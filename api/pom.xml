@@ -86,6 +86,11 @@
         <artifactId>commons-beanutils</artifactId>
         <version>1.11.0</version> <!-- force version for CVE-2025-48734; remove when org.ihtsdo.snomed.util:snomed-utilities:jar: updates this -->
       </dependency>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-core</artifactId>
+        <version>2.2.22</version> <!-- align with swagger-core-jakarta 2.2.22 from springdoc; ModelConverters.getInstance(boolean) added in 2.2.22, missing in 2.2.9 brought by swagger-request-validator -->
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
