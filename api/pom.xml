@@ -50,8 +50,7 @@
     <hamcrest-test.version>1.3</hamcrest-test.version>
     <hamcrest-date.version>2.0.8</hamcrest-date.version>
     <hapi.version>6.6.2</hapi.version>
-    <spring-security-core.version>6.5.4</spring-security-core.version>
-    <spring-core.version>5.3.29</spring-core.version>
+    <spring-security.version>6.5.4</spring-security.version>
     <snomed-utilities.version>2.1.0</snomed-utilities.version>
   </properties>
 
@@ -68,24 +67,14 @@
         <version>10.1.40</version><!-- force version for CVE-2024-50379, CVE-2024-56337, CVE-2025-24813, CVE-2025-48988 -->
       </dependency>
       <dependency>
-          <groupId>com.nimbusds</groupId>
-          <artifactId>nimbus-jose-jwt</artifactId>
-          <version>9.37.4</version> <!-- force version for CVE-2023-52428; remove when spring-boot spring-boot-starter-oauth2-resource-server updates to this (currently 9.22) -->
-      </dependency>
-      <dependency>
-          <groupId>ca.uhn.hapi.fhir</groupId>
-          <artifactId>hapi-fhir-structures-r4</artifactId>
-          <version>6.4.0</version> <!-- force version for CVE-2024-51132, CVE-2024-52007, CVE-2024-45294; remove when hapi-fhir-structures-r4 updates this (currently 6.0.1) -->
-      </dependency>
-      <dependency>
           <groupId>ca.uhn.hapi.fhir</groupId>
           <artifactId>org.hl7.fhir.utilities</artifactId>
-          <version>6.4.0</version><!-- force version for CVE-2024-51132, CVE-2024-52007, CVE-2024-45294; remove when hapi-fhir-structures-r4 updates this (currently 6.0.1) -->
+          <version>6.4.0</version><!-- force version for CVE-2024-51132, CVE-2024-52007, CVE-2024-45294; hapi-fhir 6.6.2 uses fhir-core ~5.6.x -->
       </dependency>
       <dependency>
           <groupId>ca.uhn.hapi.fhir</groupId>
           <artifactId>org.hl7.fhir.r4</artifactId>
-          <version>6.4.0</version><!-- force version for CVE-2024-45294, CVE-2024-51132, CVE-2024-52007; remove when hapi-fhir-structures-r4 updates this (currently 6.0.1) -->
+          <version>6.4.0</version><!-- force version for CVE-2024-45294, CVE-2024-51132, CVE-2024-52007; hapi-fhir 6.6.2 uses fhir-core ~5.6.x -->
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
@@ -96,11 +85,6 @@
         <groupId>commons-beanutils</groupId>
         <artifactId>commons-beanutils</artifactId>
         <version>1.11.0</version> <!-- force version for CVE-2025-48734; remove when org.ihtsdo.snomed.util:snomed-utilities:jar: updates this -->
-      </dependency>
-      <dependency>
-      <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-crypto</artifactId>
-        <version>6.5.2</version> <!-- bring in line with parent dependency spring-security-core.  Maybe out of whack due to use of spring boot 2 as Boot 2.x is tied to Spring Security 5.x?-->
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -151,11 +135,6 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-data</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-core</artifactId>
-      <version>${spring-security-core.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.data</groupId>

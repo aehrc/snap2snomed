@@ -35,7 +35,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.OrderBy;
 import jakarta.persistence.PostLoad;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Transient;
@@ -116,7 +115,6 @@ public class MapRow implements Snap2SnomedEntity, Serializable {
   @OneToMany(mappedBy = "mapRow", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @EqualsAndHashCode.Exclude
   @Exclude
-  @OrderBy("modified DESC, created DESC")
   private SortedSet<@NotNull Note> notes;
 
   @ManyToOne
