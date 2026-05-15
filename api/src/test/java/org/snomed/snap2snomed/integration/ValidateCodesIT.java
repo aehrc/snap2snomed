@@ -25,10 +25,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.Set;
-
-import static org.hamcrest.Matchers.is;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ValidateCodesIT extends IntegrationTestBase {

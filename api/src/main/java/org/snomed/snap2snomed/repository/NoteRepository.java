@@ -18,7 +18,6 @@ package org.snomed.snap2snomed.repository;
 
 import java.util.Optional;
 import org.snomed.snap2snomed.model.Note;
-import org.snomed.snap2snomed.model.Task;
 import org.snomed.snap2snomed.model.enumeration.NoteCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

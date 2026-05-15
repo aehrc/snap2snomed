@@ -17,7 +17,6 @@
 package org.snomed.snap2snomed.model;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
