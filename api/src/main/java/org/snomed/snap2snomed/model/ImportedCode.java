@@ -81,7 +81,7 @@ public class ImportedCode implements Snap2SnomedEntity {
   String display;
 
   @ReadOnlyProperty
-  @ElementCollection(fetch = FetchType.LAZY)
+  @ElementCollection(fetch = FetchType.EAGER)
   @OrderColumn(name = "collection_order")
   @CollectionTable(
     name="IMPORTED_CODE_ADDITIONAL_COLUMNS",
