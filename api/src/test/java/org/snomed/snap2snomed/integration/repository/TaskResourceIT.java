@@ -726,7 +726,7 @@ public class TaskResourceIT extends IntegrationTestBase {
             config.getSecurity().getAdminGroup());
     adminUser.get("/tasks/" + task)
             .then().statusCode(200);
-    adminUser.delete("/tasks/" + task).then().statusCode(204);
+    adminUser.delete("/tasks/" + task).then().statusCode(200);
 
   }
 }

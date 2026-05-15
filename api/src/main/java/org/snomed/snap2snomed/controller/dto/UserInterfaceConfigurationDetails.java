@@ -85,7 +85,6 @@ public class UserInterfaceConfigurationDetails {
 
   String registrationText;
 
-  @NotBlank
   String mainPageText;
 
   @NotBlank

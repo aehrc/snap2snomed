@@ -730,7 +730,7 @@ public class Snap2snomedRestClient {
   }
 
   public void deleteTask(String user, Long taskId) {
-    givenUser(user).delete("/tasks/" + taskId).then().statusCode(204);
+    givenUser(user).delete("/tasks/" + taskId).then().statusCode(200);
   }
 
   public void expectDeleteTaskFailure(String user, Long taskId, int statusCode) {
