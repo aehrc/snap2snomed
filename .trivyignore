@@ -5,12 +5,5 @@ CVE-2022-30065
 # no fix, SQL injection issue which is minimal. Remove when querydsl-jpa addresses this issue
 CVE-2024-49203
 
-# spring-webmvc path traversal; fix in Spring Framework 6.1.13 (Spring Boot 3.3.5+); currently on SB 3.3.0 (SF 6.1.8)
-CVE-2024-38816
-CVE-2024-38819
-
-# Bug should not affect our application. Need to upgrade spring-boot to get a fix
-CVE-2025-22235
-
 # Bug should not affect our application. Need to upgrade spring-boot to get a fix
 CVE-2025-41249

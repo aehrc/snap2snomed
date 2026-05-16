@@ -62,11 +62,6 @@
         <version>1.26.0</version> <!-- force version for  CVE-2024-25710 & CVE-2024-26308; remove when org.apache.poi:poi-ooxml updates to this (currently 5.2.3)-->
       </dependency>      
       <dependency>
-        <groupId>org.apache.tomcat.embed</groupId>
-        <artifactId>tomcat-embed-core</artifactId>
-        <version>10.1.40</version><!-- force version for CVE-2024-50379, CVE-2024-56337, CVE-2025-24813, CVE-2025-48988 -->
-      </dependency>
-      <dependency>
           <groupId>ca.uhn.hapi.fhir</groupId>
           <artifactId>org.hl7.fhir.utilities</artifactId>
           <version>6.4.0</version><!-- force version for CVE-2024-51132, CVE-2024-52007, CVE-2024-45294; hapi-fhir 6.6.2 uses fhir-core ~5.6.x -->
