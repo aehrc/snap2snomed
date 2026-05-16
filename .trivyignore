@@ -1,7 +1,0 @@
-# Accept the risk for DEX
-CVE-2022-27191
-CVE-2022-30065
-
-# no fix, SQL injection issue which is minimal. Remove when querydsl-jpa addresses this issue
-CVE-2024-49203
-

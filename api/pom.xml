@@ -50,7 +50,6 @@
     <hamcrest-test.version>1.3</hamcrest-test.version>
     <hamcrest-date.version>2.0.8</hamcrest-date.version>
     <hapi.version>6.6.2</hapi.version>
-    <spring-security.version>6.5.4</spring-security.version>
     <snomed-utilities.version>2.1.0</snomed-utilities.version>
   </properties>
 
