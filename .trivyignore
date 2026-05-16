@@ -5,5 +5,3 @@ CVE-2022-30065
 # no fix, SQL injection issue which is minimal. Remove when querydsl-jpa addresses this issue
 CVE-2024-49203
 
-# Bug should not affect our application. Need to upgrade spring-boot to get a fix
-CVE-2025-41249
