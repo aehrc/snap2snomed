@@ -66,24 +66,23 @@ export class AuthService {
     // clear SessionStorage first
     this.clearSessionStorage();
     if (this.baseUrl.length > 5) {
-      let href = `${this.baseUrl}`;
-      let params = new HttpParams()
-        .set('client_id', this.authClientID)
-        .set('response_type', this.authLoginResponseType)
-        .set('scope', this.authLoginScope)
-        .set('redirect_uri', this.authLoginRedirectUrl);
+      const endpoint = this.identityProvider
+        ? `${this.baseUrl}/authorize`
+        : `${this.baseUrl}/login`;
+
+      const queryParts = [
+        `client_id=${encodeURIComponent(this.authClientID)}`,
+        `response_type=${encodeURIComponent(this.authLoginResponseType)}`,
+        `scope=${encodeURIComponent(this.authLoginScope)}`,
+        `redirect_uri=${encodeURIComponent(this.authLoginRedirectUrl)}`,
+      ];
 
       if (this.identityProvider) {
-        params = params.set('identity_provider', this.identityProvider);
-        href += `/authorize`;
-      }
-      else {
-        href += `/login`;
+        queryParts.push(`identity_provider=${encodeURIComponent(this.identityProvider)}`);
       }
 
-      href += `?${params.toString()}`;
       // Redirect to AWS Cognito hosted UI
-      window.location.href = href;
+      window.location.href = `${endpoint}?${queryParts.join('&')}`;
     } else {
       throwError(() => ({error: `Login unsuccessful - missing URL ${this.baseUrl}`}));
     }
