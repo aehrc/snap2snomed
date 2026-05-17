@@ -74,8 +74,8 @@ stages:
                 trivy image --exit-code 1 --severity HIGH,CRITICAL --scanners vuln --timeout 15m $(dockerRegistry)/$(registryPath):$(Build.BuildNumber)
           - script: |
               export SENTRY_RELEASE=$(git rev-parse --short=7 HEAD) && \
-              yarn exec sentry-cli releases new && \
-              yarn exec sentry-cli releases set-commits --auto --ignore-missing && \
+              yarn exec sentry-cli releases new $SENTRY_RELEASE && \
+              yarn exec sentry-cli releases set-commits $SENTRY_RELEASE --auto --ignore-missing && \
               yarn exec sentry-cli sourcemaps upload ../target/site
             displayName: Notify Sentry of release
             workingDirectory: $(System.DefaultWorkingDirectory)/ui/snapclient
