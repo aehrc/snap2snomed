@@ -14,7 +14,7 @@
   <button mat-raised-button color="any"
     [disabled]="processing"
   (click)="dialogRef.close(true)">{{data.button}}</button>
-  <button mat-raised-button color="primary"
+  <button mat-flat-button color="primary"
     [disabled]="!processing"
   (click)="dialogRef.close(false)">{{data.cancel}}</button>
 </div>

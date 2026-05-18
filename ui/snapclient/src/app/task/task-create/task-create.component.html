@@ -45,7 +45,7 @@
             && data.errorMessage.indexSpecificationWithAllConflictsRemoved.count > 0
             && !data.task.allowAssigneeToBeAuthorAndReviewer
             && !data.task.reassignAlreadyAssignedRows) {
-            <button mat-raised-button color="primary" type="cancel"
+            <button mat-flat-button color="primary" type="cancel"
               (click)="onCreateAnyway()">
               {{ 'TASK.CREATE_TASK_ANYWAY' | translate : {
               total: calculateRowCountToCreate(),
@@ -56,7 +56,7 @@
         }
         @if (calculateRowCountToCreate() > 0 && (data.task.allowAssigneeToBeAuthorAndReviewer || data.task.reassignAlreadyAssignedRows)) {
           <button
-            mat-raised-button color="primary" type="cancel"
+            mat-flat-button color="primary" type="cancel"
             (click)="onCreateWithOverride()">
             {{ 'TASK.CREATE_TASK_OVERRIDE' | translate : {
             total: calculateRowCountToCreate(),

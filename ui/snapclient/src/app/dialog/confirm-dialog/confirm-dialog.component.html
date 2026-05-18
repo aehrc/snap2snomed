@@ -9,7 +9,7 @@
   <button mat-raised-button color="any" (click)="dialogRef.close(true)"
   cdkFocusInitial>{{data.button}}</button>
   @if (data.type === 'CONFIRM') {
-    <button mat-raised-button color="primary"
+    <button mat-flat-button color="primary"
     (click)="dialogRef.close(false)">{{data.cancel}}</button>
   }
 </div>

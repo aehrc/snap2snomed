@@ -148,7 +148,7 @@
                 </mat-form-field>
                 @if (mode === 'FORM.CREATE' && !formGroup.controls.dualMapMode.value) {
                   <div class="import-existing-map">
-                    <button mat-raised-button color="primary"  title="{{ 'FORM.IMPORT_EXISTING_MAP' | translate }}"
+                    <button mat-flat-button color="primary"  title="{{ 'FORM.IMPORT_EXISTING_MAP' | translate }}"
                       type="button" (click)="onImportMapping($event)">
                       {{ 'FORM.IMPORT_EXISTING_MAP' | translate }}
                     </button>
@@ -221,7 +221,7 @@
               </div>
             }
             @if (mode !== 'FORM.VIEW') {
-              <button mat-raised-button color="primary" type="submit" id="save"
+              <button mat-flat-button color="primary" type="submit" id="save"
               [disabled]="formGroup.invalid">{{ 'FORM.SAVE' | translate }}</button>
             }
             <button mat-raised-button color="default" type="cancel" id="cancel"
