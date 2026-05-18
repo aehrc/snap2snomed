@@ -356,17 +356,12 @@ flag {
   font-size: smaller;
 }
 
-/** M3 indigo-pink raises secondary text to rgba(0,0,0,0.87); restore M2 secondary-text grey */
+/** M3 indigo-pink raises secondary text to rgba(0,0,0,0.87); restore M2 secondary-text grey.
+    :root (specificity 0-1-0) beats the theme's html (0-0-1) selectors unconditionally. */
 :root {
   --mat-paginator-container-text-color: rgba(0, 0, 0, 0.54);
   --mat-table-header-headline-color: rgba(0, 0, 0, 0.54);
-}
-
-/** M3 sets html{--mat-button-filled-container-color: white} as default, overriding filled/raised
-    primary buttons. Force the primary colour directly since the token cascade is unreliable. */
-.mat-mdc-unelevated-button.mat-primary:not(:disabled),
-.mat-mdc-raised-button.mat-primary:not(:disabled) {
-  background-color: #3f51b5;
-  color: white;
+  --mat-button-filled-container-color: #3f51b5;
+  --mat-button-filled-label-text-color: white;
 }
 
