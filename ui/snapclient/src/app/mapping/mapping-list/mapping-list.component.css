@@ -96,12 +96,7 @@ mat-toolbar {
 
 button.cancel {
   background: none;
-  z-index: 4;
-  float: right;
-  position: absolute;
   border: 0;
-  right: -4px;
-  top: -10px;
 }
 
 table {
