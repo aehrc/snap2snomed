@@ -221,10 +221,11 @@ footer {
   z-index: 100;
 }
 
-.footer-link {
+a.footer-link {
   padding: 0 20px 0 20px;
   color: darkgray;
   font-size: 0.8em;
+  text-decoration: none;
 }
 
 @media only screen and (max-width: 1640px) {
@@ -359,5 +360,14 @@ flag {
 /** reduce font-size in tables **/
 .mat-mdc-cell td {
   font-size: smaller;
+}
+
+/** M3 indigo-pink raises secondary text to rgba(0,0,0,0.87); restore M2 secondary-text grey */
+.mat-mdc-paginator {
+  --mat-paginator-container-text-color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-mdc-header-cell {
+  --mat-table-header-headline-color: rgba(0, 0, 0, 0.54);
 }
 
