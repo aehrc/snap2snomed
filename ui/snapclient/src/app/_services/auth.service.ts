@@ -70,10 +70,14 @@ export class AuthService {
         ? `${this.baseUrl}/authorize`
         : `${this.baseUrl}/login`;
 
+      // Normalize scope: split on '+' or whitespace then rejoin with '%20'.
+      // The config value may use '+' as separator (legacy form-encoding style) or spaces.
+      // encodeURIComponent('+') = '%2B', which Cognito treats as a literal '+' — invalid_scope.
+      const normalizedScope = this.authLoginScope.split(/[\s+]+/).map(encodeURIComponent).join('%20');
       const queryParts = [
         `client_id=${encodeURIComponent(this.authClientID)}`,
         `response_type=${encodeURIComponent(this.authLoginResponseType)}`,
-        `scope=${encodeURIComponent(this.authLoginScope)}`,
+        `scope=${normalizedScope}`,
         `redirect_uri=${encodeURIComponent(this.authLoginRedirectUrl)}`,
       ];
 
