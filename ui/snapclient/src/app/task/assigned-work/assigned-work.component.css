@@ -14,16 +14,14 @@
   margin-bottom: 12px;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
-::ng-deep.mat-tab-label.mat-tab-label-active:not(.mat-tab-disabled),
-::ng-deep.mat-tab-label.mat-tab-label-active.cdk-keyboard-focused:not(.mat-tab-disabled) {
+::ng-deep .mat-mdc-tab.mdc-tab--active:not([disabled]),
+::ng-deep .mat-mdc-tab.mdc-tab--active.cdk-keyboard-focused:not([disabled]) {
   font-weight: 700;
   color: #555555;
   opacity: 1;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
-::ng-deep.mat-tab-label, ::ng-deep.mat-tab-label-active {
+::ng-deep .mat-mdc-tab {
   min-width: 120px !important;
   padding: 5px !important;
   margin: 3px !important;

@@ -65,13 +65,11 @@
   min-width: 120px;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
-.mat-column-filter-sourceDisplay .mat-form-field-type-mat-input {
+.mat-column-filter-sourceDisplay .mat-mdc-form-field {
   width: 95% !important;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of input that may no longer apply for the MDC version. */
-.mat-column-filter-targetDisplay .mat-form-field-type-mat-input {
+.mat-column-filter-targetDisplay .mat-mdc-form-field {
   width: 95% !important;
 }
 
@@ -124,9 +122,8 @@ mat-column-bulk-noMap,
   height: auto;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-#table-mapping ::ng-deep .mat-form-field-wrapper {
-  padding-bottom: 0!important;
+#table-mapping ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  display: none;
 }
 
 td.mat-mdc-cell {
@@ -137,8 +134,7 @@ td.mat-mdc-cell {
   border-collapse: collapse;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
-::ng-deep .highlight-check .mat-checkbox-inner-container .mat-checkbox-persistent-ripple {
+::ng-deep .highlight-check .mdc-checkbox .mdc-checkbox__ripple {
   opacity: .1;
   background-color: blueviolet !important;
 }
