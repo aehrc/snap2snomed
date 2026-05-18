@@ -221,11 +221,6 @@ footer {
   z-index: 100;
 }
 
-.footer-link {
-  padding: 0 20px 0 20px;
-  color: darkgray;
-  font-size: 0.8em;
-}
 
 @media only screen and (max-width: 1640px) {
   footer {
