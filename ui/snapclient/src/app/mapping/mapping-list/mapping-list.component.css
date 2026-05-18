@@ -33,6 +33,10 @@
   background-color: #e6e6e6;
 }
 
+mat-toolbar {
+  justify-content: flex-end;
+}
+
 .mat-mdc-cell, .mat-mdc-header-cell {
   padding: 10px;
 }
