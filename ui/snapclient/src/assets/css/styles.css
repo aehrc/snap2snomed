@@ -367,3 +367,11 @@ flag {
   --mat-table-header-headline-color: rgba(0, 0, 0, 0.54);
 }
 
+/** M3 sets html{--mat-button-filled-container-color: white} as default, overriding filled/raised
+    primary buttons. Force the primary colour directly since the token cascade is unreliable. */
+.mat-mdc-unelevated-button.mat-primary:not(:disabled),
+.mat-mdc-raised-button.mat-primary:not(:disabled) {
+  background-color: #3f51b5;
+  color: white;
+}
+
