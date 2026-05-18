@@ -55,7 +55,7 @@
   max-width: 95px;
   white-space: nowrap;
   overflow: hidden;
-  padding: 5px 5px 5px 5px;
+  padding: 5px 5px 5px 10px;
   display: inline;
   display: flex;
   text-align: center;
