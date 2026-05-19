@@ -19,11 +19,13 @@ package org.snomed.snap2snomed.problem.task;
 import com.google.common.collect.Sets;
 import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.snomed.snap2snomed.controller.dto.IndexSpecification;
 import org.snomed.snap2snomed.problem.Snap2SnomedProblem;
 import org.zalando.problem.Status;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class TaskSpecificationContainsUnassignableRowsProblem extends Snap2SnomedProblem {
 
   IndexSpecification indexesWithExistingTask;
