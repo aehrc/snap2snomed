@@ -139,7 +139,7 @@ public class CodeSetImportService {
         statement.setLong(4, code.getImportedCodeSet().getId());
         statement.addBatch();
       }
-      statement.executeLargeBatch();
+      statement.executeBatch();
 
       final PreparedStatement additionalColumnsStatement2 = connection.prepareStatement("insert into imported_code_additional_columns (imported_code_id, value, collection_order) values (?, ?, ?)");
       final ResultSet generatedKeys2 = statement.getGeneratedKeys();
@@ -157,13 +157,13 @@ public class CodeSetImportService {
         }
 
         if (batchCount >= importBatchSize) {
-          additionalColumnsStatement2.executeLargeBatch();
+          additionalColumnsStatement2.executeBatch();
           batchCount = 0;
         }
 
       }
 
-      additionalColumnsStatement2.executeLargeBatch(); // flush the last few records.
+      additionalColumnsStatement2.executeBatch(); // flush the last few records.
 
     }
   }
@@ -260,7 +260,7 @@ public class CodeSetImportService {
           statement.addBatch();
         }
       }
-      statement.executeLargeBatch();
+      statement.executeBatch();
 
       // Obsolete: we now take the status from the file, or use DRAFT if not provided for all rows
       // Set imported MapRows to DRAFT for the map
@@ -284,7 +284,7 @@ public class CodeSetImportService {
         statement.setLong(4, mapRowTargetParam.getMapRowTarget().getRow().getId());
         statement.addBatch();
       }
-      statement.executeLargeBatch();
+      statement.executeBatch();
     }
 
     int getInsertCount() {
