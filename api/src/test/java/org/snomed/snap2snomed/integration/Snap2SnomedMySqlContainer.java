@@ -30,7 +30,7 @@ public class Snap2SnomedMySqlContainer extends MySQLContainer<Snap2SnomedMySqlCo
   public static Snap2SnomedMySqlContainer getInstance() {
     if (container == null) {
       container = new Snap2SnomedMySqlContainer();
-      container.setCommand("--character_set_server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-allowed-packet=2000000");
+      container.setCommand("--character_set_server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max-allowed-packet=67108864");
       container.urlParameters.put("cachePrepStmts", "true");
       container.urlParameters.put("useServerPrepStmts", "false");
       container.urlParameters.put("rewriteBatchedStatements", "true");
