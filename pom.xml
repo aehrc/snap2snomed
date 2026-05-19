@@ -27,6 +27,11 @@
     <version>3.5.14</version>
   </parent>
 
+  <properties>
+    <tomcat.version>10.1.55</tomcat.version><!-- CVE-2026-41293 CRITICAL, CVE-2026-43512 CRITICAL, CVE-2026-41284 HIGH, CVE-2026-42498 HIGH, CVE-2026-43513 HIGH -->
+    <netty.version>4.1.133.Final</netty.version><!-- CVE-2026-42583 HIGH, CVE-2026-42584 HIGH, CVE-2026-42587 HIGH -->
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
