@@ -34,7 +34,7 @@
     <docker.repository>aehrc/snap2snomed</docker.repository>
     <docker.registry.host>quay.io</docker.registry.host>
     <sentry.version>7.3.0</sentry.version>
-    <jacoco.version>0.8.15</jacoco.version>
+    <jacoco.version>0.8.12</jacoco.version>
     <commons-csv.version>1.10.0</commons-csv.version>
     <aws-advanced-jdbc-wrapper.version>2.5.2</aws-advanced-jdbc-wrapper.version>
     <org.springdoc.version>2.6.0</org.springdoc.version>
