@@ -66,8 +66,12 @@
   padding: 10px;
 }
 
+.breadcrumbs .space-fill {
+  display: none;
+}
+
 .breadcrumb-list {
-  margin: auto;
+  margin: 0;
 }
 
 .breadcrumbs {
