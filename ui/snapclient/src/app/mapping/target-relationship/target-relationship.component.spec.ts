@@ -140,8 +140,8 @@ describe('TargetRelationshipComponent', () => {
     expect(component.targetRows.length).toEqual(0);
 
     component.addSelection(targetCode, targetDisplay, targetSystem, relationship);
-    await fixture.whenStable();
     fixture.detectChanges();
+    await fixture.whenStable();
     expect(emitSpy).toHaveBeenCalledOnceWith(target);
   });
 
@@ -170,10 +170,10 @@ describe('TargetRelationshipComponent', () => {
 
     // FIRST CALL (creates item)
     component.addSelection(targetCode, targetDisplay, 'system', relationship);
+    fixture.detectChanges();
 
     flushMicrotasks();
     tick();
-    fixture.detectChanges();
 
     // simulate parent state update (critical)
     component.targetRows = [{ targetCode: targetCode } as any];
@@ -257,10 +257,10 @@ describe('TargetRelationshipComponent', () => {
 
     // FIRST ADD
     component.addSelection(code, display, 'system', relationship);
+    fixture.detectChanges();
 
     flushMicrotasks();
     tick();
-    fixture.detectChanges();
 
     // simulate parent updating @Input after emit
     component.targetRows = [{
