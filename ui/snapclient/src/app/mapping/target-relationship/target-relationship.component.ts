@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MapRowRelationship, mapRowRelationships, MapRowStatus, MapView, TARGET_NO_ACTIVE_SUGGESTIONS_TAG, toMapRowStatus} from '../../_models/map_row';
 import {MapService} from '../../_services/map.service';
 import {Router} from '@angular/router';
@@ -43,7 +43,7 @@ export interface Coding { //import from reducer?
   templateUrl: './target-relationship.component.html',
   styleUrls: ['./target-relationship.component.css']
 })
-export class TargetRelationshipComponent implements OnInit {
+export class TargetRelationshipComponent implements OnInit, OnChanges {
   relationships: MapRowRelationship[] = [];
   error: ErrorInfo = {};
   selectedSearchItem: any = null;
@@ -53,11 +53,14 @@ export class TargetRelationshipComponent implements OnInit {
   @Input() sourceNavSet: SourceNavSet | null = null;
   @Input() disableActions = false;
   @Input() disableFlagging = false;
+  @Input() savingRelationship: MapRowRelationship | null = null;
   @Output() newTargetEvent = new EventEmitter<MapView>();
   @Output() removeTargetEvent = new EventEmitter<MapView>();
   @Output() noMapEvent = new EventEmitter<boolean>();
   @Output() flagEvent = new EventEmitter<MapView>();
   @Output() noReplacementEvent = new EventEmitter<MapView>();
+
+  addingTargetRelationship: string | null = null;
 
   writeDisableUtils = WriteDisableUtils;
   toMapRowStatus = toMapRowStatus;
@@ -75,7 +78,7 @@ export class TargetRelationshipComponent implements OnInit {
 
   ngOnInit(): void {
     const self = this;
-    self.selectionService.subscribe({
+    self.selectionService.subscribeWithCurrent({
       next: (value: any) => {
         self.selectedSearchItem = value;
       }
@@ -155,6 +158,7 @@ export class TargetRelationshipComponent implements OnInit {
 
   addSelection(code: string, display: string, system: string, relationship: string): void {
     const self = this;
+    self.addingTargetRelationship = relationship;
 
     self.fhirService.getEnglishFsn(code, system, self.task?.mapping?.toVersion || '').subscribe(englishFsn => {
       let displayTerm = display;
@@ -174,15 +178,21 @@ export class TargetRelationshipComponent implements OnInit {
           self.translate.get('ERROR.DUPLICATE_TARGET_ERROR').subscribe((res: any) => {
             self.error.message = res;
           });
+          self.addingTargetRelationship = null;
         }
       }
-
     });
   }
 
   removeTarget(targetRow: MapView): void {
     const self = this;
     self.removeTargetEvent.emit(targetRow);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.savingRelationship && changes.savingRelationship.currentValue === null) {
+      this.addingTargetRelationship = null;
+    }
   }
 
   isReconcileTask() : boolean {
