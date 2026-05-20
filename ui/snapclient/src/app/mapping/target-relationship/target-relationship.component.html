@@ -2,64 +2,66 @@
   <app-errormessage [error]="error"></app-errormessage>
   <div class="card-relationship">
     @if (isNoMap() && !isReconcileTask()) {
-      <mat-card appearance="outlined">
-        <mat-card-content>{{'MAP.NO_MAPPING_AVAILABLE' | translate}}</mat-card-content>
-      </mat-card>
+    <mat-card appearance="outlined">
+      <mat-card-content>{{'MAP.NO_MAPPING_AVAILABLE' | translate}}</mat-card-content>
+    </mat-card>
     } @else {
-      @for (relationship of relationships; track relationship) {
-        <mat-card appearance="outlined" cdkDropList
-          [appDroppable]="{zone: 'relationshipZone'}"
-          [dropDisabled]="isEditDisabled()"
-          (onDroppableComplete)="onDrop($event, relationship)">
-          <mat-card-title>
-            <button color="any" mat-icon-button (click)="addFocusTarget(relationship)"
-              [disabled]="disableActions">
-              <mat-icon>add</mat-icon>
-            </button>
-            <span>{{'RELATIONSHIP.' + relationship | translate}}</span>
-          </mat-card-title>
-          <mat-card-content>
-            <mat-selection-list>
-              @for (row of filterRows(relationship); track row) {
-                <mat-option (click)="click(row)">
-                  <span [appDraggable]="{data:row, zones:draggableZones}"
-                    class="row-target">
-                    @if (isReconcileTask() && row.targetLastAuthor) {
-                      <app-user-chip id="targetLastAuthorUserChip" [user]="row.targetLastAuthor"
-                      [font_size]="'12px'"></app-user-chip>
-                    }
-                    <span class="selection-text">{{row.targetDisplay}}</span>
-                    <span>
-                      <span #tooltip="matTooltip" matTooltip="{{getTargetOutOfScopeTooltip(row)}}">
-                        @if (row.targetOutOfScope) {
-                          <button mat-icon-button disabled="{{!isOutOfScopeWithSuggestions(row) || isReviewTask()}}"(click)="onMapMaintenance(row)" color="accent"
-                            ><mat-icon>warning</mat-icon></button>
-                          }
-                        </span>
-                        <button mat-icon-button (click)="updateFlag(row)" [disabled]="disableFlagging"
-                          [ngClass]="['flag']"
-                          #tooltip="matTooltip" matTooltip="{{'MAP.TARGET_FLAGGED' | translate}}"
-                          >@if (row.flagged) {
-                          <mat-icon color="accent">flag</mat-icon>
-                        } @else {
-                          <mat-icon>outlined_flag</mat-icon>
-                        }
-                      </button>
-                      @if (!disableActions) {
-                        <span>
-                          <button color="accent" mat-mini-fab #tooltip="matTooltip"
-                            matTooltip="{{'DETAILS.DELETE' | translate}}"
-                            (click)="removeTarget(row)"><mat-icon>remove</mat-icon></button>
-                          </span>
-                        }
-                      </span>
-                    </span>
-                  </mat-option>
+    @for (relationship of relationships; track relationship) {
+    <mat-card appearance="outlined" cdkDropList [appDroppable]="{zone: 'relationshipZone'}"
+      [dropDisabled]="isEditDisabled()" (onDroppableComplete)="onDrop($event, relationship)">
+      <mat-card-title>
+        <button class="relationship-add-button" color="any" mat-icon-button (click)="addFocusTarget(relationship)"
+          [disabled]="disableActions || !selectedSearchItem || addingTargetRelationship !== null || savingRelationship !== null">
+          <span class="relationship-add-button-icon">
+            <mat-progress-spinner
+              *ngIf="addingTargetRelationship === relationship || savingRelationship === relationship" diameter="20"
+              mode="indeterminate"></mat-progress-spinner>
+            <mat-icon
+              *ngIf="!(addingTargetRelationship === relationship || savingRelationship === relationship)">add</mat-icon>
+          </span>
+          <mat-icon>add</mat-icon>
+        </button>
+        <span>{{'RELATIONSHIP.' + relationship | translate}}</span>
+      </mat-card-title>
+      <mat-card-content>
+        <mat-selection-list>
+          @for (row of filterRows(relationship); track row) {
+          <mat-option (click)="click(row)">
+            <span [appDraggable]="{data:row, zones:draggableZones}" class="row-target">
+              @if (isReconcileTask() && row.targetLastAuthor) {
+              <app-user-chip id="targetLastAuthorUserChip" [user]="row.targetLastAuthor"
+                [font_size]="'12px'"></app-user-chip>
+              }
+              <span class="selection-text">{{row.targetDisplay}}</span>
+              <span>
+                <span #tooltip="matTooltip" matTooltip="{{getTargetOutOfScopeTooltip(row)}}">
+                  @if (row.targetOutOfScope) {
+                  <button mat-icon-button disabled="{{!isOutOfScopeWithSuggestions(row) || isReviewTask()}}"
+                    (click)="onMapMaintenance(row)" color="accent"><mat-icon>warning</mat-icon></button>
+                  }
+                </span>
+                <button mat-icon-button (click)="updateFlag(row)" [disabled]="disableFlagging" [ngClass]="['flag']"
+                  #tooltip="matTooltip" matTooltip="{{'MAP.TARGET_FLAGGED' | translate}}">@if (row.flagged) {
+                  <mat-icon color="accent">flag</mat-icon>
+                  } @else {
+                  <mat-icon>outlined_flag</mat-icon>
+                  }
+                </button>
+                @if (!disableActions) {
+                <span>
+                  <button color="accent" mat-mini-fab #tooltip="matTooltip"
+                    matTooltip="{{'DETAILS.DELETE' | translate}}"
+                    (click)="removeTarget(row)"><mat-icon>remove</mat-icon></button>
+                </span>
                 }
-              </mat-selection-list>
-            </mat-card-content>
-          </mat-card>
-        }
-      }
-    </div>
+              </span>
+            </span>
+          </mat-option>
+          }
+        </mat-selection-list>
+      </mat-card-content>
+    </mat-card>
+    }
+    }
   </div>
+</div>

@@ -128,7 +128,7 @@
             <app-target-relationship [task]="task" [targetRows]="mapRows" [source]="getSource()" [sourceNavSet]="selectedRowset"
               (newTargetEvent)="saveTarget($event)"
               [disableActions]="isEditDisabled()"
-              [disableFlagging]="writeDisableUtils.isFlaggingDisabled(this.task.type, toMapRowStatus(source.status))"
+              [disableFlagging]="writeDisableUtils.isFlaggingDisabled(this.task?.type, toMapRowStatus(source.status))"
               (removeTargetEvent)="removeTarget($event)"
               (flagEvent)="updateFlag($event)"
             ></app-target-relationship>
