@@ -31,6 +31,7 @@ import { SelectionService } from 'src/app/_services/selection.service';
 import { By } from '@angular/platform-browser';
 import { MapRowRelationship, MapRowStatus, MapView } from 'src/app/_models/map_row';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ErrormessageComponent } from 'src/app/errormessage/errormessage.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -40,7 +41,7 @@ import { FhirService } from "../../_services/fhir.service";
 import { of } from "rxjs";
 import { UntypedFormBuilder } from '@angular/forms';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 describe('TargetRelationshipComponent', () => {
   let component: TargetRelationshipComponent;
@@ -89,6 +90,7 @@ describe('TargetRelationshipComponent', () => {
         MatSnackBarModule,
         MatTooltipModule,
         MatIconModule,
+        MatProgressSpinnerModule,
         MatCardModule,
         MatListModule,
         TranslateModule.forRoot({
@@ -99,7 +101,7 @@ describe('TargetRelationshipComponent', () => {
           }
         })],
       providers: [
-        provideAnimations(),
+        provideNoopAnimations(),
         { provide: APP_CONFIG, useValue: {} },
         provideMockStore({
           initialState: initialAppState,
@@ -140,7 +142,6 @@ describe('TargetRelationshipComponent', () => {
     expect(component.targetRows.length).toEqual(0);
 
     component.addSelection(targetCode, targetDisplay, targetSystem, relationship);
-    fixture.detectChanges();
     await fixture.whenStable();
     expect(emitSpy).toHaveBeenCalledOnceWith(target);
   });
@@ -170,8 +171,6 @@ describe('TargetRelationshipComponent', () => {
 
     // FIRST CALL (creates item)
     component.addSelection(targetCode, targetDisplay, 'system', relationship);
-    fixture.detectChanges();
-
     flushMicrotasks();
     tick();
 
@@ -257,8 +256,6 @@ describe('TargetRelationshipComponent', () => {
 
     // FIRST ADD
     component.addSelection(code, display, 'system', relationship);
-    fixture.detectChanges();
-
     flushMicrotasks();
     tick();
 
