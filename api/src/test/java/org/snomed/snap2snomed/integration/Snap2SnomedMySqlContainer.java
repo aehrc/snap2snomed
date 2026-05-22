@@ -41,7 +41,7 @@ public class Snap2SnomedMySqlContainer extends MySQLContainer<Snap2SnomedMySqlCo
   @Override
   public String getJdbcUrl() {
     final String additionalUrlParams = this.constructUrlParameters("?", "&");
-    return "jdbc:aws-wrapper:mariadb://" + this.getHost() + ":" + this.getMappedPort(MYSQL_PORT) + "/" + this.getDatabaseName() + additionalUrlParams;
+    return "jdbc:aws-wrapper:mysql://" + this.getHost() + ":" + this.getMappedPort(MYSQL_PORT) + "/" + this.getDatabaseName() + additionalUrlParams;
   }
 
   @Override
