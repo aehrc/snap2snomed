@@ -17,8 +17,6 @@
 package org.snomed.snap2snomed.model;
 
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 import jakarta.validation.constraints.NotNull;
 
 import org.snomed.snap2snomed.model.enumeration.ColumnType;
@@ -40,7 +38,6 @@ public class AdditionalCodeColumn {
 
     @NotNull
     @ReadOnlyProperty
-    @Enumerated(EnumType.STRING)
     private ColumnType type;
 
 }
