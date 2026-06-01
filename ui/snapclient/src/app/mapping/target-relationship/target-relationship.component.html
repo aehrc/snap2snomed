@@ -36,20 +36,20 @@
               <span>
                 <span #tooltip="matTooltip" matTooltip="{{getTargetOutOfScopeTooltip(row)}}">
                   @if (row.targetOutOfScope) {
-                  <button mat-icon-button disabled="{{!isOutOfScopeWithSuggestions(row) || isReviewTask()}}"
+                  <button mat-icon-button class="btn-accent" disabled="{{!isOutOfScopeWithSuggestions(row) || isReviewTask()}}"
                     (click)="onMapMaintenance(row)" color="accent"><mat-icon>warning</mat-icon></button>
                   }
                 </span>
                 <button mat-icon-button (click)="updateFlag(row)" [disabled]="disableFlagging" [ngClass]="['flag']"
                   #tooltip="matTooltip" matTooltip="{{'MAP.TARGET_FLAGGED' | translate}}">@if (row.flagged) {
-                  <mat-icon color="accent">flag</mat-icon>
+                  <mat-icon class="accent-icon">flag</mat-icon>
                   } @else {
                   <mat-icon>outlined_flag</mat-icon>
                   }
                 </button>
                 @if (!disableActions) {
                 <span>
-                  <button color="accent" mat-mini-fab #tooltip="matTooltip"
+                  <button color="btn-accent" mat-mini-fab #tooltip="matTooltip"
                     matTooltip="{{'DETAILS.DELETE' | translate}}"
                     (click)="removeTarget(row)"><mat-icon>remove</mat-icon></button>
                 </span>
