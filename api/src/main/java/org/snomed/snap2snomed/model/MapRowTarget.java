@@ -18,16 +18,12 @@ package org.snomed.snap2snomed.model;
 
 import java.time.Instant;
 import java.util.Set;
-import jakarta.persistence.Column;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -100,8 +96,6 @@ public class MapRowTarget implements Snap2SnomedEntity, java.lang.Comparable<Map
      * A set of string tag values that can be used for a wide variety of purposes.
      */
     @ElementCollection
-    @CollectionTable(name = "map_row_target_tags", joinColumns = @JoinColumn(name = "map_row_target_id"))
-    @Column(name = "tags")
     private Set<String> tags;
 
     boolean flagged;

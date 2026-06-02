@@ -685,6 +685,8 @@ public class MappingService {
 
     }
 
+    validateMapTargets(createdId);
+
     return createdId;
   }
 
@@ -692,7 +694,7 @@ public class MappingService {
   public ValidationResult validateMapTargets(Long mapId) throws IOException {
     final User currentUser = authenticationFacade.getAuthenticatedUser();
     final String userId = currentUser.getId();
-    final List<MapRowTarget> mapRowTargets = mapRowTargetRepository.findByMapIdInternal(mapId);
+    final List<MapRowTarget> mapRowTargets = mapRowTargetRepository.findByMapId(mapId);
     Set<String> targetCodes = mapRowTargets.stream().map(target -> target.getTargetCode()).collect(Collectors.toSet());
     String scope = null;
     String csVersion = null;
@@ -710,14 +712,12 @@ public class MappingService {
     if (!targetsToFlag.isEmpty()) {
       log.info("About to flag the following target codes, for map " + mapId + " {user: " + userId + ", " +
               "modified: " + Instant.now() + "}: " + String.join(",", targetsToFlag));
-      mapRowTargets.stream()
+      List<Long> targetIds = mapRowTargetRepository.findByMapId(mapId)
+              .stream()
               .filter(target -> targetsToFlag.contains(target.getTargetCode()))
-              .forEach(target -> {
-                if (target.getTags() == null) {
-                  target.setTags(new HashSet<>());
-                }
-                target.getTags().add(MapRowTargetRepository.TARGET_OUT_OF_SCOPE_TAG);
-              });
+              .map(MapRowTarget::getId)
+              .collect(Collectors.toList());
+      mapRowTargetRepository.addOutOfScopeTag(targetIds);
     }
     return validationResult;
   }

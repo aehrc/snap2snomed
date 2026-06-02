@@ -161,10 +161,8 @@ public class MappingRestController {
     if (!webSecurity.isAdminUser() && !webSecurity.isProjectOwnerForMapId(mapId)) {
       throw new NotAuthorisedProblem("Not authorised to import mapping if the user is not admin or member of an associated project!");
     }
-    Long newMapId = mappingService.newMappingVersion(mapId, mapDetails.getSourceId(), mapDetails.getMapVersion(),
+    return mappingService.newMappingVersion(mapId, mapDetails.getSourceId(), mapDetails.getMapVersion(),
         mapDetails.getToVersion(), mapDetails.getToScope());
-    mappingService.validateMapTargets(newMapId);
-    return newMapId;
   }
 
   @Operation(description = "Validates the target codes for the given map id. " +

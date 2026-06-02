@@ -76,10 +76,6 @@ public interface MapRowTargetRepository
       + "                      or u member of mrt.row.map.project.guests)))")
   List<MapRowTarget> findByMapId(Long mapId);
 
-  @Query("select mrt from MapRowTarget mrt where mrt.row.map.id = :mapId")
-  @RestResource(exported = false)
-  List<MapRowTarget> findByMapIdInternal(Long mapId);
-
   @Override
   @Query("select mrt from MapRowTarget mrt join MapRow mr on mr.id = mrt.row.id where true = ?#{@authenticationFacadeImpl.isAdminUser()} or exists (select 1 from User u where u.id = ?#{@authenticationFacadeImpl.principalSubject} and (u member of mr.map.project.owners or u member of mr.map.project.members or u member of mr.map.project.guests))")
   Iterable<MapRowTarget> findAll();
@@ -117,7 +113,7 @@ public interface MapRowTargetRepository
   // ---------------------------------
 
   @Query(value = "insert into map_row_target (created, created_by, modified, modified_by, flagged, relationship, target_code, target_display, row_id) select :dateTime created, :user created_by, :dateTime modified, :user modified_by, false, s.relationship, s.target_code, s.target_display, tr.id row_id from map_row_target s, map_row sr, map_row tr where (s.row_id = sr.id) and (sr.map_id = :sourceMapId) and (tr.map_id = :mapId) and (sr.source_code_id = tr.source_code_id)", nativeQuery = true)
-  @Modifying(clearAutomatically = true)
+  @Modifying
   @RestResource(exported = false)
   int copyMapRowTargets(Long mapId, Long sourceMapId, String user, Instant dateTime);
 
@@ -133,7 +129,7 @@ public interface MapRowTargetRepository
           "and (sr.blind_map_flag = FALSE) " +
           "and (sr.last_author_id = tr.last_author_id) " +
           "and (sr.modified = tr.modified)", nativeQuery = true)
-  @Modifying(clearAutomatically = true)
+  @Modifying
   @RestResource(exported = false)
   int copyMapRowTargetsForDualMap(Long mapId, Long sourceMapId, String user, Instant dateTime);
 
@@ -145,7 +141,7 @@ public interface MapRowTargetRepository
           "map_row sr, map_row tr, imported_code sc, imported_code tc where (s.row_id = sr.id) " +
           "and (sr.map_id = :sourceMapId) and (tr.map_id = :mapId) and (sr.source_code_id = sc.id) " +
           "and (sc.code = tc.code) and (tr.source_code_id = tc.id)", nativeQuery = true)
-  @Modifying(clearAutomatically = true)
+  @Modifying
   @RestResource(exported = false)
   int copyMapRowTargetsForNewSource(Long mapId, Long sourceMapId, String user, Instant dateTime);
 
@@ -165,7 +161,7 @@ public interface MapRowTargetRepository
           "and (sr.blind_map_flag = FALSE) " + 
           "and (sr.last_author_id = tr.last_author_id) " + 
           "and (sr.modified = tr.modified)", nativeQuery = true)
-  @Modifying(clearAutomatically = true)
+  @Modifying
   @RestResource(exported = false)
   int copyMapRowTargetsForNewSourceForDualMap(Long mapId, Long sourceMapId, String user, Instant dateTime);
 
@@ -187,9 +183,9 @@ public interface MapRowTargetRepository
   long count();
 
   @Transactional
-  @Modifying(clearAutomatically = true)
+  @Modifying
   @RestResource(exported = false)
-  @Query(value = "insert ignore into map_row_target_tags (map_row_target_id, tags) "
+  @Query(value = "insert ignore into map_row_target_tags "
       + "select id, '" + TARGET_OUT_OF_SCOPE_TAG + "' "
       + "from map_row_target "
       + "where id in :ids",
