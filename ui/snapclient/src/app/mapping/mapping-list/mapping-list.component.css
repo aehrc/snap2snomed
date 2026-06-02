@@ -99,6 +99,10 @@ button.cancel {
   border: 0;
 }
 
+button[mat-stroked-button] mat-icon {
+  vertical-align: middle;
+}
+
 table {
   width: 100%;
 }
