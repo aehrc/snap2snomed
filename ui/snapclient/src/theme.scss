@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.core();
+  @include mat.all-component-themes(mat.define-theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+    ),
+    typography: (
+      plain-family: 'Montserrat, sans-serif',
+      brand-family: 'Montserrat, sans-serif',
+    ),
+    density: (
+      scale: 0,
+    ),
+  )));
+}

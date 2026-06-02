@@ -355,12 +355,63 @@ flag {
   font-size: smaller;
 }
 
-/** M3 indigo-pink raises secondary text to rgba(0,0,0,0.87); restore M2 secondary-text grey.
+/** M3 raises secondary text colour; restore M2 grey for paginator and table headers.
     :root (specificity 0-1-0) beats the theme's html (0-0-1) selectors unconditionally. */
 :root {
   --mat-paginator-container-text-color: rgba(0, 0, 0, 0.54);
   --mat-table-header-headline-color: rgba(0, 0, 0, 0.54);
-  --mat-button-filled-container-color: #3f51b5;
+}
+
+/* Accent colour (#ff4081) — add class="btn-accent" to elements needing pink */
+.mat-mdc-raised-button.btn-accent,
+.mat-mdc-unelevated-button.btn-accent {
+  --mat-button-protected-container-color: #ff4081;
+  --mat-button-filled-container-color: #ff4081;
+  --mat-button-protected-label-text-color: white;
   --mat-button-filled-label-text-color: white;
+}
+
+.mat-mdc-fab.btn-accent,
+.mat-mdc-mini-fab.btn-accent {
+  --mat-fab-container-color: #ff4081;
+  --mat-fab-small-container-color: #ff4081;
+  --mat-fab-foreground-color: white;
+  --mat-fab-small-foreground-color: white;
+}
+
+.mat-mdc-icon-button.btn-accent {
+  --mat-icon-button-icon-color: #ff4081;
+}
+
+.mat-mdc-button.btn-accent {
+  --mat-button-text-label-text-color: #ff4081;
+}
+
+/* Primary icon buttons and small FABs — add class="btn-primary" where needed */
+.mat-mdc-icon-button.btn-primary {
+  --mat-icon-button-icon-color: var(--mat-button-filled-container-color);
+}
+
+.mat-mdc-mini-fab.btn-primary {
+  --mat-fab-small-container-color: var(--mat-button-filled-container-color);
+  --mat-fab-small-foreground-color: var(--mat-button-filled-label-text-color, white);
+}
+
+/* Warn colour (#d32f2f) — add class="btn-warn" to elements needing red */
+.mat-mdc-icon-button.btn-warn {
+  --mat-icon-button-icon-color: #d32f2f;
+}
+
+/* Accent icons — replaces mat-icon color="accent" */
+.mat-icon.accent-icon {
+  color: #ff4081;
+}
+
+/* Accent chips — replaces mat-chip-option color="accent" */
+.mat-mdc-chip-option.accent-chip {
+  --mat-chip-elevated-selected-container-color: #ff4081;
+  --mat-chip-selected-label-text-color: white;
+  --mat-chip-with-icon-selected-icon-color: white;
+  --mat-chip-selected-trailing-icon-color: white;
 }
 

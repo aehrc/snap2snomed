@@ -9,13 +9,13 @@
       <mat-card-content>
         <div class="panel-header">
           <div class="col">
-            <button mat-icon-button color="accent" type="button" title="Close" (click)="backToTask()">
+            <button mat-icon-button class="btn-accent" type="button" title="Close" (click)="backToTask()">
               <mat-icon>cancel</mat-icon>
             </button>
           </div>
           <div class="col-main">
             <h2><b>{{'SOURCE.SOURCE' | translate}}:</b> {{source.display}}
-            <button mat-icon-button color="any" type="button" title="Copy source label"
+            <button mat-icon-button type="button" title="Copy source label"
               [cdkCopyToClipboard]="source.display">
               <mat-icon>content_copy</mat-icon>
             </button>
@@ -43,7 +43,7 @@
           </table>
         </div>
         <div class="col-status">
-          <button mat-button color="any" type="button" title="Previous code" (click)="loadPrevious()"
+          <button mat-button type="button" title="Previous code" (click)="loadPrevious()"
             [disabled]="!hasPrevious()">
             <mat-icon>navigate_before</mat-icon>
             {{'MAP.PREVIOUS' | translate}}
@@ -59,7 +59,7 @@
               }
             </mat-button-toggle-group>
           </span>
-          <button mat-button color="any" type="button" title="Next code" (click)="loadNext()"
+          <button mat-button type="button" title="Next code" (click)="loadNext()"
             [disabled]="!hasNext()">{{'MAP.NEXT' | translate}}
             <mat-icon>navigate_next</mat-icon>
           </button>
@@ -135,7 +135,7 @@
           </mat-card-content>
           <mat-card-footer>
             <span class="button-actions">
-              <button (click)="loadPrevious()" [disabled]="!hasPrevious()" color="any" mat-icon-button
+              <button (click)="loadPrevious()" [disabled]="!hasPrevious()" mat-icon-button
                 title="Previous code" type="button">
                 <mat-icon>navigate_before</mat-icon>
               </button>
@@ -148,7 +148,7 @@
                     <mat-icon>{{toIconName(status)}}</mat-icon></mat-button-toggle>
                   }
                 </mat-button-toggle-group>
-                <button (click)="loadNext()" [disabled]="!hasNext()" color="any" mat-icon-button title="Next code"
+                <button (click)="loadNext()" [disabled]="!hasNext()" mat-icon-button title="Next code"
                   type="button">
                   <mat-icon>navigate_next</mat-icon>
                 </button>

@@ -20,7 +20,7 @@
           }
         </mat-form-field>
       }
-      <button class="add" color="primary" mat-raised-button type="button"
+      <button class="add" mat-flat-button type="button"
         (click)="addNewNote()" [disabled]="!isValid()">
         <mat-icon class="add">save</mat-icon>
         {{'DETAILS.NOTE_SAVE' | translate}}
@@ -32,7 +32,7 @@
       <mat-card-title>{{'DETAILS.NOTES' | translate}}
         &nbsp;
         @if (notes.length > 0) {
-          <mat-chip-option color="accent" selected>{{notes.length}}</mat-chip-option>
+          <mat-chip-option class="accent-chip" selected>{{notes.length}}</mat-chip-option>
         }
       </mat-card-title>
     </mat-card-header>
@@ -41,7 +41,7 @@
         @for (note of notes; track note) {
           <div>
             <app-notes-item [note]="note">
-              <button mat-icon-button color="accent" title="{{'PROJECT.DELETE_NOTE_TOOLTIP' | translate}}"
+              <button mat-icon-button class="btn-accent" title="{{'PROJECT.DELETE_NOTE_TOOLTIP' | translate}}"
                 [disabled]="!canDelete(note)"
                 (click)="deleteNote(note)"><mat-icon>delete</mat-icon></button>
               </app-notes-item>
@@ -55,7 +55,7 @@
         <mat-card-title>{{'DETAILS.SYSTEM_NOTES' | translate}}
           &nbsp;
           @if (systemNotes.length > 0) {
-            <mat-chip-option color="accent" selected>{{systemNotes.length}}</mat-chip-option>
+            <mat-chip-option class="accent-chip" selected>{{systemNotes.length}}</mat-chip-option>
           }
         </mat-card-title>
       </mat-card-header>

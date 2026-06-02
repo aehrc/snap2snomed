@@ -6,10 +6,10 @@
   <p>{{data.message}}</p>
 </div>
 <div mat-dialog-actions class="pull-right">
-  <button mat-raised-button color="any" (click)="dialogRef.close(true)"
+  <button mat-raised-button (click)="dialogRef.close(true)"
   cdkFocusInitial>{{data.button}}</button>
   @if (data.type === 'CONFIRM') {
-    <button mat-flat-button color="primary"
+    <button mat-flat-button
     (click)="dialogRef.close(false)">{{data.cancel}}</button>
   }
 </div>

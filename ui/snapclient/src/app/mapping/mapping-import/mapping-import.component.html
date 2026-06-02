@@ -156,8 +156,8 @@
         -->
 
         <mat-card-actions>
-          <button mat-flat-button color="primary" type="submit" [disabled]="disableSubmit()" (click)="onSubmit()">{{
+          <button mat-flat-button type="submit" [disabled]="disableSubmit()" (click)="onSubmit()">{{
           createMode ? ('FORM.SELECT_FILE' | translate) : ('FORM.IMPORT_EXISTING_MAP' | translate) }}</button>
-          <button mat-raised-button color="default" type="cancel" (click)="onClose()">{{ 'FORM.CLOSE' | translate }}</button>
+          <button mat-raised-button type="cancel" (click)="onClose()">{{ 'FORM.CLOSE' | translate }}</button>
         </mat-card-actions>
       </mat-dialog-content>

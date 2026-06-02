@@ -75,7 +75,8 @@
     "lodash": "^4.17.21",
     "eslint": "^9.39.4",
     "prettier": "^2.3.0",
-"ts-node": "~8.3.0",
+    "sass": "^1.97.1",
+    "ts-node": "~8.3.0",
     "typescript": "~5.9.0",
     "typescript-eslint": "^8.59.2"
   }

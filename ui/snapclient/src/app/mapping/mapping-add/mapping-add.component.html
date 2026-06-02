@@ -75,7 +75,7 @@
                       <mat-error>{{ 'MAP.SOURCE_REQUIRED' | translate }}</mat-error>
                     }
                   </mat-form-field>
-                  <button mat-mini-fab color="accent" type="button" title="{{ 'MAP.SOURCE_IMPORT' | translate }}"
+                  <button mat-mini-fab class="btn-accent" type="button" title="{{ 'MAP.SOURCE_IMPORT' | translate }}"
                     (click)="addSource($event)">
                     <mat-icon>add</mat-icon>
                   </button>
@@ -112,7 +112,7 @@
                       <mat-error>{{ 'MAP.TARGET_VERSION_ERROR' | translate }}</mat-error>
                     }
                   </mat-form-field>
-                  <button mat-mini-fab color="accent" type="button" title="{{ 'MAP.REFRESH_TARGET_VERSIONS' | translate }}"
+                  <button mat-mini-fab class="btn-accent" type="button" title="{{ 'MAP.REFRESH_TARGET_VERSIONS' | translate }}"
                     (click)="loadReleases()">
                     <mat-icon>sync</mat-icon>
                   </button>
@@ -148,7 +148,7 @@
                 </mat-form-field>
                 @if (mode === 'FORM.CREATE' && !formGroup.controls.dualMapMode.value) {
                   <div class="import-existing-map">
-                    <button mat-flat-button color="primary"  title="{{ 'FORM.IMPORT_EXISTING_MAP' | translate }}"
+                    <button mat-flat-button title="{{ 'FORM.IMPORT_EXISTING_MAP' | translate }}"
                       type="button" (click)="onImportMapping($event)">
                       {{ 'FORM.IMPORT_EXISTING_MAP' | translate }}
                     </button>
@@ -221,13 +221,13 @@
               </div>
             }
             @if (mode !== 'FORM.VIEW') {
-              <button mat-flat-button color="primary" type="submit" id="save"
+              <button mat-flat-button type="submit" id="save"
               [disabled]="formGroup.invalid">{{ 'FORM.SAVE' | translate }}</button>
             }
-            <button mat-raised-button color="default" type="cancel" id="cancel"
+            <button mat-raised-button type="cancel" id="cancel"
             (click)="onCancel($event)">{{ (mode !== 'FORM.VIEW' ? 'FORM.CLOSE' : 'FORM.CANCEL') | translate }}</button>
             @if (mode === 'FORM.EDIT') {
-              <button id="delete" mat-raised-button color="accent" (click)="deleteMap()" type="button">
+              <button id="delete" mat-raised-button class="btn-accent" (click)="deleteMap()" type="button">
                 {{ (warnDelete ? 'FORM.DELETE_CONFIRM' : 'FORM.DELETE') | translate }}
               </button>
             }

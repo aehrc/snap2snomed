@@ -79,10 +79,10 @@
             }
           </mat-card-content>
           <mat-card-actions>
-            <button mat-flat-button color="primary" type="submit"
+            <button mat-flat-button type="submit"
               [disabled]="disableSubmit(taskForm)"
             (click)="onSubmit(taskForm, $event)">{{ 'TASK.ASSIGN' | translate }}</button>
-            <button mat-raised-button color="default" type="cancel"
+            <button mat-raised-button type="cancel"
             (click)="onCancel(taskForm, $event)">{{ 'FORM.CLEAR' | translate }}</button>
           </mat-card-actions>
         </form>

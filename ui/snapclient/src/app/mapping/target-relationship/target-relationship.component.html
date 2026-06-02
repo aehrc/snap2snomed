@@ -10,7 +10,7 @@
     <mat-card appearance="outlined" cdkDropList [appDroppable]="{zone: 'relationshipZone'}"
       [dropDisabled]="isEditDisabled()" (onDroppableComplete)="onDrop($event, relationship)">
       <mat-card-title>
-        <button class="relationship-add-button" color="any" mat-icon-button (click)="addFocusTarget(relationship)"
+        <button class="relationship-add-button" mat-icon-button (click)="addFocusTarget(relationship)"
           [disabled]="disableActions || !selectedSearchItem || addingTargetRelationship !== null || savingRelationship !== null">
           <span class="relationship-add-button-icon">
             @if (addingTargetRelationship === relationship || savingRelationship === relationship) {
@@ -37,7 +37,7 @@
                 <span #tooltip="matTooltip" matTooltip="{{getTargetOutOfScopeTooltip(row)}}">
                   @if (row.targetOutOfScope) {
                   <button mat-icon-button class="btn-accent" disabled="{{!isOutOfScopeWithSuggestions(row) || isReviewTask()}}"
-                    (click)="onMapMaintenance(row)" color="accent"><mat-icon>warning</mat-icon></button>
+                    (click)="onMapMaintenance(row)"><mat-icon>warning</mat-icon></button>
                   }
                 </span>
                 <button mat-icon-button (click)="updateFlag(row)" [disabled]="disableFlagging" [ngClass]="['flag']"
@@ -49,7 +49,7 @@
                 </button>
                 @if (!disableActions) {
                 <span>
-                  <button color="btn-accent" mat-mini-fab #tooltip="matTooltip"
+                  <button class="btn-accent" mat-mini-fab #tooltip="matTooltip"
                     matTooltip="{{'DETAILS.DELETE' | translate}}"
                     (click)="removeTarget(row)"><mat-icon>remove</mat-icon></button>
                 </span>

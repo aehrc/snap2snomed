@@ -30,7 +30,7 @@
           @if (isAssigned(task)) {
             <button
               [disabled]="incompleteRows && incompleteRows.count != 0"
-              mat-icon-button color="primary"
+              mat-icon-button class="btn-primary"
               #tooltip="matTooltip" matTooltip="{{'TASK.COMPLETE_TASK_TOOL_TIP' | translate}}"
               (click)="onCompleteTask($event, 'COMPLETE')">
               <mat-icon>check_circle_outline</mat-icon>
@@ -38,7 +38,7 @@
           }
           @if (isOwner || isAdmin) {
             <button
-              mat-icon-button color="warn"
+              mat-icon-button class="btn-warn"
               #tooltip="matTooltip" matTooltip="{{'TASK.CANCEL_TASK_TOOL_TIP' | translate}}"
               (click)="onCompleteTask($event, 'CANCEL')">
               <mat-icon>remove_circle</mat-icon>

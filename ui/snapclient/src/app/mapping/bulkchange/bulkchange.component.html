@@ -66,13 +66,13 @@
       <mat-card appearance="outlined">
         <div class="box spaced">
           <span class="box">
-            <mat-checkbox color="primary"
+            <mat-checkbox
               [(ngModel)]="clearNoMap"
             (change)="setClearNoMap($event.checked)" ngDefaultControl></mat-checkbox>
             <span>{{'BULKCHANGEDIALOG.CLEAR_NO_MAP' | translate}}</span>
           </span>
           <span class="box">
-            <mat-checkbox color="primary"
+            <mat-checkbox
               [(ngModel)]="noMap"
             (change)="setNoMap($event.checked)"></mat-checkbox>
             <span>{{'BULKCHANGEDIALOG.SET_NO_MAP' | translate}}</span>
@@ -86,7 +86,7 @@
     @if (((data.task && data.task.type !== 'REVIEW') || data.task === null) && !(noMapValue != null) && changedStatus == null && changedRelationship == null && !hasSearchValue && !isDualMapView()) {
       <mat-card appearance="outlined">
         <div class="box">
-          <mat-checkbox color="primary"
+          <mat-checkbox
             [(ngModel)]="clearTarget"
           (change)="clearTargetClicked($event.checked)" ngDefaultControl></mat-checkbox>
           <span class="auto-margin-top">{{'BULKCHANGEDIALOG.CLEAR_TARGET' | translate}}</span>
@@ -96,7 +96,7 @@
     @if (isDualMapView() && changedStatus == null) {
       <mat-card appearance="outlined">
         <div class="box">
-          <mat-checkbox color="primary"
+          <mat-checkbox
             [(ngModel)]="resetDualMap"
           ngDefaultControl></mat-checkbox>
           <span class="auto-margin-top">{{'BULKCHANGEDIALOG.REDO_DUAL_MAPPING' | translate}}</span>
@@ -105,10 +105,10 @@
     }
     <mat-divider class="divider"></mat-divider>
     <div class="box spaced">
-      <button mat-flat-button color="primary"
+      <button mat-flat-button
         [disabled]="!resetDualMap && !changedRelationship && !changedStatus && noMapValue == null && !clearTarget"
       (click)="onOk()">{{'DIALOG.OK' | translate}}</button>
-      <button mat-raised-button color="any"
+      <button mat-raised-button
         [disabled]="processing"
       (click)="onCancel()">{{'DIALOG.CANCEL' | translate}}</button>
     </div>

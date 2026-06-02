@@ -69,7 +69,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'TABLE.NO_MAP' | translate}}</th>
         <td mat-cell *matCellDef="let maprow; let i = index">
           &nbsp;&nbsp;
-          <mat-checkbox (change)="updateNoMapRow($event, i)" color="primary"
+          <mat-checkbox (change)="updateNoMapRow($event, i)"
             [disabled]="writeDisableUtils.isEditDisabled(this.task.type, maprow.status)"
           [value]="maprow.noMap" [(ngModel)]="maprow.noMap"></mat-checkbox>
         </td>
@@ -106,7 +106,7 @@
           <th mat-header-cell *matHeaderCellDef>{{'TABLE.TARGET_OUT_OF_SCOPE' | translate}}</th>
           <td mat-cell *matCellDef="let maprow; let i = index">
             @if (maprow.targetOutOfScope) {
-              <button mat-icon-button color="accent" #tooltip="matTooltip" matTooltip="{{'TABLE.TARGET_OUT_OF_SCOPE_TOOLTIP' | translate}}"
+              <button mat-icon-button class="btn-accent" #tooltip="matTooltip" matTooltip="{{'TABLE.TARGET_OUT_OF_SCOPE_TOOLTIP' | translate}}"
                 (click)="detailsView(i)">
                 <mat-icon>warning</mat-icon>
               </button>
@@ -124,7 +124,7 @@
                 #tooltip="matTooltip" matTooltip="{{'MAP.TARGET_FLAGGED' | translate}}"
                 >
                 @if (maprow.flagged) {
-                  <mat-icon color="accent">flag</mat-icon>
+                  <mat-icon class="accent-icon">flag</mat-icon>
                 } @else {
                   <mat-icon>outlined_flag</mat-icon>
                 }
