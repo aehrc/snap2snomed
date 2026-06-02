@@ -369,14 +369,14 @@ flag {
 }
 
 /* Accent colour (#ff4081) — add class="btn-accent" to elements needing pink */
-.mat-mdc-raised-button.btn-accent {
+.mat-mdc-raised-button.btn-accent,
+.mat-mdc-unelevated-button.btn-accent {
   --mdc-protected-button-container-color: #ff4081;
   --mdc-protected-button-label-text-color: white;
-}
-
-.mat-mdc-unelevated-button.btn-accent {
   --mdc-filled-button-container-color: #ff4081;
   --mdc-filled-button-label-text-color: white;
+  background-color: #ff4081 !important;
+  color: white !important;
 }
 
 .mat-mdc-fab.btn-accent {
