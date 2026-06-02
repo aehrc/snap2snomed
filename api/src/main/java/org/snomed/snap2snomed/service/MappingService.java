@@ -685,8 +685,6 @@ public class MappingService {
 
     }
 
-    validateMapTargets(createdId);
-
     return createdId;
   }
 
