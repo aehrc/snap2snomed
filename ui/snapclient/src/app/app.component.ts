@@ -72,6 +72,9 @@ export class AppComponent implements OnInit {
       if (code && code.length > 1) {
         this.isLoading = true;
         this.store.dispatch(new LogIn(code));
+      } else if (params.error) {
+        this.hasError = true;
+        this.errorMsg = params.error_description ?? params.error;
       }
     });
   }
