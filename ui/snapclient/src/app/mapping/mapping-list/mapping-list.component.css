@@ -1,6 +1,7 @@
 .container {
   height: calc(100vh - 249px);
   margin: 10px;
+  background-color: #fafafa;
 }
 
 .container.has-error {
