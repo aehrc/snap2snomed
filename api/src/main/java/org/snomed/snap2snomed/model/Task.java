@@ -46,6 +46,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.rest.core.config.Projection;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -56,6 +57,7 @@ import org.springframework.data.rest.core.config.Projection;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "task")
 @Slf4j
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Task implements Snap2SnomedEntity {
   @Column(name = "created", nullable = false, updatable = false)
   @CreatedDate
