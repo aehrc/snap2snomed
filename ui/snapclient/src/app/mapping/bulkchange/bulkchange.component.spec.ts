@@ -110,7 +110,7 @@ describe('BulkchangeComponent', () => {
     el = fixture.debugElement.query(By.css('.mat-mdc-form-field'));
     expect(el).toBeFalsy();
 
-    const button = fixture.debugElement.query(By.css('button.mat-primary'));
+    const button = fixture.debugElement.query(By.css('button[mat-flat-button]'));
     expect(button.nativeElement.disabled).toBe(false);
   });
 
@@ -125,7 +125,7 @@ describe('BulkchangeComponent', () => {
     expect(fixture.debugElement.query(By.css('#relationships'))).toBeFalsy();
     expect(fixture.debugElement.query(By.css('#statuses'))).toBeFalsy();
 
-    const button = fixture.debugElement.query(By.css('button.mat-primary'));
+    const button = fixture.debugElement.query(By.css('button[mat-flat-button]'));
     expect(button.nativeElement.disabled).toBe(false);
   });
 
@@ -141,7 +141,7 @@ describe('BulkchangeComponent', () => {
     el = fixture.debugElement.query(By.css('.mat-mdc-form-field'));
     expect(el).toBeFalsy();
 
-    const button = fixture.debugElement.query(By.css('button.mat-primary'));
+    const button = fixture.debugElement.query(By.css('button[mat-flat-button]'));
     expect(button.nativeElement.disabled).toBe(false);
   });
 
@@ -150,7 +150,7 @@ describe('BulkchangeComponent', () => {
 
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('button.mat-primary'));
+    const button = fixture.debugElement.query(By.css('button[mat-flat-button]'));
     expect(button.nativeElement.disabled).toBe(false);
   });
 
@@ -159,7 +159,7 @@ describe('BulkchangeComponent', () => {
 
     fixture.detectChanges();
 
-    const button = fixture.debugElement.query(By.css('button.mat-primary'));
+    const button = fixture.debugElement.query(By.css('button[mat-flat-button]'));
     expect(button.nativeElement.disabled).toBe(false);
   });
 });
