@@ -240,6 +240,7 @@ td.mat-mdc-cell {
 .top-row {
   display: flex;
   justify-content: space-between;
+  background-color: #e6e6e6;
 }
 
 .table-actions {
@@ -259,11 +260,15 @@ td.mat-mdc-cell {
 .mapping-details {
   flex: 1;
   max-width: 50%;
+  background-color: white;
 }
 
 .actions-card {
   flex: 1;
   max-width: 50%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: white;
 }
 
 

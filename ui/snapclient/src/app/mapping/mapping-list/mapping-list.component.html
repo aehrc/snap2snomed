@@ -16,7 +16,7 @@
   }
   <div class="container" [ngClass]="{'has-error': error.message}">
     <div class="header">
-      <mat-form-field class='filter'>
+      <mat-form-field class='filter' appearance="fill">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Search title and description" #input>
         <button matSuffix mat-icon-button class="cancel" [disabled]="input.value == ''" (click)="clearInput(input)"><mat-icon>cancel</mat-icon></button>

@@ -84,6 +84,7 @@ mat-toolbar {
   font-size: 12px;
   --mat-form-field-container-text-size: 12px;
   --mat-form-field-filled-label-text-size: 12px;
+  --mat-select-trigger-text-size: 12px;
   margin-left: 10px;
   margin-top: 6px;
   float: left;
