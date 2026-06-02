@@ -2,8 +2,9 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
+    "types": ["jasmine"],
+    "paths": { "src/*": ["./src/*"] },
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "strict": true,
