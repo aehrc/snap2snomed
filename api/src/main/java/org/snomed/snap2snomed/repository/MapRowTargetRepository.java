@@ -76,6 +76,10 @@ public interface MapRowTargetRepository
       + "                      or u member of mrt.row.map.project.guests)))")
   List<MapRowTarget> findByMapId(Long mapId);
 
+  @Query("select mrt from MapRowTarget mrt where mrt.row.map.id = :mapId")
+  @RestResource(exported = false)
+  List<MapRowTarget> findByMapIdInternal(Long mapId);
+
   @Override
   @Query("select mrt from MapRowTarget mrt join MapRow mr on mr.id = mrt.row.id where true = ?#{@authenticationFacadeImpl.isAdminUser()} or exists (select 1 from User u where u.id = ?#{@authenticationFacadeImpl.principalSubject} and (u member of mr.map.project.owners or u member of mr.map.project.members or u member of mr.map.project.guests))")
   Iterable<MapRowTarget> findAll();
