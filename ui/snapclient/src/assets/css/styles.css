@@ -106,7 +106,7 @@ header {
   float: right;
 }
 
-.mat-toolbar {
+.mat-mdc-toolbar {
   background-color: white;
 }
 
@@ -360,6 +360,12 @@ flag {
 :root {
   --mat-paginator-container-text-color: rgba(0, 0, 0, 0.54);
   --mat-table-header-headline-color: rgba(0, 0, 0, 0.54);
+}
+
+/** Restore M2 appearance for paginator page-size select (M3 filled variant has grey bg + larger text) */
+.mat-mdc-paginator {
+  --mdc-filled-text-field-container-color: white;
+  --mat-paginator-select-trigger-text-size: 12px;
 }
 
 /* Accent colour (#ff4081) — add class="btn-accent" to elements needing pink */

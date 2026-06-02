@@ -115,7 +115,7 @@ ul.sources-list li {
 }
 
 .mat-column-filter-sourceCode, .mat-column-filter-targetCode,
-.mat-column-filter-sourceCode .mat-mdc-form-field, .mat-column-filter-targetCode .mat-form-field,
+.mat-column-filter-sourceCode .mat-mdc-form-field, .mat-column-filter-targetCode .mat-mdc-form-field,
 .mat-column-sourceCode, .mat-column-targetCode {
   width: 100px;
   max-width: 150px; /* wide enough for an 18 digit SNOMED code */
@@ -141,7 +141,7 @@ ul.sources-list li {
 }
 
 ::ng-deep .mat-column-filter-notes .mat-mdc-form-field,
-::ng-deep .mat-column-filter-noMap .mat-form-field {
+::ng-deep .mat-column-filter-noMap .mat-mdc-form-field {
   width: 100px;
 }
 
@@ -185,7 +185,7 @@ ul.sources-list li {
 }
 
 ::ng-deep .mat-column-filter-relationship .mat-mdc-form-field,
-::ng-deep .mat-column-filter-status .mat-form-field {
+::ng-deep .mat-column-filter-status .mat-mdc-form-field {
   width: 100px;
 }
 

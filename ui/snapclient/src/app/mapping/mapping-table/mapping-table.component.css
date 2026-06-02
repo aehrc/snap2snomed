@@ -52,7 +52,7 @@
 
 .mat-column-filter-sourceCode, .mat-column-filter-targetCode,
 .mat-column-bulk-source-code, .mat-column-bulk-target-code,
-.mat-column-filter-sourceCode .mat-mdc-form-field, .mat-column-filter-targetCode .mat-form-field,
+.mat-column-filter-sourceCode .mat-mdc-form-field, .mat-column-filter-targetCode .mat-mdc-form-field,
 .mat-column-sourceCode, .mat-column-targetCode {
   width: 100px;
   max-width: 150px; /* wide enough for an 18 digit SNOMED code */
