@@ -1,4 +1,8 @@
 
+.details-card {
+  background-color: white;
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;
