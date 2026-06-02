@@ -66,6 +66,10 @@
   padding: 10px;
 }
 
+.user-menu-button {
+  color: white;
+}
+
 .breadcrumbs .space-fill {
   display: none;
 }
