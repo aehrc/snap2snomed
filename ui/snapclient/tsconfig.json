@@ -3,7 +3,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
-    "types": ["jasmine"],
+    "types": ["jasmine", "node"],
     "paths": { "src/*": ["./src/*"] },
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
