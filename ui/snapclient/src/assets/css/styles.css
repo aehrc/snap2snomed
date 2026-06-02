@@ -369,20 +369,24 @@ flag {
 }
 
 /* Accent colour (#ff4081) — add class="btn-accent" to elements needing pink */
-.mat-mdc-raised-button.btn-accent,
-.mat-mdc-unelevated-button.btn-accent {
-  --mat-button-protected-container-color: #ff4081;
-  --mat-button-filled-container-color: #ff4081;
-  --mat-button-protected-label-text-color: white;
-  --mat-button-filled-label-text-color: white;
+.mat-mdc-raised-button.btn-accent {
+  --mdc-protected-button-container-color: #ff4081;
+  --mdc-protected-button-label-text-color: white;
 }
 
-.mat-mdc-fab.btn-accent,
+.mat-mdc-unelevated-button.btn-accent {
+  --mdc-filled-button-container-color: #ff4081;
+  --mdc-filled-button-label-text-color: white;
+}
+
+.mat-mdc-fab.btn-accent {
+  --mdc-fab-container-color: #ff4081;
+  --mdc-fab-icon-color: white;
+}
+
 .mat-mdc-mini-fab.btn-accent {
-  --mat-fab-container-color: #ff4081;
-  --mat-fab-small-container-color: #ff4081;
-  --mat-fab-foreground-color: white;
-  --mat-fab-small-foreground-color: white;
+  --mdc-fab-small-container-color: #ff4081;
+  --mdc-fab-small-icon-color: white;
 }
 
 .mat-mdc-icon-button.btn-accent {
@@ -390,7 +394,7 @@ flag {
 }
 
 .mat-mdc-button.btn-accent {
-  --mat-button-text-label-text-color: #ff4081;
+  --mdc-text-button-label-text-color: #ff4081;
 }
 
 /* Primary icon buttons and small FABs — add class="btn-primary" where needed */
