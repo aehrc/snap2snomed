@@ -37,6 +37,7 @@
 
 mat-toolbar {
   justify-content: flex-end;
+  --mat-toolbar-container-background-color: white;
 }
 
 .mat-mdc-cell, .mat-mdc-header-cell {
