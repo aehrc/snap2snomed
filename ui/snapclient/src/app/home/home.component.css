@@ -28,6 +28,7 @@
   display: flex;
   flex-direction: row;
   align-content: flex-end;
+  align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
   background-color: #434a55;
@@ -68,6 +69,9 @@
 .profile-menu {
   margin: 0;
   padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .user-menu-button {
