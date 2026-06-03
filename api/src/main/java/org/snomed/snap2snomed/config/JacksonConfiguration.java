@@ -26,11 +26,13 @@ public class JacksonConfiguration {
   @Bean
   public Hibernate6Module hibernate6Module() {
     Hibernate6Module module = new Hibernate6Module();
-    // USE_TRANSIENT_ANNOTATION is enabled by default and causes Jackson to skip
-    // @Transient fields during deserialization. This breaks task creation because
-    // fields like sourceRowSpecification are @Transient (not persisted) but are
-    // sent in the request body and needed by the task creation logic.
+    // USE_TRANSIENT_ANNOTATION skips @Transient fields during deserialization,
+    // breaking task creation (sourceRowSpecification etc. are @Transient but needed).
     module.disable(Hibernate6Module.Feature.USE_TRANSIENT_ANNOTATION);
+    // FORCE_LAZY_LOADING restores pre-module behaviour: lazy collections/associations
+    // (e.g. Project.owners/members/guests) are loaded by Hibernate during serialization
+    // rather than being returned as null by the module.
+    module.enable(Hibernate6Module.Feature.FORCE_LAZY_LOADING);
     return module;
   }
 
