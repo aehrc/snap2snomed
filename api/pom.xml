@@ -450,7 +450,6 @@
         <artifactId>git-commit-id-maven-plugin</artifactId>
         <configuration>
           <prefix>git</prefix>
-          <searchParentDirectories>true</searchParentDirectories>
           <generateGitPropertiesFile>true</generateGitPropertiesFile>
           <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
           <offline>true</offline>
