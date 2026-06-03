@@ -29,9 +29,19 @@
               "src/favicon.ico",
               "src/assets",
               {
+                  "glob": "flag-icons.min.css",
+                  "input": "./node_modules/flag-icon-css/css",
+                  "output": "./assets/css"
+              },
+              {
                   "glob": "**/*",
                   "input": "./node_modules/flag-icon-css/flags/4x3",
-                  "output": "./assets/flags"
+                  "output": "./assets/flags/4x3"
+              },
+              {
+                  "glob": "**/*",
+                  "input": "./node_modules/flag-icon-css/flags/1x1",
+                  "output": "./assets/flags/1x1"
               }
             ],
             "styles": [

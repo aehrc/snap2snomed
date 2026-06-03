@@ -15,4 +15,15 @@ html {
       scale: 0,
     ),
   )));
+
+  --mat-sys-surface: white;
+  --mat-sys-surface-container-low: white;
+  --mat-sys-surface-container: white;
+  --mat-toolbar-container-background-color: white;
+  --mat-table-background-color: white;
+  --mat-paginator-container-background-color: white;
+  --mat-button-toggle-selected-state-text-color: white;
+  --mat-fab-small-container-color: #ff4081;
+  --mat-fab-small-foreground-color: white;
+  --mat-select-panel-background-color: white;
 }

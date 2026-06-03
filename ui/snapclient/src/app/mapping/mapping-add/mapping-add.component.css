@@ -71,7 +71,7 @@ table.details-table td {
   margin-top: 1em;
 }
 
-.mat-icon {
+:not(button) > .mat-icon {
   position: relative;
   top: -2px;
   margin-left: 0px

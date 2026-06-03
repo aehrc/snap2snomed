@@ -13,6 +13,10 @@ h3 {
   justify-content: space-between;
 }
 
+.mat-mdc-card-actions .mat-mdc-raised-button {
+  --mat-button-protected-label-text-color: black;
+}
+
 .field-full-width {
   width: 100%;
   margin-bottom: 10px;

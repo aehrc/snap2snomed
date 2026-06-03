@@ -1,6 +1,8 @@
 
 .details-card {
   background-color: white;
+  margin: 10px;
+  flex: 1;
 }
 
 .row {

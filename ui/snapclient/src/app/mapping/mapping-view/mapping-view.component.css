@@ -1,5 +1,6 @@
 .mapping-edit {
   background-color: #e6e6e6;
+  width: 840px;
 }
 
 .mat-mdc-card {
@@ -264,7 +265,14 @@ td.mat-mdc-cell {
 .mapping-details {
   flex: 1;
   max-width: 50%;
-  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+app-mapping-details-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .actions-card {

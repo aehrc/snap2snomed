@@ -1,15 +1,3 @@
-#task-select .mat-mdc-select {
-  vertical-align: top;
-  margin-bottom: -20px;
-  margin-top: -8px;
-}
-
 #task-select .mat-mdc-form-field {
   width: 100%;
-  height: 28px;
-  vertical-align: super;
-}
-
-#task-select .mat-mdc-select-arrow-wrapper {
-  vertical-align: bottom !important;
 }
