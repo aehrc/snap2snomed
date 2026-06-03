@@ -375,7 +375,12 @@ flag {
   --mdc-protected-button-label-text-color: white;
   --mdc-filled-button-container-color: #ff4081;
   --mdc-filled-button-label-text-color: white;
-  background-color: #ff4081 !important;
+  background: #ff4081 !important;
+  color: white !important;
+}
+
+.mat-mdc-raised-button.btn-accent .mdc-button__label,
+.mat-mdc-unelevated-button.btn-accent .mdc-button__label {
   color: white !important;
 }
 
