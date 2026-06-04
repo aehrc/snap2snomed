@@ -15,6 +15,7 @@
  */
 
 import {ErrorHandler, NgModule, NgZone, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {ShrimpHierarchyViewModule} from '@csiro/shrimp-hierarchy-view';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -240,7 +241,8 @@ export function HttpLoaderFactory(httpClient: HttpClient): TranslateHttpLoader {
         MatSlideToggleModule,
         MatButtonToggleModule,
         BreadcrumbComponent,
-        BreadcrumbItemDirective], providers: [AuthService, AuthGuard, UserService, MapService, TranslateService,
+        BreadcrumbItemDirective,
+        ShrimpHierarchyViewModule], providers: [AuthService, AuthGuard, UserService, MapService, TranslateService,
         { provide: MAT_DATE_LOCALE, useValue: 'en-AU' },
         { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
         {

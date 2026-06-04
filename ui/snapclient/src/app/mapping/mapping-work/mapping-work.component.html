@@ -74,7 +74,7 @@
                   @if (loadingHierarchy) {
                     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                   } @else {
-                    <!-- lib-shrimp-hierarchy: temporarily disabled (awaiting Angular 21-compatible release) -->
+                    <lib-shrimp-hierarchy [rows]="nodes" (selected)="onSelected($event)"></lib-shrimp-hierarchy>
                   }
                 </div>
               }

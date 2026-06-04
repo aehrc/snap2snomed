@@ -18,17 +18,8 @@ import {FhirActions, FhirActionTypes} from './fhir.actions';
 import {Release} from '../../_services/fhir.service';
 import {R4} from '@ahryman40k/ts-fhir-types';
 import {Properties} from './fhir.effects';
-
-// ConceptNode was previously sourced from @csiro/shrimp-hierarchy-view (Angular 11, ViewEngine).
-// Defined locally here until a compatible version is available for Angular 21.
-export interface ConceptNode<T> {
-  id: string;
-  display: string;
-  title?: string;
-  primitive?: boolean;
-  directParents: string[] | null;
-  payload?: T;
-}
+import {ConceptNode} from '@csiro/shrimp-hierarchy-view';
+export {ConceptNode} from '@csiro/shrimp-hierarchy-view';
 
 export interface Coding {
   code: string;
