@@ -105,7 +105,9 @@
             @if (loadingHierarchy) {
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
             } @else {
-              <lib-shrimp-hierarchy [rows]="nodes" (selected)="onSelected($event)"></lib-shrimp-hierarchy>
+              @defer {
+                <lib-shrimp-hierarchy [rows]="nodes" (selected)="onSelected($event)"></lib-shrimp-hierarchy>
+              }
             }
           </div>
         }
