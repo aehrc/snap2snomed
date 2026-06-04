@@ -47,7 +47,8 @@
 }
 
 .details-drawer {
-  background-color: #e6e6e6;
+  background-color: white;
+  width: 90vw;
 }
 
 .sources-list {
