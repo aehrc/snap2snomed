@@ -62,7 +62,7 @@
                       <mat-hint align="end">{{valueset.value?.length || 0}}/{{MAX_VALUESET}}</mat-hint>
                     </mat-form-field>
                   </mat-expansion-panel>
-                  <div class="field-full-width source-file mat-elevation-z2">
+                  <div class="field-full-width source-file">
                     <div class="file">
                       <label>{{ 'SOURCE.FILE' | translate }}</label>
                       <button id="fileUploadButton" mat-button mat-raised-button type="button"
@@ -186,7 +186,7 @@
                         }
                         <button mat-flat-button type="submit" [disabled]="disableSubmit()"
                         (click)="onSubmit()">{{ 'FORM.SAVE' | translate }}</button>
-                        <button mat-raised-button type="cancel"
+                        <button mat-raised-button class="black-text" type="cancel"
                         (click)="onClose(false)">{{ 'FORM.CLOSE' | translate }}</button>
                       </mat-card-actions>
                     </div>

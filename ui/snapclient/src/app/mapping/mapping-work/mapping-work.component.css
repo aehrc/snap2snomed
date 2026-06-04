@@ -74,20 +74,34 @@
   max-width: 27%;
 }
 
-.col-right {
-  flex-direction: column-reverse;
-  min-width: unset;
-  max-width: 10%;
+.actions-inner {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: 12px;
+  box-sizing: border-box;
 }
 
 .col-left {
-  padding-left: 0px;
-  width: 75%
+  flex: 2;
+  padding-left: 0;
+}
+
+.col-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .row-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
 }
 
 .row-actions button {
@@ -146,8 +160,11 @@
   min-width: 40%;
   margin: 10px;
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
+  flex-direction: column;
+}
+
+.actions-card > .actions-inner {
+  flex: 1;
 }
 
 .top-row {

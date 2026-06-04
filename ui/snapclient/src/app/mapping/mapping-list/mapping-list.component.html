@@ -16,13 +16,13 @@
   }
   <div class="container" [ngClass]="{'has-error': error.message}">
     <div class="header">
-      <mat-form-field class='filter' appearance="fill">
+      <mat-form-field class='filter' appearance="fill" subscriptSizing="dynamic">
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Search title and description" #input>
         <button matSuffix mat-icon-button class="cancel" [disabled]="input.value == ''" (click)="clearInput(input)"><mat-icon>cancel</mat-icon></button>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill" subscriptSizing="dynamic">
         <mat-label>Roles</mat-label>
         <mat-select [(value)]="roles.defaultValue" (selectionChange)="applyRoleFilter($event)">
           @for (op of roles.options; track op) {
@@ -85,14 +85,9 @@
           <tr mat-row (click)="viewMapping(row)" *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
         @if (projects.length === 0) {
-          <div>
-            <mat-card appearance="outlined">
-              <mat-card-header>
-                <mat-card-title>
-                  <mat-icon>info</mat-icon>
-                {{'MAP.NO_MAPS_FOUND' | translate}}</mat-card-title>
-              </mat-card-header>
-            </mat-card>
+          <div class="no-maps-message">
+            <mat-icon>info</mat-icon>
+            {{'MAP.NO_MAPS_FOUND' | translate}}
           </div>
         }
       </div>

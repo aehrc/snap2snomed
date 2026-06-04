@@ -47,7 +47,7 @@
           <!-- Assign As-->
           <div class="task-radio">
             <label id="assignAs-label">{{ 'TASK.ASSIGN_AS' | translate }}</label>
-            <mat-radio-group id="type" name="type" class="task-radio-group" aria-labelledby="assignAs-label"
+            <mat-radio-group id="type" name="type" class="task-radio-group accent-radio" aria-labelledby="assignAs-label"
               [(ngModel)]="task.type" #name="ngModel"
               [ngModelOptions]="ngModelOptions"
               (change)="updateDescription(name.dirty)" required>
@@ -62,7 +62,7 @@
             <div class="task-radio">
               <label id="assignRows-label">{{ 'TASK.ASSIGN_ROWS' | translate }}</label>
               <mat-radio-group id="assignRows" name="assignRows" aria-labelledby="assignRows-label"
-                class="task-radio-group" [value]="assignRows"
+                class="task-radio-group accent-radio" [value]="assignRows"
                 (change)="setRowSelection($event, name.dirty)" required>
                 @for (row of row_options; track row) {
                   <mat-radio-button class="task-radio-button" [value]="row"

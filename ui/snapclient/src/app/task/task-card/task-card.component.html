@@ -9,8 +9,10 @@
             <div class="description">{{task.description}}</div>
           </mat-card-title>
           <mat-card-title>
-            <mat-progress-bar mode="determinate" [value]="percentComplete"></mat-progress-bar>
-            <div class="mat-progress-text"> {{rounded(percentComplete)}}% </div>
+            <div class="progress-container">
+              <mat-progress-bar mode="determinate" [value]="percentComplete"></mat-progress-bar>
+              <div class="mat-progress-text"> {{rounded(percentComplete)}}% </div>
+            </div>
           </mat-card-title>
         </mat-card-header>
         <mat-divider></mat-divider>

@@ -342,7 +342,7 @@ export class MappingAddComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(SourceImportComponent, {
-      width: this.width, data
+      width: this.width, maxWidth: this.width, data
     });
 
     dialogRef.afterClosed().subscribe(
@@ -383,7 +383,7 @@ export class MappingAddComponent implements OnInit {
   onImportMapping($event: Event): void {
     $event.preventDefault();
     const dialogRef = this.dialog.open(MappingImportComponent, {
-      width: this.width, data: {
+      width: this.width, maxWidth: this.width, data: {
         source: new MappingImportSource(),
         createMode: true
       }

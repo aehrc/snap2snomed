@@ -424,3 +424,46 @@ flag {
   --mat-chip-selected-trailing-icon-color: white;
 }
 
+/* Accent display chip — use mat-chip (not mat-chip-option) for non-selectable accent chips */
+.mat-mdc-chip.accent-chip {
+  --mat-chip-elevated-container-color: #ff4081;
+  --mat-chip-label-text-color: white;
+  --mat-chip-with-icon-icon-color: white;
+  --mat-chip-outline-color: transparent;
+}
+
+/* Badge styling — primary colour, rounded square, not squished */
+.mat-badge-content {
+  background-color: #3F51B5 !important;
+  color: white !important;
+  border-radius: 4px !important;
+  width: auto !important;
+  min-width: 14px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+  padding: 0 4px !important;
+}
+
+/* Select panel that sizes to its content rather than the trigger width */
+.fit-content-panel {
+  min-width: fit-content !important;
+}
+
+/* Accent radio buttons — replaces mat-radio-button color="accent" */
+.accent-radio .mat-mdc-radio-button {
+  --mat-radio-selected-icon-color: #ff4081;
+  --mat-radio-selected-hover-icon-color: #ff4081;
+  --mat-radio-selected-focus-icon-color: #ff4081;
+  --mat-radio-selected-pressed-icon-color: #ff4081;
+  --mat-radio-checked-ripple-color: #ff4081;
+}
+
+/* Accent checkboxes — replaces mat-checkbox color="accent" */
+.mat-mdc-checkbox.accent-checkbox {
+  --mat-checkbox-selected-icon-color: #ff4081;
+  --mat-checkbox-selected-hover-icon-color: #ff4081;
+  --mat-checkbox-selected-focus-icon-color: #ff4081;
+  --mat-checkbox-selected-pressed-icon-color: #ff4081;
+  --mat-checkbox-selected-checkmark-color: white;
+}
+

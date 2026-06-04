@@ -110,13 +110,32 @@ small {
 }
 
 .mat-mdc-progress-bar {
-  height: 20px;
+  --mat-progress-bar-active-indicator-height: 20px;
+  --mat-progress-bar-track-height: 20px;
+  --mat-progress-bar-track-shape: 10px;
   border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+::ng-deep .mat-mdc-card-title {
+  overflow: visible !important;
+}
+
+::ng-deep .mat-mdc-card-header {
+  overflow: visible !important;
+}
+
+.progress-container {
+  position: relative;
+  width: 100%;
 }
 
 .mat-progress-text {
   position: absolute;
-  padding: 5px;
+  top: 0;
+  left: 5px;
+  height: 20px;
+  line-height: 20px;
   color: white;
   font-size: 0.8em;
 }

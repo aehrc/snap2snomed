@@ -1,5 +1,5 @@
 .mapping-edit {
-  background-color: #e6e6e6;
+  background-color: white;
   width: 840px;
 }
 
@@ -81,7 +81,7 @@ ul.sources-list li {
 /** columns **/
 .mat-column-filter-id,
 .mat-column-id {
-  width: 35px;
+  width: 50px;
   text-align: center;
 }
 

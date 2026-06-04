@@ -786,7 +786,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   clickImport(): void {
     const dialogRef = this.dialog.open(MappingImportComponent, {
-      width: this.import_dialog_width, data: {
+      width: this.import_dialog_width, maxWidth: this.import_dialog_width, data: {
         source: new MappingImportSource(),
         createMode: false
       }

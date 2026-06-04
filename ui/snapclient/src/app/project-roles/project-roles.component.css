@@ -21,7 +21,7 @@
 }
 
 .mat-mdc-header-cell {
-  padding-left: 0;
+  padding: 0;
 }
 
 mat-header-cell.mat-sort-header {
@@ -32,12 +32,18 @@ mat-header-cell.mat-sort-header {
   max-width: 110px;
 }
 
+.mat-column-filter_name .filterclass {
+  padding-right: 8px;
+}
+
 .mat-column-filter_role {
   max-width: 110px;
 }
 
 .filterclass {
-  min-width: 98%
+  width: 100%;
+  max-width: 100%;
+  margin: 8px 0;
 }
 
 .notInProject {

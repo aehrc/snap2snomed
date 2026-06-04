@@ -27,7 +27,7 @@
 
       <ng-container matColumnDef="filter_name">
         <mat-header-cell *matHeaderCellDef [attr.colspan]="1">
-          <mat-form-field class="filterclass" appearance="outline">
+          <mat-form-field class="filterclass" appearance="outline" subscriptSizing="dynamic">
             <input matInput autocapitalize="off" autocomplete="false" list="no_name"
               [formControl]="usernameFilterControl">
               <datalist id="no_name"></datalist>
@@ -37,9 +37,9 @@
 
         <ng-container matColumnDef="filter_role">
           <mat-header-cell *matHeaderCellDef [attr.colspan]="1">
-            <mat-form-field class="filterclass" appearance="outline">
+            <mat-form-field class="filterclass" appearance="outline" subscriptSizing="dynamic">
               <mat-select [(ngModel)]="filterValues.project_role" (selectionChange)="applyFilter()"
-                multiple>
+                multiple panelClass="fit-content-panel">
                 @for (role of projectRoles; track role) {
                   <mat-option [id]="role.toString()" [value]="role">
                     {{'ROLE.' + role | translate}}

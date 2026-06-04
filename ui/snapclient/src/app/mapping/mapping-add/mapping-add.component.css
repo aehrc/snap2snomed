@@ -31,6 +31,7 @@
 
 .mat-mdc-card {
   padding: 25px;
+  box-shadow: none !important;
 }
 
 .source-field {
@@ -117,7 +118,13 @@ table.details-table td {
 }
 
 button#delete {
-  float: right;
+  margin-left: auto;
+}
+
+button#cancel {
+  --mat-button-protected-label-text-color: black;
+  --mat-button-protected-container-color: white;
+  margin-left: 8px;
 }
 
 /* Blue button for authoring mode when enabled, grey when disabled */

@@ -1,6 +1,6 @@
 <div class="full-page-container mat-elevation-z8">
   <form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
-    <mat-card appearance="outlined">
+    <mat-card>
       <mat-card-header>
         <mat-card-title>{{ getFormModeTextForTranslation() | translate }}</mat-card-title>
       </mat-card-header>
@@ -143,7 +143,7 @@
                   }
                   <a href="https://docs.snomed.org/snomed-ct-specifications/snomed-ct-expression-constraint-language/appendices/appendix-d-ecl-quick-reference" target="_blank">{{ 'MAP.ECL_HELP' | translate }}</a>
                   <mat-hint align="end">
-                    {{mappingModel.toScope?.length || 0}}/{{MAX_TARGETSCOPE}}
+                    {{mappingModel.toScope.length || 0}}/{{MAX_TARGETSCOPE}}
                   </mat-hint>
                 </mat-form-field>
                 @if (mode === 'FORM.CREATE' && !formGroup.controls.dualMapMode.value) {

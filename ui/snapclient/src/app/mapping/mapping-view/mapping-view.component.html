@@ -24,9 +24,10 @@
               </div>
             } @else {
               <p>
-                <mat-chip-option class="accent-chip" selected>
-                  <mat-icon>warning</mat-icon>
-                {{'MAP.NO_MY_TASKS' | translate}}</mat-chip-option>
+                <mat-chip class="accent-chip">
+                  <mat-icon matChipAvatar>warning</mat-icon>
+                  {{'MAP.NO_MY_TASKS' | translate}}
+                </mat-chip>
               </p>
             }
             <div class="button-row">

@@ -2,6 +2,8 @@
   height: calc(100vh - 249px);
   margin: 10px;
   background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
 }
 
 .container.has-error {
@@ -9,30 +11,35 @@
 }
 
 .container-scroll-list {
-  height: calc(100vh - 306px);
+  flex: 1;
   overflow-y: auto;
   width: 100%;
 }
 
 .container-scroll-list.has-error {
-  height: calc(100vh - 385px);
+  flex: 1;
 }
 
 .filter {
   width: 300px;
   --mat-form-field-filled-container-color: white;
+  margin-left: 0;
 }
 
 .header {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
   position: sticky;
   width: 100%;
   top: 0;
   z-index: 2;
+  background-color: #fafafa;
 }
 
 .mapping-add {
-  background-color: #e6e6e6;
+  background-color: white;
   width: 840px;
 }
 
@@ -54,7 +61,8 @@ mat-toolbar {
 }
 
 .mat-column-actions {
-  width: 8%;
+  width: 200px;
+  white-space: nowrap;
 }
 
 .mat-column-description {
@@ -87,9 +95,11 @@ mat-toolbar {
   --mat-form-field-filled-label-text-size: 12px;
   --mat-select-trigger-text-size: 12px;
   margin-left: 10px;
-  margin-top: 6px;
-  float: left;
-  z-index: 3;
+}
+
+
+mat-paginator {
+  flex: 1;
 }
 
 .mat-mdc-row {
@@ -102,8 +112,9 @@ button.cancel {
   border: 0;
 }
 
-button[mat-stroked-button] mat-icon {
-  vertical-align: middle;
+button[mat-stroked-button] {
+  --mat-button-outlined-icon-spacing: 0px;
+  --mat-button-outlined-icon-offset: 0px;
 }
 
 table {
@@ -125,13 +136,18 @@ table {
   }
 }
 
-@media only screen and (max-height: 920px) {
-  .container-scroll-list {
-    height: calc(99vh - 249px);
-  }
-}
 
 .mat-mdc-row:hover .mat-mdc-cell {
   background-color: #dcf1fc;
+}
+
+.no-maps-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: white;
+  font-size: 1.2em;
 }
 
