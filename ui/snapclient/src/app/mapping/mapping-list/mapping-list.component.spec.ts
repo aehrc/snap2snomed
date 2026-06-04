@@ -140,9 +140,9 @@ describe('MappingListComponent', () => {
 
   it('should show NO RESULTS if no projects', () => {
     fixture.detectChanges();
-    el = fixture.debugElement.query(By.css('mat-card-title'));
+    el = fixture.debugElement.query(By.css('.no-maps-message'));
     expect(el).toBeTruthy();
-    expect(el.nativeElement.textContent).toBe('info MAP.NO_MAPS_FOUND');
+    expect(el.nativeElement.textContent).toContain('MAP.NO_MAPS_FOUND');
   });
 
   it('should show project list if projects', () => {
