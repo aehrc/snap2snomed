@@ -52,6 +52,7 @@
             "extractLicenses": false,
             "sourceMap": true,
             "optimization": false,
+            "outputHashing": "all",
             "namedChunks": true,
             "browser": "src/main.ts"
           },
