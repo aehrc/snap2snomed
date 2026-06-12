@@ -40,10 +40,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-import javax.validation.Validator;
-import javax.xml.bind.DatatypeConverter;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Validator;
+import java.util.HexFormat;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -139,7 +139,7 @@ public class CodeSetImportService {
         statement.setLong(4, code.getImportedCodeSet().getId());
         statement.addBatch();
       }
-      statement.executeLargeBatch();
+      statement.executeBatch();
 
       final PreparedStatement additionalColumnsStatement2 = connection.prepareStatement("insert into imported_code_additional_columns (imported_code_id, value, collection_order) values (?, ?, ?)");
       final ResultSet generatedKeys2 = statement.getGeneratedKeys();
@@ -157,13 +157,13 @@ public class CodeSetImportService {
         }
 
         if (batchCount >= importBatchSize) {
-          additionalColumnsStatement2.executeLargeBatch();
+          additionalColumnsStatement2.executeBatch();
           batchCount = 0;
         }
 
       }
 
-      additionalColumnsStatement2.executeLargeBatch(); // flush the last few records.
+      additionalColumnsStatement2.executeBatch(); // flush the last few records.
 
     }
   }
@@ -260,7 +260,7 @@ public class CodeSetImportService {
           statement.addBatch();
         }
       }
-      statement.executeLargeBatch();
+      statement.executeBatch();
 
       // Obsolete: we now take the status from the file, or use DRAFT if not provided for all rows
       // Set imported MapRows to DRAFT for the map
@@ -284,7 +284,7 @@ public class CodeSetImportService {
         statement.setLong(4, mapRowTargetParam.getMapRowTarget().getRow().getId());
         statement.addBatch();
       }
-      statement.executeLargeBatch();
+      statement.executeBatch();
     }
 
     int getInsertCount() {
@@ -333,8 +333,8 @@ public class CodeSetImportService {
           String code;
           // If delimiter is null we only read lines and auto-generate ids
           if (importDetails.getDelimiter() == null) {
-            code = DatatypeConverter.printHexBinary(md.digest(csvRecord.get(importDetails.getDisplayColumnIndex()).getBytes()))
-                .toLowerCase().trim();
+            code = HexFormat.of().formatHex(md.digest(csvRecord.get(importDetails.getDisplayColumnIndex()).getBytes()))
+                .trim();
             importDetails.setDisplayColumnIndex(0);
           } else {
             code = csvRecord.get(importDetails.getCodeColumnIndex()).trim();

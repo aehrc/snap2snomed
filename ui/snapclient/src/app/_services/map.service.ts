@@ -15,7 +15,7 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Mapping} from '../_models/mapping';
 import {Project} from '../_models/project';

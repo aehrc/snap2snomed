@@ -23,8 +23,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
  
+ import java.util.HashSet;
  import java.util.Set;
- import javax.validation.constraints.NotNull;
+ import jakarta.validation.constraints.NotNull;
  
  import org.snomed.snap2snomed.model.enumeration.MapStatus;
  import org.snomed.snap2snomed.model.enumeration.MappingRelationship;
@@ -78,7 +79,7 @@ import lombok.AllArgsConstructor;
       this.targetDisplay = target.getTargetDisplay();
       this.relationship = target.getRelationship();
       this.flagged = target.isFlagged();
-      this.targetTags = target.getTags();
+      this.targetTags = target.getTags() != null ? new HashSet<>(target.getTags()) : null;
     }
     if (row.getSourceCode().getAdditionalColumns().size() > 0) {
       this.additionalColumns = row.getSourceCode().getAdditionalColumns();
@@ -138,7 +139,7 @@ import lombok.AllArgsConstructor;
       this.targetDisplay = target.getTargetDisplay();
       this.relationship = target.getRelationship();
       this.flagged = target.isFlagged();
-      this.targetTags = target.getTags();
+      this.targetTags = target.getTags() != null ? new HashSet<>(target.getTags()) : null;
     }
     if (row.getSourceCode().getAdditionalColumns().size() > 0) {
       this.additionalColumns = row.getSourceCode().getAdditionalColumns();
@@ -187,7 +188,7 @@ import lombok.AllArgsConstructor;
       this.targetDisplay = target.getTargetDisplay();
       this.relationship = target.getRelationship();
       this.flagged = target.isFlagged();      
-      this.targetTags = target.getTags();
+      this.targetTags = target.getTags() != null ? new HashSet<>(target.getTags()) : null;
     }
     if (row.getSourceCode().getAdditionalColumns().size() > 0) {
       this.additionalColumns = row.getSourceCode().getAdditionalColumns();

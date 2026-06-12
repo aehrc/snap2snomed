@@ -17,7 +17,7 @@
 package org.snomed.snap2snomed.problem.config;
 
 import java.net.URI;
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 import org.snomed.snap2snomed.problem.mapping.InvalidStateTransitionProblem;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

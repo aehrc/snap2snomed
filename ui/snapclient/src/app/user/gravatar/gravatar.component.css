@@ -13,7 +13,8 @@ div {
   height: 2.2em;
   width: 2.2em;
   line-height: 2.2em;
-  opacity: 90%
+  opacity: 90%;
+  border-radius: 50%;
 }
 
 #gravatar {

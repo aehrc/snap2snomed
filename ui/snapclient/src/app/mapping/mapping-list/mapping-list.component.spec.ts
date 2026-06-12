@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {MappingListComponent} from './mapping-list.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
 import {MockStore, provideMockStore} from '@ngrx/store/testing';
@@ -45,6 +45,17 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTableModule} from "@angular/material/table";
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {ProjectBadgesComponent} from '../../project-badges/project-badges.component';
+import {UserChipComponent} from '../../user/user-chip/user-chip.component';
+import {GravatarComponent} from '../../user/gravatar/gravatar.component';
 
 describe('MappingListComponent', () => {
   let component: MappingListComponent;
@@ -58,9 +69,16 @@ describe('MappingListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [
+        MappingListComponent,
+        InitialsPipe,
+        LastupdatedPipe,
+        ErrormessageComponent,
+        ProjectBadgesComponent,
+        UserChipComponent,
+        GravatarComponent
+    ],
+    imports: [RouterTestingModule,
         MatButtonModule,
         MatDialogModule,
         MatDividerModule,
@@ -72,32 +90,36 @@ describe('MappingListComponent', () => {
         MatChipsModule,
         NoopAnimationsModule,
         MatSnackBarModule,
+        MatSidenavModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatLabel,
+        MatSelectModule,
+        MatPaginatorModule,
+        MatBadgeModule,
+        MatTooltipModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory
+            }
+        })],
+    providers: [
         { provide: APP_CONFIG, useValue: {} },
-        {provide: MatDialogRef, useValue: {}},
-        {provide: MAT_DIALOG_DATA, useValue: {}},
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
         provideMockStore({
-        initialState: initialAppState,
-        selectors: [
-          {selector: selectMappingError, value: 'MockError'},
-          {selector: selectCurrentMapping, value: new Mapping()},
-          {selector: selectCurrentUser, value: user},
-        ],
-      }), TranslateService],
-      declarations: [
-        MappingListComponent,
-        InitialsPipe,
-        LastupdatedPipe,
-        ErrormessageComponent]
-    }).compileComponents();
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectMappingError, value: 'MockError' },
+                { selector: selectCurrentMapping, value: new Mapping() },
+                { selector: selectCurrentUser, value: user },
+            ],
+        }), TranslateService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+}).compileComponents();
     translateService = TestBed.inject(TranslateService);
     store = TestBed.inject(MockStore);
     fixture = TestBed.createComponent(MappingListComponent);
@@ -118,9 +140,9 @@ describe('MappingListComponent', () => {
 
   it('should show NO RESULTS if no projects', () => {
     fixture.detectChanges();
-    el = fixture.debugElement.query(By.css('mat-card-title'));
+    el = fixture.debugElement.query(By.css('.no-maps-message'));
     expect(el).toBeTruthy();
-    expect(el.nativeElement.textContent).toBe('info MAP.NO_MAPS_FOUND');
+    expect(el.nativeElement.textContent).toContain('MAP.NO_MAPS_FOUND');
   });
 
   it('should show project list if projects', () => {

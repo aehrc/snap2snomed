@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import org.snomed.snap2snomed.controller.dto.AutomapRowDto;
 import org.snomed.snap2snomed.controller.dto.IndexSpecification;
-import org.snomed.snap2snomed.model.Project;
 import org.snomed.snap2snomed.model.Task;
 import org.snomed.snap2snomed.model.enumeration.MapStatus;
 import org.snomed.snap2snomed.model.enumeration.TaskType;

@@ -23,12 +23,9 @@ import org.snomed.snap2snomed.controller.dto.MappingImportResponse;
 import org.snomed.snap2snomed.controller.dto.ValidationResult;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-
-import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.is;
+import java.io.IOException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ValidateCodesIT extends IntegrationTestBase {

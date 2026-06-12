@@ -1,5 +1,9 @@
-.mat-dialog-content {
+.mat-mdc-dialog-content {
   text-align: center;
+}
+
+button[mat-raised-button] {
+  --mat-button-protected-label-text-color: black;
 }
 
 .mat-dialog-subtitle {

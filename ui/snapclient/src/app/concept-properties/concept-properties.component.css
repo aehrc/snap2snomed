@@ -3,20 +3,20 @@
   max-height: 200px;
 }
 
-.mat-card {
+.mat-mdc-card {
   max-height: 340px;
 }
 
-.mat-table {
+.mat-mdc-table {
   margin-top: 0;
   display: table;
 }
 
-.mat-row {
+.mat-mdc-row {
   height: auto;
 }
 
-.mat-row:nth-child(even){
+.mat-mdc-row:nth-child(even){
   background-color: #00000010;
 }
 
@@ -24,7 +24,7 @@
   border-top: 2px solid black;
 }
 
-.properties .mat-cell {
+.properties .mat-mdc-cell {
   padding: 3px 6px;
 }
 
@@ -39,7 +39,7 @@
   min-width: 7em;
 }
 
-.mat-chip {
+.mat-mdc-chip {
   min-height: 20px;
   text-align: center;
   padding: 0 4px;

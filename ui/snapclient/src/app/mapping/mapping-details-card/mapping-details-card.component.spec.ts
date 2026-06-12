@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -29,6 +29,12 @@ import { Project } from 'src/app/_models/project';
 import {LastupdatedPipe} from 'src/app/_utils/lastupdated_pipe';
 
 import { MappingDetailsCardComponent } from './mapping-details-card.component';
+import { TargetVersionComponent } from 'src/app/target-version/target-version.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MappingDetailsCardComponent', () => {
   let component: MappingDetailsCardComponent;
@@ -40,37 +46,42 @@ describe('MappingDetailsCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {appName: 'Snap2SNOMED', authDomainUrl: 'anything'}},
-        provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {
-              selector: selectAuthorizedProjects,
-              value: {project: project},
-            }
-          ],}),
-      ],
-      declarations: [
+    declarations: [
         MappingDetailsCardComponent,
-        LastupdatedPipe
-      ]
-    })
+        LastupdatedPipe,
+        TargetVersionComponent
+    ],
+    imports: [RouterTestingModule.withRoutes([]),
+        NoopAnimationsModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatLabel,
+        MatSelectModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: { appName: 'Snap2SNOMED', authDomainUrl: 'anything' } },
+        provideMockStore({
+            initialState: initialAppState,
+            selectors: [
+                {
+                    selector: selectAuthorizedProjects,
+                    value: { project: project },
+                }
+            ],
+        }),
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     .compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(fakeAsync(() => {
 
     mapping = new Mapping();
     mapping.id = '2';
@@ -93,7 +104,9 @@ describe('MappingDetailsCardComponent', () => {
     component = fixture.componentInstance;
     component.mapping = mapping;
     fixture.detectChanges();
-  });
+    tick();
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

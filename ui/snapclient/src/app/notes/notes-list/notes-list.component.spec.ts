@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, tick, TestBed} from '@angular/core/testing';
 
 import {NotesListComponent} from './notes-list.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
@@ -46,6 +46,9 @@ import {FormsModule} from '@angular/forms';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ErrorNotifier} from "../../errorhandler/errornotifier";
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {DroppableDirective} from '../../_directives/droppable.directive';
+import {NotesItemComponent} from '../notes-item/notes-item.component';
 
 describe('NotesListComponent', () => {
   let component: NotesListComponent;
@@ -58,9 +61,8 @@ describe('NotesListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
+    declarations: [NotesListComponent, DroppableDirective, NotesItemComponent],
+    imports: [RouterTestingModule,
         MatButtonModule,
         MatIconModule,
         MatCardModule,
@@ -73,29 +75,30 @@ describe('NotesListComponent', () => {
         NoopAnimationsModule,
         FormsModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [
-        {provide: APP_CONFIG, useValue: {}},
-        {provide: MatDialogRef, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })],
+    providers: [
+        { provide: APP_CONFIG, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
         provideMockStore({
-          initialState: initialAppState,
-          selectors: [
-            {selector: selectCurrentMapping, value: mapping},
-          ],
+            initialState: initialAppState,
+            selectors: [
+                { selector: selectCurrentMapping, value: mapping },
+            ],
         }), TranslateService, ErrorNotifier,
-        {provide: MapService, useValue: mockMapService}],
-      declarations: [NotesListComponent]
-    })
+        { provide: MapService, useValue: mockMapService },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
       .compileComponents();
   });
 
-  beforeEach(() => {
+  beforeEach(fakeAsync(() => {
     fixture = TestBed.createComponent(NotesListComponent);
     component = fixture.componentInstance;
     const row = {
@@ -104,7 +107,9 @@ describe('NotesListComponent', () => {
     } as MapRow;
     component.newNote = new Note(null, '', new User(), '', '', row, NoteCategory.USER);
     fixture.detectChanges();
-  });
+    tick();
+    fixture.detectChanges();
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -121,12 +126,16 @@ describe('NotesListComponent', () => {
     expect(el.nativeElement.disabled).toBeTruthy();
   });
 
-  it('should show send button - enabled', () => {
+  it('should show send button - enabled', fakeAsync(() => {
     expect(component.newNote).toBeTruthy();
     if (component.newNote) {
-      component.newNote.noteText = 'tests';
+      const textarea = fixture.debugElement.query(By.css('textarea'));
+      textarea.nativeElement.value = 'tests';
+      textarea.triggerEventHandler('input', {target: textarea.nativeElement});
+      fixture.detectChanges();
+      tick();
       fixture.detectChanges();
       expect(fixture.debugElement.nativeElement.querySelector('#notes button').disabled).toBeFalsy();
     }
-  });
+  }));
 });

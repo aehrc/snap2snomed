@@ -21,10 +21,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 import org.snomed.snap2snomed.model.*;
 import org.snomed.snap2snomed.model.enumeration.MapStatus;

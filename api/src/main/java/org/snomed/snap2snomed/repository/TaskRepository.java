@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -31,7 +32,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 @RepositoryRestResource
 public interface TaskRepository
-    extends RevisionRepository<Task, Long, Integer>, PagingAndSortingRepository<Task, Long> {
+    extends RevisionRepository<Task, Long, Integer>, PagingAndSortingRepository<Task, Long>, CrudRepository<Task, Long> {
 
   // ---------------------------------
   // Exported in REST interface

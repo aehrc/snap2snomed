@@ -6,27 +6,15 @@ locals {
     },
     {
       name = "spring.datasource.url"
-      value = "jdbc:mysql:aws://${aws_rds_cluster_instance.api.endpoint}:${aws_rds_cluster_instance.api.port}/${aws_rds_cluster.api.database_name}?cachePrepStmts=true&useServerPrepStmts=false&rewriteBatchedStatements=true&socketTimeout=480000"
+      value = "jdbc:aws-wrapper:mysql://${aws_rds_cluster_instance.api.endpoint}:${aws_rds_cluster_instance.api.port}/${aws_rds_cluster.api.database_name}?cachePrepStmts=true&useServerPrepStmts=false&rewriteBatchedStatements=true&socketTimeout=480000"
     },
     {
       name  = "spring.datasource.driverClassName",
-      value = "software.aws.rds.jdbc.mysql.Driver"
+      value = "software.amazon.jdbc.Driver"
     },
     {
       name  = "spring.jpa.database-platform",
-      value = "org.hibernate.dialect.MariaDBDialect"
-    },
-    {
-      name  = "spring.datasource.username",
-      value = aws_rds_cluster.api.master_username
-    },
-    {
-      name  = "spring.datasource.password",
-      value = var.database_password
-    },
-    {
-      name  = "snap2snomed.security.clientId",
-      value = var.client_id
+      value = "org.hibernate.dialect.MySQLDialect"
     },
     {
       name  = "spring.security.oauth2.resourceserver.jwt.issuer-uri",
@@ -35,10 +23,6 @@ locals {
     {
       name  = "snap2snomed.swagger.applicationVersion",
       value = var.application_version
-    },
-    {
-      name  = "sentry.dsn",
-      value = var.sentry_dsn
     },
     {
       name  = "sentry.environment",

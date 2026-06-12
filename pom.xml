@@ -24,17 +24,16 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.18</version>
+    <version>3.5.14</version>
   </parent>
+
+  <properties>
+    <tomcat.version>10.1.55</tomcat.version><!-- CVE-2026-41293 CRITICAL, CVE-2026-43512 CRITICAL, CVE-2026-41284 HIGH, CVE-2026-42498 HIGH, CVE-2026-43513 HIGH -->
+    <netty.version>4.1.133.Final</netty.version><!-- CVE-2026-42583 HIGH, CVE-2026-42584 HIGH, CVE-2026-42587 HIGH -->
+  </properties>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.flywaydb</groupId>
-        <artifactId>flyway-core</artifactId>
-        <version>7.15.0</version>
-       <!-- Version 8 of Flyway community no longer supports MySQL 5.7 but the latest Aurora MySQL LTS version is 5.7 -->
-      </dependency>
       <dependency>
         <groupId>org.yaml</groupId>
         <artifactId>snakeyaml</artifactId>

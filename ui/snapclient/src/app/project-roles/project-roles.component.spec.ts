@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 SNOMED International
+ * Copyright © 2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import {APP_CONFIG} from '../app.config';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../store/app.state';
 import {HttpLoaderFactory} from '../app.module';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {MatTableModule} from '@angular/material/table';
 import {UserService} from '../_services/user.service';
 import {MatSelectModule} from '@angular/material/select';
@@ -31,10 +31,15 @@ import {MatInputModule} from '@angular/material/input';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 import {MatSortModule} from '@angular/material/sort';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 import {MatSelectHarness} from '@angular/material/select/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InitialsPipe} from '../_utils/initialize_pipe';
+import {UserChipComponent} from '../user/user-chip/user-chip.component';
+import {GravatarComponent} from '../user/gravatar/gravatar.component';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ProjectRolesComponent', () => {
   let component: ProjectRolesComponent;
@@ -45,9 +50,8 @@ describe('ProjectRolesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        MatTableModule,
+    declarations: [ProjectRolesComponent, InitialsPipe, UserChipComponent, GravatarComponent],
+    imports: [MatTableModule,
         MatSelectModule,
         MatSortModule,
         BrowserAnimationsModule,
@@ -55,19 +59,19 @@ describe('ProjectRolesComponent', () => {
         // Hmm these two needed for the mat-selects to have text ??
         FormsModule,
         ReactiveFormsModule,
+        MatChipsModule,
+        MatTooltipModule,
         TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClientTestingModule]
-          }
-        })
-      ],
-      providers: [TranslateService, {provide: APP_CONFIG, useValue: {}},
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })],
+    providers: [TranslateService, { provide: APP_CONFIG, useValue: {} },
         { provide: UserService, useValue: userService },
-        provideMockStore({initialState: initialAppState})],
-      declarations: [ProjectRolesComponent, InitialsPipe]
-    })
+        provideMockStore({ initialState: initialAppState }), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     .compileComponents();
     translateService = TestBed.inject(TranslateService);
     fixture = TestBed.createComponent(ProjectRolesComponent);

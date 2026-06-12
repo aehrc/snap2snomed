@@ -27,9 +27,10 @@ import {TranslateService} from '@ngx-translate/core';
 import {Mapping} from '../_models/mapping';
 
 @Component({
-  selector: 'app-automap',
-  templateUrl: './automap.component.html',
-  styleUrls: ['./automap.component.css']
+    selector: 'app-automap',
+    templateUrl: './automap.component.html',
+    styleUrls: ['./automap.component.css'],
+    standalone: false
 })
 export class AutomapComponent implements OnInit {
   automapDialog: MatDialogRef<AutomapDialogComponent> | null = null;

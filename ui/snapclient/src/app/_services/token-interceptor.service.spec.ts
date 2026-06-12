@@ -17,10 +17,10 @@
 import {TestBed} from '@angular/core/testing';
 
 import {TokenInterceptor} from './token-interceptor.service';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../store/app.state';
-import {HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpRequest, HttpResponse} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpErrorResponse, HttpRequest, HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {APP_CONFIG} from '../app.config';
 import {take} from 'rxjs/operators';
 import {of} from 'rxjs';
@@ -37,13 +37,10 @@ describe('TokenInterceptorService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes(routes),
-        HttpClientTestingModule
-      ],
-      providers: [provideMockStore({initialState}),
-        {provide: APP_CONFIG, useValue: {}, HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}],
-    });
+    imports: [RouterTestingModule.withRoutes(routes)],
+    providers: [provideMockStore({ initialState }),
+        { provide: APP_CONFIG, useValue: {}, HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     httpClient = TestBed.inject(HttpClient);
     httpMock = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TokenInterceptor);

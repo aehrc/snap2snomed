@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022-23 SNOMED International
+ * Copyright © 2022-2026 SNOMED International
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import {ErrorInfo} from '../../errormessage/errormessage.component';
 import {MapService} from '../../_services/map.service';
 import {
   MapRow,
+  MapRowRelationship,
   MapRowStatus,
   mapRowStatusToIconName,
   MapView,
@@ -40,9 +41,8 @@ import {selectCurrentView} from 'src/app/store/mapping-feature/mapping.selectors
 import {MapViewParams, SourceNavigationService, SourceNavSet} from 'src/app/_services/source-navigation.service';
 import {Subscription} from 'rxjs';
 import {ViewContext} from 'src/app/store/mapping-feature/mapping.actions';
-import {ConceptNode} from '@csiro/shrimp-hierarchy-view';
 import {SelectionService} from 'src/app/_services/selection.service';
-import {Coding} from '../../store/fhir-feature/fhir.reducer';
+import {Coding, ConceptNode} from '../../store/fhir-feature/fhir.reducer';
 import {selectConceptHierarcy} from 'src/app/store/fhir-feature/fhir.selectors';
 import {ConceptHierarchy} from 'src/app/store/fhir-feature/fhir.actions';
 import {StatusUtils} from '../../_utils/status_utils';
@@ -63,9 +63,10 @@ export type SourceRow = {
 };
 
 @Component({
-  selector: 'app-mapping-detail',
-  templateUrl: './mapping-detail.component.html',
-  styleUrls: ['./mapping-detail.component.css']
+    selector: 'app-mapping-detail',
+    templateUrl: './mapping-detail.component.html',
+    styleUrls: ['./mapping-detail.component.css'],
+    standalone: false
 })
 export class MappingDetailComponent implements OnInit, OnDestroy {
 
@@ -74,7 +75,7 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
   source!: SourceRow;
   nodes: ConceptNode<Coding>[] = [];
   loadingHierarchy = false;
-  private timeout: NodeJS.Timeout | null = null;
+  private timeout: ReturnType<typeof setTimeout>| null = null;
   hierarchyView = 'tree';
   mapRows: MapView[] = [];
   rowId: string | null = null;
@@ -91,6 +92,7 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
   writeDisableUtils = WriteDisableUtils;
 
   currentSelection: any;
+  savingRelationship: MapRowRelationship | null = null;
 
   @Input() currentUser: User | null = null;
   @Input() task: Task | undefined;
@@ -338,6 +340,7 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
     $event.rowId = self.rowId ?? '';
     const mapView = $event;
     if (mapView.targetId === '' || mapView.hasChanged()) {
+      self.savingRelationship = (mapView.relationship as MapRowRelationship) ?? null;
       const targetRow = new TargetRow(
         mapView.rowId,
         mapView.targetId, mapView.targetCode, mapView.targetDisplay,
@@ -353,8 +356,10 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
             self.updateStatus(mapView.status as MapRowStatus);
           }
           this.targetChangedService.changeTarget(targetRow);
+          self.savingRelationship = null;
         },
         (err) => this.translate.get('ERROR.TARGETS_NOT_SAVED').subscribe((msg) => {
+          self.savingRelationship = null;
           this.error.message = msg;
         })
       );

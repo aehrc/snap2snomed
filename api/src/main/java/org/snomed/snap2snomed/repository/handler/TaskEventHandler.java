@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import org.snomed.snap2snomed.model.ImportedCode;
 import org.snomed.snap2snomed.model.Map;
 import org.snomed.snap2snomed.model.Project;
