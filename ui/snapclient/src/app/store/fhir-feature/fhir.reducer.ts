@@ -148,6 +148,12 @@ export function fhirReducer(state = initialFhirState, action: FhirActions): IFhi
         errorMessage: action.payload.error
       };
 
+    case FhirActionTypes.CONCEPT_HIERARCHY_CLEAR:
+      return {
+        ...state,
+        nodes: []
+      };
+
     default:
       return state;
   }

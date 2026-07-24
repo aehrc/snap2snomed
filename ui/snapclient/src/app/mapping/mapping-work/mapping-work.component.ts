@@ -43,7 +43,7 @@ import {SourceNavigationService} from 'src/app/_services/source-navigation.servi
 import {Coding, ConceptNode} from 'src/app/store/fhir-feature/fhir.reducer';
 import {SelectionService} from 'src/app/_services/selection.service';
 import {selectConceptHierarcy} from 'src/app/store/fhir-feature/fhir.selectors';
-import {ConceptHierarchy} from 'src/app/store/fhir-feature/fhir.actions';
+import {ConceptHierarchy, ConceptHierarchyClear} from 'src/app/store/fhir-feature/fhir.actions';
 import {FhirService} from 'src/app/_services/fhir.service';
 import {MapService} from 'src/app/_services/map.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -283,6 +283,7 @@ export class MappingWorkComponent implements OnInit, OnDestroy {
   toggleHierarchy(): void {
     this.hierarchyView = this.hierarchyView === 'tree' ? 'shrimp' : 'tree';
     localStorage.setItem('hierarchyView', this.hierarchyView);
+    this.nodes = [];
     this.handleSelection();
   }
 
@@ -307,6 +308,7 @@ export class MappingWorkComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.loading = false;
     this.automapping = false;
+    this.store.dispatch(new ConceptHierarchyClear());
     this.subscription.unsubscribe();
     // if (this.navigationSubscription) {
     //   this.navigationSubscription.unsubscribe();

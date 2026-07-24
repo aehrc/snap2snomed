@@ -20,6 +20,10 @@
   background-color: deepskyblue;
 }
 
+#map-details-button {
+  --mat-icon-button-icon-color: black;
+}
+
 .compact-table .mat-mdc-row {
   height: 30px;
 }

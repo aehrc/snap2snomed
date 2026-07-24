@@ -40,6 +40,7 @@ export enum FhirActionTypes {
   CONCEPT_HIERARCHY = "[Fhir] Concept Hierarchy",
   CONCEPT_HIERARCHY_SUCCESS = "Concept Hierarchy Succeeded",
   CONCEPT_HIERARCHY_FAILED = "Concept Hierarchy Failed",
+  CONCEPT_HIERARCHY_CLEAR = "[Fhir] Concept Hierarchy Clear",
 }
 
 export class LoadReleases implements Action {
@@ -165,6 +166,10 @@ export class ConceptHierarchyFailure implements Action {
   }
 }
 
+export class ConceptHierarchyClear implements Action {
+  readonly type = FhirActionTypes.CONCEPT_HIERARCHY_CLEAR;
+}
+
 export type FhirActions = LoadReleases
   | LoadReleasesSuccess
   | LoadReleasesFailure
@@ -183,4 +188,5 @@ export type FhirActions = LoadReleases
   | ConceptHierarchy
   | ConceptHierarchySuccess
   | ConceptHierarchyFailure
+  | ConceptHierarchyClear
 ;

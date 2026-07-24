@@ -44,7 +44,7 @@ import {ViewContext} from 'src/app/store/mapping-feature/mapping.actions';
 import {SelectionService} from 'src/app/_services/selection.service';
 import {Coding, ConceptNode} from '../../store/fhir-feature/fhir.reducer';
 import {selectConceptHierarcy} from 'src/app/store/fhir-feature/fhir.selectors';
-import {ConceptHierarchy} from 'src/app/store/fhir-feature/fhir.actions';
+import {ConceptHierarchy, ConceptHierarchyClear} from 'src/app/store/fhir-feature/fhir.actions';
 import {StatusUtils} from '../../_utils/status_utils';
 import {WriteDisableUtils} from "../../_utils/write_disable_utils";
 import {debounceTime} from "rxjs/operators";
@@ -180,6 +180,7 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
   toggleHierarchy(): void {
     this.hierarchyView = this.hierarchyView === 'tree' ? 'shrimp' : 'tree';
     localStorage.setItem('hierarchyView', this.hierarchyView);
+    this.nodes = [];
     this.handleSelection();
   }
 
@@ -202,6 +203,7 @@ export class MappingDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.store.dispatch(new ConceptHierarchyClear());
     this.subscription.unsubscribe();
   }
 

@@ -32,6 +32,11 @@
   margin-top: 1.2em;
 }
 
+#previous-code-button,
+#next-code-button {
+  color: black;
+}
+
 .status-group {
   width: 400px; /* FIXED WIDTH NEEDED TO PREVENT JUMPING */
   overflow-x: auto;
@@ -173,8 +178,12 @@ h2 {
 }
 
 .mat-button-toggle-checked {
-  background-color: #ff4081;
-  color: #ffffff;
+  --mat-button-toggle-legacy-selected-state-background-color: #ff4081;
+  --mat-button-toggle-legacy-selected-state-text-color: #ffffff;
+  --mat-button-toggle-selected-state-background-color: #ff4081;
+  --mat-button-toggle-selected-state-text-color: #ffffff;
+  background-color: #ff4081 !important;
+  color: #ffffff !important;
 }
 
 .mat-mdc-unelevated-button.mat-button-disabled.mat-button-disabled {

@@ -149,7 +149,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>{{'TABLE.ACTIONS' | translate}}</th>
           <td mat-cell *matCellDef="let maprow; let i = index">
-            <button mat-icon-button #tooltip="matTooltip" matTooltip="{{'MAP.MAP_DETAILS' | translate}}"
+            <button id="map-details-button" mat-icon-button #tooltip="matTooltip" matTooltip="{{'MAP.MAP_DETAILS' | translate}}"
               (click)="detailsView(i)"
               ><mat-icon>loupe</mat-icon></button>
             </td>

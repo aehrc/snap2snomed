@@ -26,6 +26,7 @@
                         @if (!automapping) {
                           <span>
                             <button mat-stroked-button
+                              id="automap-button"
                               matTooltip="{{'AUTOMAP.AUTOMAP_TOOLTIP' | translate}}"
                               matTooltipShowDelay="1000"
                               (click)="launchAutomap()"
@@ -62,7 +63,7 @@
               <button class="view-toggle" mat-icon-button (click)="toggleHierarchy()"
                 #tooltip="matTooltip"
                 matTooltip="{{'MAP.SWITCH_VIEW' | translate}}">
-                <mat-icon color="{{hierarchyView === 'tree' ? 'accent' : undefined}}">account_tree</mat-icon>
+                <mat-icon [class.accent-icon]="hierarchyView === 'tree'">account_tree</mat-icon>
               </button>
               @if (hierarchyView === 'tree') {
                 <div>

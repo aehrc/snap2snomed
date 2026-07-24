@@ -78,7 +78,7 @@
           <!-- mat-checkbox is in a div to stop multiple items appearing on the one line and to make scroll work -->
           @for (column of hideShowColumns; track column) {
             <div mat-menu-item>
-              <mat-checkbox [checked]="true" (change)="onHideShowChange($event, column)">{{getHideShowItemLabel(column) | translate}}</mat-checkbox>
+              <mat-checkbox class="accent-checkbox" [checked]="true" (change)="onHideShowChange($event, column)">{{getHideShowItemLabel(column) | translate}}</mat-checkbox>
             </div>
           }
         </mat-menu>

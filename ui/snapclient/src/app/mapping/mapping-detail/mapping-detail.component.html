@@ -43,7 +43,7 @@
           </table>
         </div>
         <div class="col-status">
-          <button mat-button type="button" title="Previous code" (click)="loadPrevious()"
+          <button id="previous-code-button" mat-button type="button" title="Previous code" (click)="loadPrevious()"
             [disabled]="!hasPrevious()">
             <mat-icon>navigate_before</mat-icon>
             {{'MAP.PREVIOUS' | translate}}
@@ -59,7 +59,7 @@
               }
             </mat-button-toggle-group>
           </span>
-          <button mat-button type="button" title="Next code" (click)="loadNext()"
+          <button id="next-code-button" mat-button type="button" title="Next code" (click)="loadNext()"
             [disabled]="!hasNext()">{{'MAP.NEXT' | translate}}
             <mat-icon>navigate_next</mat-icon>
           </button>
@@ -93,7 +93,7 @@
       <div class="tree-view card-col">
         <button class="view-toggle" mat-icon-button (click)="toggleHierarchy()" #tooltip="matTooltip"
           matTooltip="{{'MAP.SWITCH_VIEW' | translate}}">
-          <mat-icon color="{{hierarchyView === 'tree' ? 'accent' : undefined}}">account_tree</mat-icon>
+          <mat-icon [class.accent-icon]="hierarchyView === 'tree'">account_tree</mat-icon>
         </button>
         @if (hierarchyView === 'tree') {
           <div>

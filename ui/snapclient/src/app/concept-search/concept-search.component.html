@@ -4,7 +4,7 @@
       <ng-content select=".search-title"></ng-content>
     </mat-card-title>
     <span class="activeOnly pull-right">
-      <mat-checkbox [checked]="activeOnly"
+      <mat-checkbox class="accent-checkbox" [checked]="activeOnly"
       (change)="updateActiveOnly($event)">{{'SEARCH.ACTIVE_ONLY' | translate}}</mat-checkbox>
     </span>
   </mat-card-header>
