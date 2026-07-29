@@ -386,6 +386,7 @@ flag {
 .mat-mdc-mini-fab.btn-accent {
   --mdc-fab-small-container-color: #ff4081;
   --mdc-fab-small-icon-color: white;
+  --mat-fab-small-container-shape: 50%;
 }
 
 .mat-mdc-icon-button.btn-accent {
@@ -435,6 +436,29 @@ flag {
   --mat-chip-selected-label-text-color: white;
   --mat-chip-with-icon-selected-icon-color: white;
   --mat-chip-selected-trailing-icon-color: white;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  border-radius: 50% !important;
+  padding: 0 !important;
+}
+
+.mat-mdc-chip-option.accent-chip .mdc-evolution-chip__action--primary {
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+  justify-content: center;
+}
+
+.mat-mdc-chip-option.accent-chip .mat-mdc-chip-action-label {
+  padding: 0;
+  width: 100%;
+  text-align: center;
+  overflow: visible;
+}
+
+.mat-mdc-chip-option.accent-chip .mat-mdc-chip-graphic {
+  display: none;
 }
 
 /* Accent display chip — use mat-chip (not mat-chip-option) for non-selectable accent chips */

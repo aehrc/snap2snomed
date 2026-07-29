@@ -109,7 +109,11 @@
   margin-left: 5px;
 }
 
-#automap-button {
+#automap-button:not(:disabled) {
+  color: black;
+}
+
+#bulk-change-button:not(:disabled) {
   color: black;
 }
 

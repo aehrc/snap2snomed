@@ -28,3 +28,15 @@ button.add {
   max-height: 305px;
   overflow-y: auto;
 }
+
+.notes-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  font-size: 0.75em;
+}

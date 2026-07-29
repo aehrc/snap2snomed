@@ -15,12 +15,11 @@
  */
 
 const { writeFile } = require('fs');
-const yargs = require('yargs/yargs');
-const argv = yargs(process.argv.slice(2)).parse();
 // read environment variables from .env file
 require('dotenv').config();
-// read the command line arguments passed with yargs
-const environment = argv.environment;
+// read the --environment=<value> command line argument
+const environmentArg = process.argv.slice(2).find((arg) => arg.startsWith('--environment='));
+const environment = environmentArg ? environmentArg.split('=')[1] : undefined;
 // Configure Angular `environment.ts` file path
 const baseEnvFile = './src/assets/config.json';
 // Load node modules

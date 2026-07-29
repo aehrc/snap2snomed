@@ -86,6 +86,14 @@
   margin: 0;
 }
 
+::ng-deep .xng-breadcrumb-link {
+  color: rgba(0, 0, 0, .54) !important;
+}
+
+::ng-deep .xng-breadcrumb-trail {
+  color: black !important;
+}
+
 .breadcrumbs {
   width: calc(100% - 258px);
   min-height: 33px;

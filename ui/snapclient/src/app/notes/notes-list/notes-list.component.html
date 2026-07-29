@@ -32,7 +32,7 @@
       <mat-card-title>{{'DETAILS.NOTES' | translate}}
         &nbsp;
         @if (notes.length > 0) {
-          <mat-chip-option class="accent-chip" selected>{{notes.length}}</mat-chip-option>
+          <span class="notes-count-badge">{{notes.length}}</span>
         }
       </mat-card-title>
     </mat-card-header>

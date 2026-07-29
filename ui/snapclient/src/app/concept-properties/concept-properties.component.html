@@ -23,7 +23,7 @@
                     <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let element">
                       @if (element.value.length > 1) {
-                        <mat-chip-option>{{ element.value[1] }}</mat-chip-option>
+                        <mat-chip-option class="property-value-chip">{{ element.value[1] }}</mat-chip-option>
                       }
                       @if (element.key === 'code') {
                         <mat-icon class="grip"
@@ -87,7 +87,7 @@
                   <th mat-header-cell *matHeaderCellDef></th>
                   <td mat-cell [ngClass]="{'row-line-above': element.firstValue}" *matCellDef="let element">
                     @if (element.value.length > 1) {
-                      <mat-chip-option>{{ element.value[1] }}</mat-chip-option>
+                      <mat-chip-option class="property-value-chip">{{ element.value[1] }}</mat-chip-option>
                     }
                     @if (element.key === 'code') {
                       <mat-icon class="grip"

@@ -12,6 +12,11 @@
   justify-content: space-between;
 }
 
+.activeOnly {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 .search-footer {
   padding: 6px;
   margin: 0 10px;

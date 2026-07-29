@@ -1,5 +1,11 @@
 table {
     width: 100%;
+    --mat-table-row-item-outline-color: var(--mat-sys-outline-variant);
+}
+
+.divider {
+    margin: 0 24px;
+    width: auto;
 }
 
 .mat-mdc-header-cell {
@@ -15,6 +21,7 @@ table {
 .notes-container {
   height: 400px;
   overflow: auto;
+  padding: 0 24px;
 }
 
 /* make date column "fixed width" so it doesn't get spread over multiple rows when the notes are long */

@@ -20,6 +20,10 @@
   background-color: #00000010;
 }
 
+.mat-mdc-row {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
 .row-line-above {
   border-top: 2px solid black;
 }
@@ -45,6 +49,21 @@
   padding: 0 4px;
   border-radius: 6px;
   display: inherit;
+}
+
+.property-value-chip {
+  --mat-chip-outline-width: 0;
+  --mat-chip-elevated-container-color: #e0e0e0;
+  --mat-chip-container-height: 16px;
+  min-height: 16px;
+  font-size: 0.7em;
+}
+
+/* mdc-evolution-chip__action--primary is internal markup rendered by MatChipOption's
+   own template, so it needs ::ng-deep to be reachable from this component's stylesheet. */
+.property-value-chip ::ng-deep .mdc-evolution-chip__action--primary {
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .grip {

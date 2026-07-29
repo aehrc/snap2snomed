@@ -752,7 +752,7 @@ export class MappingViewComponent implements OnInit, AfterViewInit, OnDestroy {
   clickBulkChange(): void {
     const self = this;
     const confirmDialogRef =
-      self.dialog.open(BulkchangeComponent, {data: self.getBulkChangeDialogData()});
+      self.dialog.open(BulkchangeComponent, {width: '800px', maxWidth: '800px', data: self.getBulkChangeDialogData()});
     confirmDialogRef.afterClosed().subscribe(
       (result) => {
         if (result) {

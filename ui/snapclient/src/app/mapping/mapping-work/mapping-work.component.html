@@ -41,6 +41,7 @@
                       </span>
                     }
                     <button mat-stroked-button
+                      id="bulk-change-button"
                       (click)="clickBulkChange()"
                       [disabled]="(isAdmin && currentUser?.id !== task.assignee.id) ||  !hasSelectedRows()">
                       {{'TABLE.BULK_CHANGE' | translate}}

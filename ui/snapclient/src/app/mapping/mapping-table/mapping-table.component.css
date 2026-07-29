@@ -24,6 +24,10 @@
   --mat-icon-button-icon-color: black;
 }
 
+.view-notes-button {
+  --mat-icon-button-icon-color: black;
+}
+
 .compact-table .mat-mdc-row {
   height: 30px;
 }
@@ -162,6 +166,7 @@ td.mat-mdc-cell {
   width:30px !important;
   height:30px !important;
   line-height: 30px !important;
+  padding: 0 !important;
 }
 
 .hide-filter {

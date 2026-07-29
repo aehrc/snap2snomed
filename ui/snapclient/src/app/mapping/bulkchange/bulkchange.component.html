@@ -89,7 +89,7 @@
           <mat-checkbox
             [(ngModel)]="clearTarget"
           (change)="clearTargetClicked($event.checked)" ngDefaultControl></mat-checkbox>
-          <span class="auto-margin-top">{{'BULKCHANGEDIALOG.CLEAR_TARGET' | translate}}</span>
+          <span>{{'BULKCHANGEDIALOG.CLEAR_TARGET' | translate}}</span>
         </div>
       </mat-card>
     }
@@ -99,7 +99,7 @@
           <mat-checkbox
             [(ngModel)]="resetDualMap"
           ngDefaultControl></mat-checkbox>
-          <span class="auto-margin-top">{{'BULKCHANGEDIALOG.REDO_DUAL_MAPPING' | translate}}</span>
+          <span>{{'BULKCHANGEDIALOG.REDO_DUAL_MAPPING' | translate}}</span>
         </div>
       </mat-card>
     }

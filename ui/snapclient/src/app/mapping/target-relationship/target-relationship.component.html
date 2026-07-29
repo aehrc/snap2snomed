@@ -19,7 +19,6 @@
               <mat-icon>add</mat-icon>
             }
           </span>
-          <mat-icon>add</mat-icon>
         </button>
         <span>{{'RELATIONSHIP.' + relationship | translate}}</span>
       </mat-card-title>
@@ -33,14 +32,14 @@
                 [font_size]="'12px'"></app-user-chip>
               }
               <span class="selection-text">{{row.targetDisplay}}</span>
-              <span>
+              <span class="row-target-actions">
                 <span #tooltip="matTooltip" matTooltip="{{getTargetOutOfScopeTooltip(row)}}">
                   @if (row.targetOutOfScope) {
                   <button mat-icon-button class="btn-accent" disabled="{{!isOutOfScopeWithSuggestions(row) || isReviewTask()}}"
                     (click)="onMapMaintenance(row)"><mat-icon>warning</mat-icon></button>
                   }
                 </span>
-                <button mat-icon-button (click)="updateFlag(row)" [disabled]="disableFlagging" [ngClass]="['flag']"
+                <button mat-icon-button (click)="$event.stopPropagation(); updateFlag(row)" [disabled]="disableFlagging" [ngClass]="['flag']"
                   #tooltip="matTooltip" matTooltip="{{'MAP.TARGET_FLAGGED' | translate}}">@if (row.flagged) {
                   <mat-icon class="accent-icon">flag</mat-icon>
                   } @else {

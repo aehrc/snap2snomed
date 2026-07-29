@@ -313,7 +313,19 @@ app-mapping-details-card {
   }
 }
 
-#validate-targets {
+#validate-targets:not(:disabled) {
+  color: black;
+}
+
+#bulk-change:not(:disabled) {
+  color: black;
+}
+
+#show-hide-button:not(:disabled) {
+  color: black;
+}
+
+#clear-filter-button:not(:disabled) {
   color: black;
 }
 
