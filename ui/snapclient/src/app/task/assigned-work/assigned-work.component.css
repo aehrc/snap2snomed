@@ -30,3 +30,9 @@
 h3 {
   color: #555555;
 }
+
+.tab-count-badge ::ng-deep .mat-badge-content {
+  font-size: 0.7em;
+  top: -6px;
+  right: -8px;
+}

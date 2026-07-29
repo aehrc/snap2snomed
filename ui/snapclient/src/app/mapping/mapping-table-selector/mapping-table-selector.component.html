@@ -1,6 +1,6 @@
 <ng-container matColumnDef="id">
   <th class="table-selector-cell" mat-header-cell *matHeaderCellDef>
-    <mat-checkbox class="accent-checkbox" [matBadge]="getSelectedRowsCount()"
+    <mat-checkbox class="accent-checkbox select-all-badge" [matBadge]="getSelectedRowsCount()"
                   matBadgeSize="small"
                   [matBadgeHidden]="selectedRows && selectedRows.length == 0"
                   matTooltip="{{ isAllSelected ? ('SELECTION.CLEAR' | translate) : ('SELECTION.SELECT_ALL' | translate) }}"

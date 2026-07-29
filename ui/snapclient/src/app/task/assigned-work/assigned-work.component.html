@@ -25,7 +25,7 @@
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">edit</mat-icon>
           <span matBadge="{{authTotalElements}}" matBadgeSize="small"
-          matBadgeOverlap="false">{{'TASK.TAB_AUTHOR' | translate}}</span>
+          class="tab-count-badge" matBadgeOverlap="false">{{'TASK.TAB_AUTHOR' | translate}}</span>
         </ng-template>
         <mat-paginator #authpaginator
           [length]="authTotalElements || 0"
@@ -49,7 +49,7 @@
           <ng-template mat-tab-label>
             <mat-icon class="tab-icon">compare_arrows</mat-icon>
             <span matBadge="{{reconcileTotalElements}}" matBadgeSize="small"
-            matBadgeOverlap="false">{{'TASK.TAB_RECONCILE' | translate }}</span>
+            class="tab-count-badge" matBadgeOverlap="false">{{'TASK.TAB_RECONCILE' | translate }}</span>
           </ng-template>
           <mat-paginator #reconcilepaginator
             [length]="reconcileTotalElements || 0"
@@ -73,7 +73,7 @@
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">checklist</mat-icon>
           <span matBadge="{{reviewTotalElements}}" matBadgeSize="small"
-          matBadgeOverlap="false">{{'TASK.TAB_REVIEW' | translate}}</span>
+          class="tab-count-badge" matBadgeOverlap="false">{{'TASK.TAB_REVIEW' | translate}}</span>
         </ng-template>
         <mat-paginator #reviewpaginator
           [length]="reviewTotalElements || 0"
