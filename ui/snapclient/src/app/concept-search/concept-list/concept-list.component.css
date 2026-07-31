@@ -25,6 +25,10 @@
 .mat-mdc-row:nth-child(even){
   background-color: #00000010;
 }
+
+.mat-mdc-row, .mat-mdc-cell {
+  border-bottom: none !important;
+}
   
 .item-list .mat-mdc-cell {
   padding: 3px 6px;

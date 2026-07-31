@@ -167,7 +167,7 @@
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'TABLE.NOTES' | translate}}</th>
                   <td mat-cell *matCellDef="let maprow; let i = index">
                     @if (maprow.latestNote) {
-                      <button mat-icon-button
+                      <button class="view-notes-button" mat-icon-button
                         #tooltip="matTooltip" matTooltip="View Notes"
                         (click)="notesView(i, maprow)"
                         ><mat-icon>chat_bubble_outline</mat-icon></button>

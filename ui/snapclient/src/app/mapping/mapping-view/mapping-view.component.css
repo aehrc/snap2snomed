@@ -3,6 +3,10 @@
   width: 840px;
 }
 
+.view-notes-button {
+  --mat-icon-button-icon-color: black;
+}
+
 .mat-mdc-card {
   margin: 10px;
   flex-grow: 1;

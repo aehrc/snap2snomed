@@ -20,8 +20,8 @@
   background-color: #00000010;
 }
 
-.mat-mdc-row {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+.mat-mdc-row, .mat-mdc-cell {
+  border-bottom: none !important;
 }
 
 .row-line-above {
@@ -54,16 +54,22 @@
 .property-value-chip {
   --mat-chip-outline-width: 0;
   --mat-chip-elevated-container-color: #e0e0e0;
-  --mat-chip-container-height: 16px;
-  min-height: 16px;
+  height: 16px !important;
+  min-height: 16px !important;
+  padding: 0 !important;
   font-size: 0.7em;
 }
 
-/* mdc-evolution-chip__action--primary is internal markup rendered by MatChipOption's
-   own template, so it needs ::ng-deep to be reachable from this component's stylesheet. */
+/* mdc-evolution-chip__action--primary and __text-label are internal markup rendered by
+   MatChipOption's own template, so they need ::ng-deep to be reachable from this stylesheet. */
 .property-value-chip ::ng-deep .mdc-evolution-chip__action--primary {
-  padding-left: 3px;
-  padding-right: 3px;
+  padding: 0 2px !important;
+  height: 16px !important;
+}
+
+.property-value-chip ::ng-deep .mdc-evolution-chip__text-label {
+  padding: 0 !important;
+  line-height: 16px !important;
 }
 
 .grip {

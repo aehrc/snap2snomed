@@ -68,7 +68,6 @@ export class AutomapComponent implements OnInit {
     self.automapping = true;
     self.automapDialog = self.dialog.open(AutomapDialogComponent, {
       width: '450px',
-      height: '200px',
       data: {
         title: self.automapDialogTitle,
         message: self.automapDialogMessage,
