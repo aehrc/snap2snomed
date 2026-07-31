@@ -49,7 +49,7 @@
     <mockserver.version>5.15.0</mockserver.version>
     <hamcrest-test.version>1.3</hamcrest-test.version>
     <hamcrest-date.version>2.0.8</hamcrest-date.version>
-    <hapi.version>6.6.2</hapi.version>
+    <hapi.version>8.10.1</hapi.version>
     <snomed-utilities.version>2.1.0</snomed-utilities.version>
     <spring-framework.version>6.2.19</spring-framework.version> <!-- force version for CVE-2026-41850, CVE-2026-41842, CVE-2026-41845; remove when spring-boot-starter-parent BOM updates this -->
     <spring-hateoas.version>2.5.3</spring-hateoas.version> <!-- force version for CVE-2026-41006, CVE-2026-41007; remove when spring-boot-starter-parent BOM updates this -->
@@ -62,16 +62,6 @@
         <artifactId>commons-compress</artifactId>
         <version>1.28.0</version> <!-- force version for CVE-2024-25710 & CVE-2024-26308; remove when org.apache.poi:poi-ooxml updates to this -->
       </dependency>      
-      <dependency>
-          <groupId>ca.uhn.hapi.fhir</groupId>
-          <artifactId>org.hl7.fhir.utilities</artifactId>
-          <version>6.9.10</version><!-- force version for CVE-2024-51132, CVE-2024-52007, CVE-2024-45294, CVE-2026-33180, CVE-2026-34359, CVE-2026-45367, CVE-2026-55471; hapi-fhir 6.6.2 uses fhir-core ~5.6.x -->
-      </dependency>
-      <dependency>
-          <groupId>ca.uhn.hapi.fhir</groupId>
-          <artifactId>org.hl7.fhir.r4</artifactId>
-          <version>6.9.10</version><!-- force version for CVE-2024-45294, CVE-2024-51132, CVE-2024-52007, CVE-2026-33180, CVE-2026-34359, CVE-2026-45367, CVE-2026-49485; hapi-fhir 6.6.2 uses fhir-core ~5.6.x; kept in lockstep with org.hl7.fhir.utilities above -->
-      </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-core</artifactId>
