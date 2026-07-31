@@ -51,6 +51,8 @@
     <hamcrest-date.version>2.0.8</hamcrest-date.version>
     <hapi.version>6.6.2</hapi.version>
     <snomed-utilities.version>2.1.0</snomed-utilities.version>
+    <spring-framework.version>6.2.19</spring-framework.version> <!-- force version for CVE-2026-41850, CVE-2026-41842, CVE-2026-41845; remove when spring-boot-starter-parent BOM updates this -->
+    <spring-hateoas.version>2.5.3</spring-hateoas.version> <!-- force version for CVE-2026-41006, CVE-2026-41007; remove when spring-boot-starter-parent BOM updates this -->
   </properties>
 
   <dependencyManagement>
