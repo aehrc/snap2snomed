@@ -52,10 +52,10 @@ describe('ConceptSearchComponent', () => {
         ErrormessageComponent,
         ConceptListComponent,
         ConceptAutosuggestComponent,
-        DroppableDirective,
         DraggableDirective
     ],
     imports: [
+        DroppableDirective,
         NoopAnimationsModule,
         ReactiveFormsModule,
         MatCardModule,

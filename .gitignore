@@ -47,11 +47,16 @@ speed-measure-plugin*.json
 /.sass-cache
 /connect.lock
 /coverage
+/ui/snapclient/coverage
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log
 /typings
+
+
+# Claude Code local state
+.claude/worktrees
 
 # System Files
 .DS_Store

@@ -21,7 +21,7 @@ import { DroppableDirective } from './droppable.directive';
 
 @Component({
     template: `<div [appDroppable]="{zone: 'testZone'}">red green blue</div>`,
-    standalone: false
+    imports: [ DroppableDirective ]
 })
 class TestDroppableComponent {
 }
@@ -34,7 +34,7 @@ describe('DroppableDirective', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DroppableDirective, TestDroppableComponent ]
+      imports: [ TestDroppableComponent ]
     })
     .compileComponents();
 

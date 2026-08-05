@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-// This file is required by karma.conf.js and loads recursively all the .spec and framework files
+// zone.js/testing's ProxyZone wrapping (needed for fakeAsync()/tick()) is only wired up for
+// known test frameworks. Vitest isn't auto-detected, so its describe/it/beforeEach hooks must be
+// exposed as a global 'vitest' object before importing the patch, matching how zone.js finds Jest.
+import * as vitestApi from 'vitest';
 
-import 'zone.js/testing';
-import { getTestBed } from '@angular/core/testing';
-import {
-  BrowserTestingModule,
-  platformBrowserTesting
-} from '@angular/platform-browser/testing';
+(globalThis as any).vitest = vitestApi;
 
-// First, initialize the Angular testing environment.
-getTestBed().initTestEnvironment(
-  BrowserTestingModule,
-  platformBrowserTesting(), {
-    teardown: { destroyAfterEach: true }
-}
-);
+import 'zone.js/plugins/vitest-patch';

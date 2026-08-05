@@ -15,18 +15,23 @@
  */
 
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {By} from '@angular/platform-browser';
-import {RouterTestingModule} from '@angular/router/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { APP_CONFIG } from 'src/app/app.config';
-import {HttpLoaderFactory} from 'src/app/app.module';
+import { HttpLoaderFactory } from 'src/app/app.module';
 import { selectAuthorizedProjects } from 'src/app/store/app.selectors';
 import { initialAppState } from 'src/app/store/app.state';
-import {Mapping} from 'src/app/_models/mapping';
+import { Mapping } from 'src/app/_models/mapping';
 import { Project } from 'src/app/_models/project';
-import {LastupdatedPipe} from 'src/app/_utils/lastupdated_pipe';
+import { LastupdatedPipe } from 'src/app/_utils/lastupdated_pipe';
 
 import { MappingDetailsCardComponent } from './mapping-details-card.component';
 import { TargetVersionComponent } from 'src/app/target-version/target-version.component';
@@ -34,7 +39,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 
 describe('MappingDetailsCardComponent', () => {
   let component: MappingDetailsCardComponent;
@@ -43,46 +51,48 @@ describe('MappingDetailsCardComponent', () => {
   let secondMapping: Mapping;
   let project: Project;
 
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [
+      declarations: [
         MappingDetailsCardComponent,
         LastupdatedPipe,
-        TargetVersionComponent
-    ],
-    imports: [RouterTestingModule.withRoutes([]),
+        TargetVersionComponent,
+      ],
+      imports: [
+        RouterTestingModule.withRoutes([]),
         NoopAnimationsModule,
         MatCardModule,
         MatFormFieldModule,
         MatLabel,
         MatSelectModule,
         TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory
-            }
-        })],
-    providers: [
-        { provide: APP_CONFIG, useValue: { appName: 'Snap2SNOMED', authDomainUrl: 'anything' } },
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+          },
+        }),
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: { appName: 'Snap2SNOMED', authDomainUrl: 'anything' },
+        },
         provideMockStore({
-            initialState: initialAppState,
-            selectors: [
-                {
-                    selector: selectAuthorizedProjects,
-                    value: { project: project },
-                }
-            ],
+          initialState: initialAppState,
+          selectors: [
+            {
+              selector: selectAuthorizedProjects,
+              value: { project: project },
+            },
+          ],
         }),
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
-    .compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(fakeAsync(() => {
-
     mapping = new Mapping();
     mapping.id = '2';
     mapping.mapVersion = 'V1.0';
@@ -127,31 +137,42 @@ describe('MappingDetailsCardComponent', () => {
   });
 
   it('should show version number in drop down', () => {
-    const select = fixture.debugElement.query(By.css('#map-version-select')).nativeElement;
+    const select = fixture.debugElement.query(
+      By.css('#map-version-select')
+    ).nativeElement;
     select.click();
     fixture.detectChanges();
     const versionOptions = fixture.debugElement.queryAll(By.css('mat-option'));
     expect(versionOptions.length).toEqual(2);
-    expect(versionOptions[0].nativeElement.textContent.trim()).toContain('V1.0');
+    expect(versionOptions[0].nativeElement.textContent.trim()).toContain(
+      'V1.0'
+    );
   });
 
   it('should have multiple versions in dropdown', () => {
-    const select = fixture.debugElement.query(By.css('#map-version-select')).nativeElement;
+    const select = fixture.debugElement.query(
+      By.css('#map-version-select')
+    ).nativeElement;
     select.click();
     fixture.detectChanges();
     const versionOptions = fixture.debugElement.queryAll(By.css('mat-option'));
     expect(versionOptions.length).toEqual(2);
-    expect(versionOptions[0].nativeElement.textContent.trim()).toContain('V1.0');
-    expect(versionOptions[1].nativeElement.textContent.trim()).toContain('V2.1');
+    expect(versionOptions[0].nativeElement.textContent.trim()).toContain(
+      'V1.0'
+    );
+    expect(versionOptions[1].nativeElement.textContent.trim()).toContain(
+      'V2.1'
+    );
   });
 
   it('should execute the component method on change', fakeAsync(() => {
-    const select = fixture.debugElement.query(By.css('#map-version-select')).nativeElement;
+    const select = fixture.debugElement.query(
+      By.css('#map-version-select')
+    ).nativeElement;
     fixture.detectChanges();
-    spyOn(component, 'versionSelectionChange');
+    vi.spyOn(component, 'versionSelectionChange').mockImplementation(() => {});
     select.dispatchEvent(new Event('selectionChange'));
     tick();
     expect(component.versionSelectionChange).toHaveBeenCalled();
   }));
-
 });
