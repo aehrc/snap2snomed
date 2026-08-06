@@ -26,7 +26,7 @@ import {FhirEffects} from './fhir.effects';
 import { APP_CONFIG } from '../../app.config';
 import {TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
 import {HttpLoaderFactory} from '../../app.module';
-import {testRoutes} from '../../auth.guard.spec';
+import {testRoutes} from '../../test-routes';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('FhirEffects', () => {

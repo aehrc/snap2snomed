@@ -36,7 +36,7 @@ import { APP_CONFIG } from '../app.config';
 import { take } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
-import { testRoutes } from '../auth.guard.spec';
+import { testRoutes } from '../test-routes';
 
 describe('TokenInterceptorService', () => {
   let service: TokenInterceptor;

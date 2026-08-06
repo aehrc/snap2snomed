@@ -20,30 +20,14 @@ import {AuthGuard} from './auth.guard';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {RouterTestingModule} from '@angular/router/testing';
-import {ActivatedRouteSnapshot, RouterStateSnapshot, Routes} from '@angular/router';
+import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {AuthService} from './_services/auth.service';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {IAppState, initialAppState} from './store/app.state';
 import {isAuthenticated} from './store/auth-feature/auth.selectors';
 import {APP_CONFIG} from './app.config';
-import {MappingListComponent} from './mapping/mapping-list/mapping-list.component';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-
-
-export const testRoutes: Routes = [
-  {
-    path: '',
-    component: MappingListComponent,
-    pathMatch: 'full',
-    data: {
-      breadcrumb: 'HOME',
-      permissions: 'ALL'
-    },
-  },
-  {path: '**', redirectTo: '/'}
-];
-
-
+import {testRoutes} from './test-routes';
 
 describe('Auth Guard', () => {
   let guard: AuthGuard;

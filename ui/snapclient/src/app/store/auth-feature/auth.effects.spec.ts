@@ -26,7 +26,7 @@ import {AppComponent} from '../../app.component';
 import {provideMockStore} from '@ngrx/store/testing';
 import {initialAppState} from '../app.state';
 import { APP_CONFIG } from '../../app.config';
-import {testRoutes} from '../../auth.guard.spec';
+import {testRoutes} from '../../test-routes';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 

@@ -48,7 +48,7 @@ import {
 } from '../store/auth-feature/auth.selectors';
 import { TokenMsg } from '../_models/user';
 import { RouterTestingModule } from '@angular/router/testing';
-import { testRoutes } from '../auth.guard.spec';
+import { testRoutes } from '../test-routes';
 import { AuthService } from '../_services/auth.service';
 
 describe('Snap2SnomedHttpErrorInterceptor', () => {
