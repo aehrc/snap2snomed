@@ -40,7 +40,6 @@
     <org.springdoc.version>2.6.0</org.springdoc.version>
     <jib.version>3.4.0</jib.version>
     <openfeign-querydsl.version>7.1</openfeign-querydsl.version> <!-- io.github.openfeign.querydsl fork; com.querydsl is unmaintained since 2021 -->
-    <problem-spring-web.version>0.29.1</problem-spring-web.version>
     <swagger-request-validator.version>2.46.0</swagger-request-validator.version>
     <apache-poi.version>5.5.1</apache-poi.version>
     <rest-assured.version>4.5.1</rest-assured.version>
@@ -154,12 +153,6 @@
       <groupId>io.github.openfeign.querydsl</groupId>
       <artifactId>querydsl-jpa</artifactId>
       <version>${openfeign-querydsl.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.zalando</groupId>
-      <artifactId>problem-spring-web-starter</artifactId>
-      <version>${problem-spring-web.version}</version>
     </dependency>
 
     <dependency>

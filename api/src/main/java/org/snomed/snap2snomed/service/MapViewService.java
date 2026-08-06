@@ -49,6 +49,7 @@ import org.snomed.snap2snomed.model.enumeration.MapStatus;
 import org.snomed.snap2snomed.model.enumeration.MappingRelationship;
 import org.snomed.snap2snomed.model.enumeration.NoteCategory;
 import org.snomed.snap2snomed.model.enumeration.TaskType;
+import org.snomed.snap2snomed.problem.Snap2SnomedProblem;
 import org.snomed.snap2snomed.problem.auth.NotAuthorisedProblem;
 import org.snomed.snap2snomed.repository.DbMapViewRepository;
 import org.snomed.snap2snomed.repository.MapRepository;
@@ -67,8 +68,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.zalando.problem.Problem;
-import org.zalando.problem.Status;
+import org.springframework.http.HttpStatus;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.ExpressionUtils;
@@ -418,7 +418,7 @@ public class MapViewService {
   public Snap2SnomedPagedModel<EntityModel<MapView>> getMapResults(Long mapId, Pageable pageable, PagedResourcesAssembler<MapView> assembler,
       MapViewFilter filter) {
     if (!mapRepository.existsById(mapId)) {
-      throw Problem.valueOf(Status.NOT_FOUND, "No Map found with id " + mapId);
+      throw Snap2SnomedProblem.of(HttpStatus.NOT_FOUND, "No Map found with id " + mapId);
     }
 
     return getMapResults(mapId, null, pageable, assembler, filter);
@@ -426,7 +426,7 @@ public class MapViewService {
 
   public Snap2SnomedPagedModel<EntityModel<MapView>> getMapResultsByTask(Long taskId, Pageable pageable, PagedResourcesAssembler<MapView> assembler,
       MapViewFilter filter) {
-    final Task task = taskRepository.findById(taskId).orElseThrow(() -> Problem.valueOf(Status.NOT_FOUND, "No Task found with id " + taskId));
+    final Task task = taskRepository.findById(taskId).orElseThrow(() -> Snap2SnomedProblem.of(HttpStatus.NOT_FOUND, "No Task found with id " + taskId));
     if (!webSecurity.isAdminUser() && !webSecurity.hasAnyProjectRoleForMapId(task.getMap().getId())) {
       throw new NotAuthorisedProblem("Not authorised to view map if the user is not admin or member of an associated project!");
     }
@@ -434,7 +434,7 @@ public class MapViewService {
   }
 
   public String getFileNameForMapExport(Long mapId, String contentType) {
-    final Map map = mapRepository.findById(mapId).orElseThrow(() -> Problem.valueOf(Status.NOT_FOUND, "No Map found with id " + mapId));
+    final Map map = mapRepository.findById(mapId).orElseThrow(() -> Snap2SnomedProblem.of(HttpStatus.NOT_FOUND, "No Map found with id " + mapId));
     String extension;
     switch (contentType) {
       case MapViewRestController.TEXT_TSV:
@@ -454,7 +454,7 @@ public class MapViewService {
         break;
 
       default:
-        throw Problem.valueOf(Status.UNSUPPORTED_MEDIA_TYPE, "Content type " + contentType + " is not supported for map export");
+        throw Snap2SnomedProblem.of(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Content type " + contentType + " is not supported for map export");
     }
 
     return "map-" + map.getProject().getTitle() + "_" + map.getMapVersion() + extension;
@@ -503,7 +503,7 @@ public class MapViewService {
   }
 
   public List<MapView> getAllMapViewForMap(Long mapId) {
-    final Map map = mapRepository.findById(mapId).orElseThrow(() -> Problem.valueOf(Status.NOT_FOUND, "No Map found with id " + mapId));
+    final Map map = mapRepository.findById(mapId).orElseThrow(() -> Snap2SnomedProblem.of(HttpStatus.NOT_FOUND, "No Map found with id " + mapId));
     Boolean dualMapMode = map.getProject().getDualMapMode();
     if (dualMapMode) {
       return getDualMapQueryForMap(mapId, null, null, null).fetch();
@@ -520,7 +520,7 @@ public class MapViewService {
         .getAdditionalColumnsMetadata();
 
     final Map map = mapRepository.findById(mapId)
-        .orElseThrow(() -> Problem.valueOf(Status.NOT_FOUND, "No Map found with id " + mapId));
+        .orElseThrow(() -> Snap2SnomedProblem.of(HttpStatus.NOT_FOUND, "No Map found with id " + mapId));
     Boolean dualMapMode = map.getProject().getDualMapMode();
 
     if (dualMapMode && task == null) {
@@ -1075,7 +1075,7 @@ public class MapViewService {
   public MapView getDualMapSiblingRow(Long mapId, Long sourceCodeId, Long mapRowId) {
 
     if (!mapRepository.existsById(mapId)) {
-      throw Problem.valueOf(Status.NOT_FOUND, "No Map found with id " + mapId);
+      throw Snap2SnomedProblem.of(HttpStatus.NOT_FOUND, "No Map found with id " + mapId);
     }
 
     JPAQuery<MapView> query = new JPAQuery<MapView>(entityManager)

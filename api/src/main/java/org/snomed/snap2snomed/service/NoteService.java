@@ -9,7 +9,7 @@ import org.snomed.snap2snomed.security.AuthenticationFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
-import org.zalando.problem.Status;
+import org.springframework.http.HttpStatus;
 
 import jakarta.transaction.Transactional;
 import java.util.Optional;
@@ -35,7 +35,7 @@ public class NoteService {
       }
       else {
         throw new DeleteProblem("note", "Only map owners or the note author can delete a note",
-            Status.METHOD_NOT_ALLOWED);
+            HttpStatus.METHOD_NOT_ALLOWED);
       }
     }
     else {
