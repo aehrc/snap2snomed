@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import {Routes} from '@angular/router';
+import {Component} from '@angular/core';
+import {ActivatedRoute, Routes} from '@angular/router';
 import {MappingListComponent} from './mapping/mapping-list/mapping-list.component';
 
 // Shared test route table used across several spec files. Kept out of any *.spec.ts file
@@ -31,4 +32,27 @@ export const testRoutes: Routes = [
     },
   },
   {path: '**', redirectTo: '/'}
+];
+
+@Component({template: '', standalone: true})
+export class TestParamsLeafComponent {
+  constructor(public route: ActivatedRoute) {
+  }
+}
+
+// Mirrors the map-view/:mappingid -> map-work/:taskid -> '' route nesting in
+// app-routing.module.ts, with the real components/guards swapped for a stub so the router's
+// param-inheritance behaviour can be tested without pulling in their dependencies.
+export const testNestedParamsRoutes: Routes = [
+  {
+    path: 'map-view/:mappingid',
+    children: [
+      {
+        path: 'map-work/:taskid',
+        children: [
+          {path: '', component: TestParamsLeafComponent}
+        ]
+      }
+    ]
+  }
 ];
