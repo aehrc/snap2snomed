@@ -33,13 +33,13 @@
     <java.version>21</java.version>
     <docker.repository>aehrc/snap2snomed</docker.repository>
     <docker.registry.host>quay.io</docker.registry.host>
-    <sentry.version>7.3.0</sentry.version>
+    <sentry.version>8.51.0</sentry.version>
     <jacoco.version>0.8.12</jacoco.version>
     <commons-csv.version>1.10.0</commons-csv.version>
     <aws-advanced-jdbc-wrapper.version>2.6.5</aws-advanced-jdbc-wrapper.version>
-    <org.springdoc.version>2.6.0</org.springdoc.version>
+    <org.springdoc.version>2.8.17</org.springdoc.version>
     <jib.version>3.4.0</jib.version>
-    <openfeign-querydsl.version>7.1</openfeign-querydsl.version> <!-- io.github.openfeign.querydsl fork; com.querydsl is unmaintained since 2021 -->
+    <openfeign-querydsl.version>7.5</openfeign-querydsl.version> <!-- io.github.openfeign.querydsl fork; com.querydsl is unmaintained since 2021 -->
     <swagger-request-validator.version>2.46.0</swagger-request-validator.version>
     <apache-poi.version>5.5.1</apache-poi.version>
     <rest-assured.version>4.5.1</rest-assured.version>
@@ -79,7 +79,7 @@
       <dependency>
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-core</artifactId>
-        <version>2.2.22</version> <!-- align with swagger-core-jakarta 2.2.22 from springdoc; ModelConverters.getInstance(boolean) added in 2.2.22, missing in 2.2.9 brought by swagger-request-validator -->
+        <version>2.2.47</version> <!-- align with swagger-core-jakarta 2.2.47 from springdoc 2.8.17; both artifacts define io.swagger.v3.core.util.PrimitiveType, a version mismatch between them breaks reflection-based field access in springdoc's ObjectMapperProvider -->
       </dependency>
       <dependency>
         <groupId>org.springframework.data</groupId>
