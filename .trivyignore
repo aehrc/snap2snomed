@@ -1,6 +1,0 @@
-# CVE-2024-49203: QueryDSL HQL injection via orderBy
-# No fixed version released for querydsl-jpa 5.1.0 (latest).
-# Not exploitable in this codebase: all orderBy calls use type-safe QueryDSL path
-# expressions (ComparableExpressionBase / PathBuilder), never raw user-supplied HQL strings.
-# Reviewed in ProjectService.java and MapViewService.java.
-CVE-2024-49203
