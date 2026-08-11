@@ -55,11 +55,6 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-compress</artifactId>
-        <version>1.28.0</version> <!-- force version for CVE-2024-25710 & CVE-2024-26308; remove when org.apache.poi:poi-ooxml updates to this -->
-      </dependency>      
-      <dependency>
         <groupId>commons-beanutils</groupId>
         <artifactId>commons-beanutils</artifactId>
         <version>1.11.0</version> <!-- force version for CVE-2025-48734; remove when org.ihtsdo.snomed.util:snomed-utilities:jar: updates this -->
