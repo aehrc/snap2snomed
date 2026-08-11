@@ -66,6 +66,10 @@ public class PreAuthFilter extends GenericFilterBean {
             new FilterRule(HttpMethod.GET, "/mapRows/([^\\/]+).*", groupValues -> webSecurity.isAdminUser() || webSecurity.hasAnyProjectRoleForMapRowId(asLong(groupValues[0]))),
 
             new FilterRule(HttpMethod.GET, "/mapRowTargets/search/findByMapId", groupValues -> webSecurity.isValidUser()), // result filtered by query
+            new FilterRule(HttpMethod.GET, "/mapRowTargets/search/findByMapIdAndSourceCodeIndex", groupValues -> webSecurity.isValidUser()), // result filtered by query
+            new FilterRule(HttpMethod.GET, "/mapRowTargets/search/findByMapIdAndSourceCodeIndexAndAuthorTaskId", groupValues -> webSecurity.isValidUser()), // result filtered by query
+            new FilterRule(HttpMethod.GET, "/mapRowTargets/search/findByMapIdAndSourceCodeIndexAndReconcileTaskId", groupValues -> webSecurity.isValidUser()), // result filtered by query
+            new FilterRule(HttpMethod.GET, "/mapRowTargets/search/findByMapIdAndTag", groupValues -> webSecurity.isValidUser()), // result filtered by query
             new FilterRule(HttpMethod.GET, "/mapRowTargets", groupValues -> webSecurity.isValidUser()), //TODO filter
 
             new FilterRule(HttpMethod.GET, "/tasks/search/findByMapIdAndType", groupValues -> webSecurity.isValidUser()),

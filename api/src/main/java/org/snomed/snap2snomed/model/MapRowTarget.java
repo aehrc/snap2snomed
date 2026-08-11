@@ -25,6 +25,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -102,11 +103,11 @@ public class MapRowTarget implements Snap2SnomedEntity, java.lang.Comparable<Map
     boolean flagged;
 
     @ManyToOne
+    @JoinColumn(name = "last_author_id")
     private User lastAuthor;
 
     @Transient
     private TaskType taskType;
-
 
     @Projection(name = "targetView", types = {MapRowTarget.class})
     public interface TargetView {

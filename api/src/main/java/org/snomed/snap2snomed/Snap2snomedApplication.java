@@ -20,7 +20,7 @@ import org.snomed.snap2snomed.config.Snap2snomedConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
+import org.springframework.boot.webmvc.autoconfigure.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.envers.repository.support.EnversRevisionRepositoryFactoryBean;

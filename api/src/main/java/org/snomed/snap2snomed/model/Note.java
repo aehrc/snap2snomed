@@ -86,6 +86,7 @@ public class Note implements Comparable<Note>, Snap2SnomedEntity {
 
     @NotNull(message = "A note must always have an author")
     @ManyToOne
+    @JoinColumn(name = "note_by_id")
     User noteBy;
 
     @Column(columnDefinition = "boolean default false")

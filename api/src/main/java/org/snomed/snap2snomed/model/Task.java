@@ -23,6 +23,7 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -92,6 +93,7 @@ public class Task implements Snap2SnomedEntity {
   private Map map;
 
   @ManyToOne
+  @JoinColumn(name = "assignee_id")
   User assignee;
 
   @Pattern(regexp = SourceRowSpecificationUtils.SOURCE_ROW_SPECIFICATION_PATTERN,

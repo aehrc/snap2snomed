@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Path;
-import io.sentry.spring.jakarta.SentryExceptionResolver;
+import io.sentry.spring7.SentryExceptionResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.snomed.snap2snomed.SpringDataRestTransactionAspect.TransactionAspectWrappedException;
 import org.snomed.snap2snomed.problem.config.ValidationProblemDetail.Violation;

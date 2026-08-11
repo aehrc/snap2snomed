@@ -32,6 +32,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -127,9 +128,11 @@ public class MapRow implements Snap2SnomedEntity, Serializable {
   private Task reconcileTask;
 
   @ManyToOne
+  @JoinColumn(name = "last_author_id")
   private User lastAuthor;
 
   @ManyToOne
+  @JoinColumn(name = "last_reviewer_id")
   private User lastReviewer;
 
   @OneToMany(mappedBy = "row", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)

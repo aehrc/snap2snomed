@@ -16,7 +16,7 @@
 
 package org.snomed.snap2snomed.integration;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.snomed.snap2snomed.controller.dto.MappingImportResponse;
@@ -55,12 +55,12 @@ public class ValidateCodesIT extends IntegrationTestBase {
                 "http://map.test.toscope", projectId, codeSetId);
         MappingImportResponse mappingImportResponse = restClient.createImportedMap(0, 2, 3,
         4, -1, -1, true, ",", mapFileResource.getFile(), "text/csv", mapId);
-        Assert.assertEquals(Integer.valueOf(1996), mappingImportResponse.getInsertCount());
+        Assertions.assertEquals(Integer.valueOf(1996), mappingImportResponse.getInsertCount());
         try {
             ValidationResult validationResult = restClient.validateMapTargets(mapId);
-            Assert.assertNotNull("Validation result was not returned", validationResult);
+            Assertions.assertNotNull(validationResult, "Validation result was not returned");
         } catch (Exception e) {
-            Assert.fail("Example map failed to validate");
+            Assertions.fail("Example map failed to validate");
         }
     }
 
@@ -70,13 +70,13 @@ public class ValidateCodesIT extends IntegrationTestBase {
                 "< 41146007 |Bacterium|", projectId, codeSetId);
         MappingImportResponse mappingImportResponse = restClient.createImportedMap(0, 2, 3,
                 4, -1, -1, true, ",", mapFileResource.getFile(), "text/csv", mapId);
-        Assert.assertEquals(Integer.valueOf(1996), mappingImportResponse.getInsertCount());
+        Assertions.assertEquals(Integer.valueOf(1996), mappingImportResponse.getInsertCount());
         try {
             ValidationResult validationResult = restClient.validateMapTargets(mapId);
-            Assert.assertNotNull("Validation result was not returned", validationResult);
-            Assert.assertTrue("Did not find any ACTIVE codes in FHIR server", validationResult.getActiveCount() > 0);
+            Assertions.assertNotNull(validationResult, "Validation result was not returned");
+            Assertions.assertTrue(validationResult.getActiveCount() > 0, "Did not find any ACTIVE codes in FHIR server");
         } catch (Exception e) {
-            Assert.fail("Example map failed to validate");
+            Assertions.fail("Example map failed to validate");
         }
     }
 }

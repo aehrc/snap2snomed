@@ -37,7 +37,7 @@
     <jacoco.version>0.8.12</jacoco.version>
     <commons-csv.version>1.10.0</commons-csv.version>
     <aws-advanced-jdbc-wrapper.version>2.6.5</aws-advanced-jdbc-wrapper.version>
-    <org.springdoc.version>2.8.17</org.springdoc.version>
+    <org.springdoc.version>3.1.0</org.springdoc.version>
     <jib.version>3.4.0</jib.version>
     <openfeign-querydsl.version>7.5</openfeign-querydsl.version> <!-- io.github.openfeign.querydsl fork; com.querydsl is unmaintained since 2021 -->
     <swagger-request-validator.version>2.46.0</swagger-request-validator.version>
@@ -50,8 +50,6 @@
     <hamcrest-date.version>2.0.8</hamcrest-date.version>
     <hapi.version>8.10.1</hapi.version>
     <snomed-utilities.version>2.1.0</snomed-utilities.version>
-    <spring-framework.version>6.2.19</spring-framework.version> <!-- force version for CVE-2026-41850, CVE-2026-41842, CVE-2026-41845; remove when spring-boot-starter-parent BOM updates this -->
-    <spring-hateoas.version>2.5.3</spring-hateoas.version> <!-- force version for CVE-2026-41006, CVE-2026-41007; remove when spring-boot-starter-parent BOM updates this -->
   </properties>
 
   <dependencyManagement>
@@ -62,16 +60,6 @@
         <version>1.28.0</version> <!-- force version for CVE-2024-25710 & CVE-2024-26308; remove when org.apache.poi:poi-ooxml updates to this -->
       </dependency>      
       <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>2.21.4</version> <!-- force version for CVE-2025-52999, GHSA-r7wm-3cxj-wff9; remove when io.jsonwebtoken:jjwt-jackson:jar updates this -->
-      </dependency>
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>2.21.4</version> <!-- force version for CVE-2026-54512, CVE-2026-54513; remove when spring-boot-dependencies BOM updates this -->
-      </dependency>
-      <dependency>
         <groupId>commons-beanutils</groupId>
         <artifactId>commons-beanutils</artifactId>
         <version>1.11.0</version> <!-- force version for CVE-2025-48734; remove when org.ihtsdo.snomed.util:snomed-utilities:jar: updates this -->
@@ -79,12 +67,7 @@
       <dependency>
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-core</artifactId>
-        <version>2.2.47</version> <!-- align with swagger-core-jakarta 2.2.47 from springdoc 2.8.17; both artifacts define io.swagger.v3.core.util.PrimitiveType, a version mismatch between them breaks reflection-based field access in springdoc's ObjectMapperProvider -->
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-commons</artifactId>
-        <version>3.5.12</version> <!-- force version for CVE-2026-41695; remove when spring-boot-starter-parent BOM updates this -->
+        <version>2.2.52</version> <!-- align with swagger-core-jakarta from springdoc 3.1.0; both artifacts define io.swagger.v3.core.util.PrimitiveType, a version mismatch between them breaks reflection-based field access in springdoc's ObjectMapperProvider -->
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -92,7 +75,16 @@
   <dependencies>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-hibernate6</artifactId>
+      <artifactId>jackson-datatype-hibernate7</artifactId>
+    </dependency>
+    <!-- Boot 4's starters no longer pull this in by default now that Jackson 3 is the default
+         mapper (Jackson 3's creator detection is built into its core, no separate module needed).
+         Our Jackson 2 ObjectMapper (JacksonConfiguration) still needs it to construct Lombok
+         @Builder-only DTOs (e.g. MappingDto, MappingDetails) via their generated all-args
+         constructor - findModulesViaServiceLoader(true) is a no-op without this on the classpath. -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-parameter-names</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -123,9 +115,12 @@
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.flywaydb</groupId>
-      <artifactId>flyway-core</artifactId>
-    </dependency>      
+      <!-- Boot 4's modularized autoconfigure split Flyway's autoconfiguration out of the implicit
+           spring-boot-starter-data-jpa graph; this starter (not just flyway-core) is what actually
+           triggers migrations running automatically on startup. -->
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-flyway</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-mysql</artifactId>
@@ -199,7 +194,7 @@
 
     <dependency>
       <groupId>io.sentry</groupId>
-      <artifactId>sentry-spring-boot-starter-jakarta</artifactId>
+      <artifactId>sentry-spring-boot-4-starter</artifactId>
       <version>${sentry.version}</version>
     </dependency>
     <dependency>
