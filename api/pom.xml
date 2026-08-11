@@ -69,6 +69,11 @@
         <artifactId>swagger-core</artifactId>
         <version>2.2.52</version> <!-- align with swagger-core-jakarta from springdoc 3.1.0; both artifacts define io.swagger.v3.core.util.PrimitiveType, a version mismatch between them breaks reflection-based field access in springdoc's ObjectMapperProvider -->
       </dependency>
+      <dependency>
+        <groupId>com.nimbusds</groupId>
+        <artifactId>nimbus-jose-jwt</artifactId>
+        <version>9.37.2</version> <!-- force version for CVE-2023-52428; remove when org.mock-server:mockserver-core updates this test-scope transitive dependency -->
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
