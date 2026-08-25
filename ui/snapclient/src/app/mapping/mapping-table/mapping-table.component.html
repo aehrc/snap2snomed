@@ -36,6 +36,7 @@
         #tooltip="matTooltip" matTooltip="{{explainRelationship(maprow.relationship)}}">
         @if (!maprow.noMap && maprow.targetCode) {
           <mat-select [(ngModel)]="maprow.relationship" [value]="maprow.relationship"
+            panelClass="data-row-select-panel" [panelWidth]="null"
             (selectionChange)="updateMapRowTarget(maprow, i)">
             @for (relationship of relationships; track relationship) {
               <mat-option [value]="relationship"
@@ -68,7 +69,6 @@
       <ng-container matColumnDef="noMap">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'TABLE.NO_MAP' | translate}}</th>
         <td mat-cell *matCellDef="let maprow; let i = index">
-          &nbsp;&nbsp;
           <mat-checkbox (change)="updateNoMapRow($event, i)"
             [disabled]="writeDisableUtils.isEditDisabled(this.task.type, maprow.status)"
           [value]="maprow.noMap" [(ngModel)]="maprow.noMap"></mat-checkbox>
@@ -79,6 +79,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'TABLE.STATUS' | translate}}</th>
         <td mat-cell *matCellDef="let maprow; let i = index">
           <mat-select [(ngModel)]="maprow.status" [disabled]="writeDisableUtils.isStatusSelectionDisabled(this.task.type, maprow.status)"
+            panelClass="data-row-select-panel" [panelWidth]="null"
             (selectionChange)="updateMapRow(maprow, i)">
             @for (status of getStatuses(maprow); track status; let j = $index) {
               <mat-option [value]="status"
@@ -143,6 +144,10 @@
               <app-user-chip [user]="maprow.lastAuthor"
               [font_size]="'12px'"></app-user-chip>
             }
+            @if (maprow.lastReviewer) {
+              <app-user-chip [user]="maprow.lastReviewer"
+              [font_size]="'12px'"></app-user-chip>
+            }
           </td>
         </ng-container>
         <!-- Actions Column -->
@@ -205,7 +210,7 @@
                 <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-relationship')}" *matHeaderCellDef [attr.colspan]="1">
                   <mat-form-field appearance="outline">
                     <mat-select [(ngModel)]="filterEntity.relationship" (selectionChange)="filterUpdate()" multiple
-                      id="relationship" name="relationship" #relationship="ngModel">
+                      id="relationship" name="relationship" #relationship="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                       @for (rel of relationships; track rel) {
                         <mat-option
                         [value]="rel">{{'RELATIONSHIP.' + rel | translate}}</mat-option>
@@ -249,7 +254,7 @@
                     <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-noMap')}"*matHeaderCellDef [attr.colspan]="1">
                       <mat-form-field appearance="outline">
                         <mat-select [(ngModel)]="filterEntity.noMap" (selectionChange)="filterUpdate()"
-                          id="noMap" name="noMap" #noMap="ngModel">
+                          id="noMap" name="noMap" #noMap="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                           <mat-option [value]="">---</mat-option>
                           @for (opt of yesNoOptions; track opt) {
                             <mat-option
@@ -264,7 +269,7 @@
                     <th mat-header-cell *matHeaderCellDef [attr.colspan]="1">
                       <mat-form-field appearance="outline">
                         <mat-select [(ngModel)]="filterEntity.status" (selectionChange)="filterUpdate()" multiple
-                          id="status" name="status" #status="ngModel">
+                          id="status" name="status" #status="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                           @for (rel of statuses; track rel) {
                             <mat-option [value]="rel">{{'STATUS.' + rel | translate}}</mat-option>
                           }
@@ -277,7 +282,7 @@
                     <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-targetOutOfScope')}" *matHeaderCellDef [attr.colspan]="1">
                       <mat-form-field appearance="outline">
                         <mat-select [(ngModel)]="filterEntity.targetOutOfScope" (selectionChange)="filterUpdate()"
-                          id="targetOutOfScope" name="targetOutOfScope" #targetOutOfScope="ngModel">
+                          id="targetOutOfScope" name="targetOutOfScope" #targetOutOfScope="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                           <mat-option [value]="">---</mat-option>
                           @for (opt of yesNoOptions; track opt) {
                             <mat-option
@@ -292,7 +297,7 @@
                     <th mat-header-cell *matHeaderCellDef [attr.colspan]="1">
                       <mat-form-field appearance="outline">
                         <mat-select [(ngModel)]="filterEntity.flagged" (selectionChange)="filterUpdate()"
-                          id="flagged" name="flagged" #flagged="ngModel">
+                          id="flagged" name="flagged" #flagged="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                           <mat-option [value]="">---</mat-option>
                           @for (opt of yesNoOptions; track opt) {
                             <mat-option
@@ -307,7 +312,7 @@
                     <th mat-header-cell *matHeaderCellDef [attr.colspan]="1">
                       <mat-form-field appearance="outline">
                         <mat-select [(ngModel)]="filterEntity.notes" (selectionChange)="filterUpdate()"
-                          id="notes" name="notes" #noMap="ngModel">
+                          id="notes" name="notes" #noMap="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                           <mat-option [value]="">---</mat-option>
                           @for (opt of yesNoOptions; track opt) {
                             <mat-option
@@ -322,7 +327,7 @@
                     <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-lastAuthor')}" *matHeaderCellDef [attr.colspan]="1">
                       <mat-form-field appearance="outline">
                         <mat-select [(ngModel)]="filterEntity.lastAuthorReviewer" (selectionChange)="filterUpdate()"
-                          multiple>
+                          multiple panelClass="filter-select-panel" [panelWidth]="null">
                           <mat-option value="none">{{'TASK.UNASSIGNED' | translate}}</mat-option>
                           <!-- TODO populate
                           <mat-option *ngFor="let member of mapRow" [value]="member.id">
@@ -333,7 +338,9 @@
                       </mat-form-field>
                     </th>
                   </ng-container>
-                  <!-- Filter Actions-->
+                  <!-- Filter Actions - no real filter (actions isn't filterable); empty
+                       placeholder sized to match the actions column so the filter row's total
+                       width lines up with the title row's. -->
                   <ng-container matColumnDef="filter-actions">
                     <th mat-header-cell *matHeaderCellDef [attr.colspan]="1">
                     </th>
@@ -359,7 +366,7 @@
                     }
 
                     <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>
-                    <tr mat-header-row *matHeaderRowDef="filteredColumns" [attr.hidden]="filterEnabled? null : true"></tr>
+                    <tr mat-header-row *matHeaderRowDef="filteredColumns" class="filter-header-row" [attr.hidden]="filterEnabled? null : true"></tr>
 
                     <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(); let idx = index"
                       [appDroppable]="{zone: 'conceptZone'}"

@@ -114,7 +114,6 @@ export class MappingTableComponent implements OnInit, AfterViewInit, OnDestroy {
     'filter-flagged',
     'filter-notes',
     'filter-lastAuthorReviewer',
-    'filter-actions',
   ];
   additionalFilteredColumns: string[] = [];
 

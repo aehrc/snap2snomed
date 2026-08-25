@@ -1,6 +1,6 @@
 .container {
   margin: 10px;
-  width: 90vw;
+  width: calc(90vw - 20px);
 }
 
 /* Header source details panel */

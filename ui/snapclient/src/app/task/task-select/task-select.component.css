@@ -1,3 +1,7 @@
 #task-select .mat-mdc-form-field {
   width: 100%;
 }
+
+::ng-deep .task-select-panel .mdc-list-item__primary-text {
+  width: 100%;
+}

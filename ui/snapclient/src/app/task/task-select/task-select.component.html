@@ -2,7 +2,7 @@
   <app-errormessage [error]="error"></app-errormessage>
   <mat-form-field>
     <mat-label>{{selectedLabel}}</mat-label>
-    <mat-select id="task-select-dropdown" #taskSelect [(ngModel)]="selectedTask" (selectionChange)="changeTask($event)">
+    <mat-select id="task-select-dropdown" #taskSelect panelClass="task-select-panel" [(ngModel)]="selectedTask" (selectionChange)="changeTask($event)">
       @if (selectedTask) {
         <mat-select-trigger>
           <app-task-item [task]="selectedTask"></app-task-item>

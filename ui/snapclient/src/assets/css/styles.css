@@ -452,9 +452,11 @@ flag {
 
 .mat-mdc-chip-option.accent-chip .mat-mdc-chip-action-label {
   padding: 0;
-  width: 100%;
-  text-align: center;
   overflow: visible;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .mat-mdc-chip-option.accent-chip .mat-mdc-chip-graphic {

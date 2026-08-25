@@ -68,6 +68,7 @@
 .container-table {
   height: 42vh;
   overflow: auto;
+  scrollbar-gutter: stable;
 }
 
 .container-table-search {

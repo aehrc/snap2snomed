@@ -277,12 +277,20 @@ public class MapViewService {
         expression = collectNativeQueryAndStatement(expression, " maprow15_.status " + getInListExpression(stringStatuses));
       }
 
+      // Rows still blind (sibling not yet independently resolved) have their lastAuthor/
+      // lastReviewer nulled out for display in this exact query's results (see MapView's "dual
+      // map mode - view screen" constructor) - matching on the underlying value here without
+      // that same blind_map_flag guard would let a still-blind row appear in the filtered list
+      // with an identity the display then correctly refuses to reveal. A filter for a specific
+      // (or "none") last author/reviewer should only ever match rows where that's actually shown.
       if (!CollectionUtils.isEmpty(lastAuthor)) {
-        expression = collectNativeQueryAndStatement(expression, " maprow15_.`last_author_id` " + getInListExpression(lastAuthor));
+        expression = collectNativeQueryAndStatement(expression,
+            " map_view.blind_map_flag = false AND maprow15_.`last_author_id` " + getInListExpression(lastAuthor));
       }
 
       if (!CollectionUtils.isEmpty(lastReviewer)) {
-        expression = collectNativeQueryAndStatement(expression, " maprow15_.`last_reviewer_id` " +  getInListExpression(lastReviewer));
+        expression = collectNativeQueryAndStatement(expression,
+            " map_view.blind_map_flag = false AND maprow15_.`last_reviewer_id` " +  getInListExpression(lastReviewer));
       }
 
       if (!CollectionUtils.isEmpty(lastAuthorReviewer)) {
@@ -292,20 +300,24 @@ public class MapViewService {
         }
 
         expression = collectNativeQueryAndStatement(expression,
+            " map_view.blind_map_flag = false AND (" +
             collectNativeQueryOrStatement(" maprow15_.`last_author_id` " +  getInListExpression(lastAuthorReviewer) +
             " OR maprow15_.`last_reviewer_id` " + getInListExpression(lastAuthorReviewer),
-                noneMatch));
+                noneMatch) + ")");
       }
 
       if (!CollectionUtils.isEmpty(assignedAuthor)) {
         String noneMatch = null;
         if (assignedAuthor.contains("none")) {
-          noneMatch = " assigned_author_user.id IS NULL ";
+          noneMatch = " assigned_author_user.id IS NULL AND sibling_assigned_author_user.id IS NULL ";
         }
 
-        //TODO assigned author not picking up second author .. existing issue not caused by this code
-        expression = collectNativeQueryAndStatement(expression, 
-            collectNativeQueryOrStatement(" assigned_author_user.id " + getInListExpression(assignedAuthor), 
+        // A blind dual-map row's second author only ever appears via sibling_assigned_author_user
+        // (see the join added above) - assigned_author_user alone is just the collapsed row's own
+        // author, so a filter checking only that column could never match the second author.
+        expression = collectNativeQueryAndStatement(expression,
+            collectNativeQueryOrStatement(" assigned_author_user.id " + getInListExpression(assignedAuthor)
+            + " OR sibling_assigned_author_user.id " + getInListExpression(assignedAuthor),
             noneMatch));
       }
 
@@ -582,6 +594,11 @@ public class MapViewService {
       queryStrBuilder.append("left outer join map_row maprow15_ on map_view.map_row_id=maprow15_.id  ");
       queryStrBuilder.append("left outer join `user` user16_ on maprow15_.`last_author_id`=user16_.id  ");
       queryStrBuilder.append("left outer join `user` assigned_author_user on  task3_.assignee_id=assigned_author_user.id  ");
+      // task12_ (already joined above via map_view.sibling_row_author_task_id) is the second
+      // author's task for a blind dual-map pair - assigned_author_user alone only ever resolves
+      // to the primary/collapsed row's own author (task3_), so filtering by the second author
+      // never matched any row. See the "assignedAuthor" filter condition below.
+      queryStrBuilder.append("left outer join `user` sibling_assigned_author_user on task12_.assignee_id=sibling_assigned_author_user.id  ");
       queryStrBuilder.append("left outer join `user` assigned_reviewer_user on task5_.assignee_id=assigned_reviewer_user.id ");
       queryStrBuilder.append("left outer join `user` assigned_reconciler_user on task7_.assignee_id=assigned_reconciler_user.id ");
       
@@ -1052,7 +1069,12 @@ public class MapViewService {
     if (betweenStatement == null) {
       return expression;
     }
-    return expression + " OR " + betweenStatement;
+    // Wrapping both sides in parentheses (rather than plain string concatenation) is required
+    // because either side may itself be an OR-combined expression (eg lastAuthorReviewer's
+    // "last_author_id IN (...) OR last_reviewer_id IN (...)") - without it, splicing this whole
+    // clause into a larger WHERE via collectNativeQueryAndStatement's bare " AND " causes SQL's
+    // AND-before-OR precedence to detach the second half from the rest of the filter entirely.
+    return "(" + expression + ") OR (" + betweenStatement + ")";
   }
 
   private BooleanExpression collectAndStatement(BooleanExpression expression, BooleanExpression betweenStatement) {
@@ -1069,7 +1091,10 @@ public class MapViewService {
     if (betweenStatement == null) {
       return expression;
     }
-    return expression + " AND " + betweenStatement;
+    // See collectNativeQueryOrStatement above - wrapping both sides is required so an
+    // OR-combined betweenStatement can't have its second half detached from the rest of the
+    // WHERE clause by SQL's AND-before-OR precedence.
+    return "(" + expression + ") AND (" + betweenStatement + ")";
   }
 
   public MapView getDualMapSiblingRow(Long mapId, Long sourceCodeId, Long mapRowId) {

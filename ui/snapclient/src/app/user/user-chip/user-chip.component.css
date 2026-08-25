@@ -1,3 +1,9 @@
 .mat-mdc-chip {
   padding: 10px;
 }
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+}

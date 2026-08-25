@@ -1,12 +1,12 @@
 @if (data) {
-  <div>
+  <div class="task-create-container">
     <mat-card-header>
       <mat-card-title>{{'TASK.CONFLICTS_TITLE' | translate }}</mat-card-title>
     </mat-card-header>
     <mat-card appearance="outlined">
       @if (existingConflicts > 0) {
         <div class="conflictmessage">
-          <mat-chip-option>{{existingConflicts}}</mat-chip-option>
+          <mat-chip-option [disabled]="true">{{existingConflicts}}</mat-chip-option>
           {{ 'TASK.EXISTING_TASK' | translate : {taskType: data.task?.type} }}
           @if (data.isOwner) {
             <div class="assign-select">
@@ -20,7 +20,7 @@
       }
       @if (roleConflicts > 0) {
         <div class="conflictmessage">
-          <mat-chip-option>{{roleConflicts}}</mat-chip-option>
+          <mat-chip-option [disabled]="true">{{roleConflicts}}</mat-chip-option>
           {{ 'TASK.ROLE_CONFLICT_TASK' | translate : {oppositeType: getTaskOppositeType()} }}
           @if (data.isOwner) {
             <div class="assign-select">

@@ -124,6 +124,22 @@ export class MappingWorkComponent implements OnInit, OnDestroy {
     {columnId: 'latestNote', columnDisplay: 'SOURCE.TABLE.NOTES', displayed: true},
     {columnId: 'actions', columnDisplay: '', displayed: true}
   ];
+
+  constantFilteredColumns: string[] = [
+    'filter-id',
+    'filter-sourceIndex',
+    'filter-sourceCode',
+    'filter-sourceDisplay',
+    'filter-targetCode',
+    'filter-targetDisplay',
+    'filter-relationship',
+    'filter-noMap',
+    'filter-status',
+    'filter-targetOutOfScope',
+    'filter-flagged',
+    'filter-notes',
+    'filter-actions'
+  ];
   additionalDisplayedColumns: TableColumn[] = [];
   // columns that are eligable for user controlling the hiding / displaying
   hideShowColumns: string[] = [
@@ -253,6 +269,10 @@ export class MappingWorkComponent implements OnInit, OnDestroy {
       this.constantHideShowColumns.push("lastAuthorReviewer");
       // actions should be the final column
       this.constantColumns.splice(-1, 0, {columnId: 'lastAuthorReviewer', columnDisplay: 'TABLE.LAST_AUTHOR', displayed: true});
+    }
+    if (this.constantFilteredColumns.indexOf('filter-lastAuthorReviewer') < 0) {
+      // filter-actions should stay the final column, same as actions above
+      this.constantFilteredColumns.splice(-1, 0, 'filter-lastAuthorReviewer');
     }
 
   }

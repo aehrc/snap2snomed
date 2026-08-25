@@ -290,7 +290,7 @@
                         <ng-container matColumnDef="filter-relationship">
                           <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-relationship')}" *matHeaderCellDef [attr.colspan]="1">
                             <mat-form-field appearance="outline">
-                              <mat-select [(ngModel)]="filterEntity.relationship" (selectionChange)="filterChange()" multiple>
+                              <mat-select [(ngModel)]="filterEntity.relationship" (selectionChange)="filterChange()" multiple panelClass="filter-select-panel" [panelWidth]="null">
                                 @for (rel of relationships; track rel) {
                                   <mat-option
                                   [value]="rel">{{'RELATIONSHIP.' + rel | translate}}</mat-option>
@@ -336,7 +336,7 @@
                             <ng-container matColumnDef="filter-noMap">
                               <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-noMap')}" *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
-                                  <mat-select [(ngModel)]="filterEntity.noMap" (selectionChange)="filterChange()">
+                                  <mat-select [(ngModel)]="filterEntity.noMap" (selectionChange)="filterChange()" panelClass="filter-select-panel" [panelWidth]="null">
                                     <mat-option [value]="">---</mat-option>
                                     @for (opt of noMapOptions; track opt) {
                                       <mat-option
@@ -350,7 +350,7 @@
                             <ng-container matColumnDef="filter-status">
                               <th mat-header-cell *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
-                                  <mat-select [(ngModel)]="filterEntity.status" (selectionChange)="filterChange()" multiple>
+                                  <mat-select [(ngModel)]="filterEntity.status" (selectionChange)="filterChange()" multiple panelClass="filter-select-panel" [panelWidth]="null">
                                     @for (rel of statuses; track rel) {
                                       <mat-option
                                       [value]="rel">{{'STATUS.' + rel | translate}}</mat-option>
@@ -364,7 +364,7 @@
                               <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-targetOutOfScope')}" *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
                                   <mat-select [(ngModel)]="filterEntity.targetOutOfScope" (selectionChange)="filterChange()"
-                                    id="targetOutOfScope" name="targetOutOfScope" #targetOutOfScope="ngModel">
+                                    id="targetOutOfScope" name="targetOutOfScope" #targetOutOfScope="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                                     <mat-option [value]="">---</mat-option>
                                     @for (opt of noMapOptions; track opt) {
                                       <mat-option
@@ -379,7 +379,7 @@
                               <th mat-header-cell *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
                                   <mat-select [(ngModel)]="filterEntity.flagged" (selectionChange)="filterChange()"
-                                    id="flagged" name="flagged" #flagged="ngModel">
+                                    id="flagged" name="flagged" #flagged="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                                     <mat-option [value]="">---</mat-option>
                                     @for (opt of noMapOptions; track opt) {
                                       <mat-option
@@ -394,7 +394,7 @@
                               <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-lastAuthorReviewer')}" *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
                                   <mat-select [(ngModel)]="filterEntity.lastAuthorReviewer" (selectionChange)="filterChange()"
-                                    multiple>
+                                    multiple panelClass="filter-select-panel" [panelWidth]="null">
                                     <mat-option value="none">{{'TASK.UNASSIGNED' | translate}}</mat-option>
                                     @for (member of members; track member) {
                                       <mat-option [value]="member.id">
@@ -412,7 +412,7 @@
                             <ng-container matColumnDef="filter-assignedAuthor">
                               <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-assignedAuthor')}" *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
-                                  <mat-select [(ngModel)]="filterEntity.assignedAuthor" (selectionChange)="filterChange()" multiple>
+                                  <mat-select [(ngModel)]="filterEntity.assignedAuthor" (selectionChange)="filterChange()" multiple panelClass="filter-select-panel" [panelWidth]="null">
                                     <mat-option value="none">{{'TASK.UNASSIGNED' | translate}}</mat-option>
                                     @for (member of members; track member) {
                                       <mat-option [value]="member.id">
@@ -430,7 +430,7 @@
                             <ng-container matColumnDef="filter-assignedReconciler">
                               <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-assignedReconciler')}" *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
-                                  <mat-select [(ngModel)]="filterEntity.assignedReconciler" (selectionChange)="filterChange()" multiple>
+                                  <mat-select [(ngModel)]="filterEntity.assignedReconciler" (selectionChange)="filterChange()" multiple panelClass="filter-select-panel" [panelWidth]="null">
                                     <mat-option value="none">{{'TASK.UNASSIGNED' | translate}}</mat-option>
                                     @for (member of members; track member) {
                                       <mat-option [value]="member.id">
@@ -448,7 +448,7 @@
                             <ng-container matColumnDef="filter-assignedReviewer">
                               <th mat-header-cell [ngClass]="{'hide-filter': !isFilterColumnVisible('filter-assignedReviewer')}" *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
-                                  <mat-select [(ngModel)]="filterEntity.assignedReviewer" (selectionChange)="filterChange()" multiple>
+                                  <mat-select [(ngModel)]="filterEntity.assignedReviewer" (selectionChange)="filterChange()" multiple panelClass="filter-select-panel" [panelWidth]="null">
                                     <mat-option value="none">{{'TASK.UNASSIGNED' | translate}}</mat-option>
                                     @for (member of members; track member) {
                                       <mat-option [value]="member.id">
@@ -467,7 +467,7 @@
                               <th mat-header-cell *matHeaderCellDef [attr.colspan]="1">
                                 <mat-form-field appearance="outline">
                                   <mat-select [(ngModel)]="filterEntity.notes" (selectionChange)="filterChange()"
-                                    id="notes" name="notes" #flagged="ngModel">
+                                    id="notes" name="notes" #flagged="ngModel" panelClass="filter-select-panel" [panelWidth]="null">
                                     <mat-option [value]="">---</mat-option>
                                     @for (opt of noMapOptions; track opt) {
                                       <mat-option
@@ -478,7 +478,7 @@
                               </th>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(); sticky: true"></tr>
-                            <tr mat-header-row *matHeaderRowDef="filteredColumns"
+                            <tr mat-header-row *matHeaderRowDef="filteredColumns" class="filter-header-row"
                             [attr.hidden]="filterEnabled? null : true"></tr>
                             <tr mat-row *matRowDef="let row; columns: getDisplayedColumns()"
                             [class.selected-row]="mappingTableSelector?.checkSelected(row)"></tr>
