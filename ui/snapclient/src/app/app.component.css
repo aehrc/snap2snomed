@@ -1,7 +1,7 @@
 .banner__row {
   display: flex;
   flex-direction: row;
-  height: 90vh;
+  min-height: 90vh;
 }
 
 .banner__container {

@@ -211,14 +211,12 @@ footer {
   clear: both;
   height: 30px;
   width: 100%;
-  position: sticky;
   margin-top: 20px;
   display: flex;
   flex-direction: row;
   align-content: flex-start;
   justify-content: space-evenly;
   flex-wrap: nowrap;
-  z-index: 100;
 }
 
 
