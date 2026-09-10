@@ -175,6 +175,7 @@ export class MappingListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   applyFilter: ReturnType<typeof debounce> = debounce((event: Event) => {
     this.filterText = (event.target as HTMLInputElement).value.trim();
+    this.currentPage = 0;
     this.store.dispatch(new LoadProjects({
       pageSize: this.pageSize,
       currentPage: this.currentPage,
@@ -185,6 +186,7 @@ export class MappingListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   applyRoleFilter: ReturnType<typeof debounce> = debounce((event: MatSelectChange) => {
     this.filterRole = event.value;
+    this.currentPage = 0;
     this.store.dispatch(new LoadProjects({
       pageSize: this.pageSize,
       currentPage: this.currentPage,
@@ -196,6 +198,7 @@ export class MappingListComponent implements OnInit, AfterViewInit, OnDestroy {
   clearInput: ReturnType<typeof debounce> = debounce((input: HTMLInputElement) => {
     input.value = "";
     this.filterText = "";
+    this.currentPage = 0;
     this.store.dispatch(new LoadProjects({
       pageSize: this.pageSize,
       currentPage: this.currentPage,

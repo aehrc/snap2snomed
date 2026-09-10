@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
 import {MappingListComponent} from './mapping-list.component';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -49,7 +49,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatFormFieldModule, MatLabel} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
+import {MatSelectChange, MatSelectModule} from '@angular/material/select';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -169,5 +169,32 @@ describe('MappingListComponent', () => {
 
     expect(component.error).toEqual({});
   });
+
+  it('should reset to the first page when the text filter changes', fakeAsync(() => {
+    component.currentPage = 5;
+
+    component.applyFilter({target: {value: 'test'}} as unknown as Event);
+    tick(200);
+
+    expect(component.currentPage).toBe(0);
+  }));
+
+  it('should reset to the first page when the role filter changes', fakeAsync(() => {
+    component.currentPage = 5;
+
+    component.applyRoleFilter({value: 'owner'} as unknown as MatSelectChange);
+    tick(200);
+
+    expect(component.currentPage).toBe(0);
+  }));
+
+  it('should reset to the first page when the text filter is cleared', fakeAsync(() => {
+    component.currentPage = 5;
+
+    component.clearInput(document.createElement('input'));
+    tick(200);
+
+    expect(component.currentPage).toBe(0);
+  }));
 
 });
