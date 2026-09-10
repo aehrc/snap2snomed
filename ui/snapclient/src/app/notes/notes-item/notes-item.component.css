@@ -5,6 +5,7 @@
 .mat-mdc-card-content {
   display: inline-block;
   width: 95%;
+  box-sizing: border-box;
 }
 
 .mat-mdc-card-actions {

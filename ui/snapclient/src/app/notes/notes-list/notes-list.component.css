@@ -13,10 +13,12 @@ button.add {
 
 #input {
   flex: 1;
+  min-width: 0;
 }
 
 #list {
   flex: 2;
+  min-width: 0;
 }
 
 #notes {
@@ -39,4 +41,8 @@ button.add {
   background-color: #ff4081;
   color: white;
   font-size: 0.75em;
+}
+
+mat-card-header {
+  padding-bottom: 8px;
 }
