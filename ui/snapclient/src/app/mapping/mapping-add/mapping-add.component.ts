@@ -258,6 +258,8 @@ export class MappingAddComponent implements OnInit {
           self.translate.get('ERROR.ADD_MAPPING').subscribe((res: string) => self.createOrAppendError(res));
         }
         self.error.detail = error;
+      } else {
+        self.error = {};
       }
     });
     self.store.select(selectSourceList).subscribe(

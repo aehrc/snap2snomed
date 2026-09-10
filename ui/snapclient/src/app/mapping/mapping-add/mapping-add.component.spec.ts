@@ -177,4 +177,13 @@ describe('MappingAddComponent', () => {
     expect(component.formGroup).toBeTruthy();
     expect(component.formGroup?.valid).toBeTruthy();
   });
+
+  it('should clear the error message once the store error resolves to null', () => {
+    component.error = {message: 'Some error'};
+
+    store.overrideSelector(selectMappingError, null);
+    store.refreshState();
+
+    expect(component.error).toEqual({});
+  });
 });
