@@ -67,7 +67,45 @@
       <dependency>
         <groupId>com.nimbusds</groupId>
         <artifactId>nimbus-jose-jwt</artifactId>
-        <version>9.37.2</version> <!-- force version for CVE-2023-52428; remove when org.mock-server:mockserver-core updates this test-scope transitive dependency -->
+        <version>9.37.4</version> <!-- force version for CVE-2023-52428 and CVE-2025-53864; remove when org.mock-server:mockserver-core updates this test-scope transitive dependency -->
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.21.5</version> <!-- force version for CVE-2026-54515, CVE-2026-59889, GHSA-mhm7-754m-9p8w; remove once spring-boot-starter-parent's managed Jackson 2 databind version catches up -->
+      </dependency>
+      <dependency>
+        <groupId>tools.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>3.1.5</version> <!-- force version for CVE-2026-59889; remove when org.flywaydb:flyway-core updates its Jackson 3 databind dependency -->
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>2.25.5</version> <!-- force version for CVE-2026-49844; remove when org.apache.poi:poi-ooxml updates this transitive dependency -->
+      </dependency>
+      <dependency>
+        <groupId>org.mozilla</groupId>
+        <artifactId>rhino</artifactId>
+        <version>1.7.14.1</version> <!-- force version for CVE-2025-66453; remove when com.github.java-json-tools:json-schema-core (via swagger-request-validator) updates this transitive dependency -->
+      </dependency>
+      <!-- force version for CVE-2026-65182, CVE-2026-65905, CVE-2026-68525; remove once
+           spring-boot-starter-parent's managed tomcat.version reaches 11.0.25+.
+           All three embed artifacts are pinned together since Tomcat releases them in lockstep. -->
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-core</artifactId>
+        <version>11.0.25</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-el</artifactId>
+        <version>11.0.25</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-websocket</artifactId>
+        <version>11.0.25</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -184,7 +222,7 @@
     <dependency>
       <groupId>org.mariadb.jdbc</groupId>
       <artifactId>mariadb-java-client</artifactId>
-      <version>3.5.8</version>
+      <version>3.5.9</version> <!-- force version for CVE-2026-55856, CVE-2026-55857, CVE-2026-55858 -->
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
