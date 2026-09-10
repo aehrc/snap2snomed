@@ -1,3 +1,4 @@
+<app-errormessage [error]="error"></app-errormessage>
 @if (task) {
   <div>
     <mat-drawer-container class="container">
@@ -6,7 +7,6 @@
           <app-loading-spinner></app-loading-spinner>
         </div>
       }
-      <app-errormessage [error]="error"></app-errormessage>
       @if (mapping) {
         <div id="table-view">
           <div class="top-row">

@@ -241,6 +241,8 @@ export class MappingWorkComponent implements OnInit, OnDestroy {
           self.error.message = err;
           self.error.detail = error;
         });
+      } else {
+        self.error = {};
       }
     }));
 

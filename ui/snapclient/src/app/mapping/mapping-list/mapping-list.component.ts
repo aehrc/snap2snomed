@@ -130,6 +130,8 @@ export class MappingListComponent implements OnInit, AfterViewInit, OnDestroy {
     self.store.select(selectMappingError).subscribe((error) => {
       if (error) {
         this.setError(error);
+      } else {
+        this.error = {};
       }
     });
 

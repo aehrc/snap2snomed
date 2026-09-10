@@ -125,5 +125,15 @@ describe('MappingWorkComponent', () => {
         expect(el.nativeElement.textContent)
             .toBe(`${task.mapping.project.title} - (MAP.SINGLE_MAP)`);
     });
+
+    it('should clear the error message once the store error resolves to null', () => {
+        fixture.detectChanges();
+        component.error = {message: 'Some error'};
+
+        store.overrideSelector(selectMappingError, null);
+        store.refreshState();
+
+        expect(component.error).toEqual({});
+    });
 });
 
