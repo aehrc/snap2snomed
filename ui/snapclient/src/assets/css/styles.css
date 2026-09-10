@@ -504,3 +504,11 @@ flag {
   --mat-checkbox-selected-checkmark-color: white;
 }
 
+/* lib-shrimp-hierarchy (@csiro/shrimp-hierarchy-view) draws a fixed "initialising..." SVG
+   banner on construction that its Angular wrapper has no way to update or clear, so it never
+   reflects the actual (correctly loaded) hierarchy data. Hide it until the library exposes a
+   way to update/remove it. */
+.hierarchy-view .banner {
+  display: none;
+}
+
