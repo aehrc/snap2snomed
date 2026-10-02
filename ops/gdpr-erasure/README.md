@@ -21,7 +21,7 @@ The legal deadline is one month from the day SNOMED received the request (GDPR A
 | Cognito user pool `snap2snomed-app` | Email, names, username, `sub`, SNOMED SSO ID | Until deleted | Delete the user |
 | Database tables `user` and `user_aud` | Email, names, nickname | Forever | Overwrite with placeholder values (`db-anonymise.sql`) |
 | Database free text (notes, descriptions) | Anything a user typed | Forever | Find with `db-find-subject.sql`, edit by hand |
-| CloudWatch log groups `*snap2snomed-app*` | Emails in sign-up Lambda, Dex and API logs | Forever | Delete whole log streams |
+| CloudWatch log groups `*snap2snomed-app*` | Emails in sign-up Lambda, Dex and API logs | Forever | Copy each stream without the person's lines to `<group>-archive`, then delete it |
 | Loki (`ontoserver-dev-k8s`, Azure australiaeast) | Copies of the API log group | 365 days | Loki delete request |
 | S3 `snap2snomed-backups/cognito/` | One full user-pool export a day | Forever | Rewrite or delete the files |
 | RDS automated backups | Whole database | 14 days | Expire, or cut retention |
@@ -111,12 +111,25 @@ If there is a hold, stop. Restrict the data (Article 18): keep it, don't use it,
 
 ```sh
 ./erasure.sh cw-delete            # dry run: lists the streams
-./erasure.sh cw-delete --yes
+./erasure.sh cw-delete --yes      # archive without the person's lines, check, then delete
 ./erasure.sh loki-delete --yes    # only if loki-search found lines
 ./erasure.sh s3-scrub --yes
 ```
 
-CloudWatch can't delete or edit a single log line, so `cw-delete` deletes whole streams. Their other lines go too. `PutLogEvents` rejects events older than 14 days, so a cleaned copy can't be put back. If you need the other lines, save the stream with `aws logs get-log-events` first and store a cleaned copy in S3.
+CloudWatch can't delete or edit a single log line, so `cw-delete` replaces each matching stream. For each one, it:
+
+1. downloads every event
+2. leaves out the lines that match the person's IDs, or their given and family name together
+3. checks that no match is left
+4. writes the rest to a log group named `<group>-archive`, under the same stream name
+5. reads the archive stream back and checks the line count
+6. only then deletes the original stream
+
+If any step fails, it removes the half-written archive stream and keeps the original.
+
+CloudWatch rejects events older than 14 days, so archive events carry the upload time. Each line's original time is at the start of its message, for example `[2022-05-31T03:52:01.237Z] …`. Search archives with Logs Insights on the message text, not on the time range. The archive groups are made by the script, not by Terraform. They have no retention period and no subscription to Loki. Their names still contain `snap2snomed-app`, so `cw-search` covers them in later requests.
+
+The evidence log records, for each stream, the lines in total, removed and archived, and a SHA-256 hash of the archived messages.
 
 For the user-pool exports in Glacier Flexible Retrieval, choose one:
 

@@ -10,6 +10,7 @@
 # Works with the macOS bash 3.2 as well as bash 5.
 
 set -euo pipefail
+shopt -s inherit_errexit 2>/dev/null || true   # bash 4.4+; bash 3.2 relies on the code not using $(...) for multi-step work
 
 APP="${S2S_APP_NAME:-snap2snomed-app}"
 REGION="${AWS_REGION:-eu-central-1}"
@@ -51,6 +52,14 @@ load() {
     [ "${#v}" -ge 6 ] || die "identifier '$v' is shorter than 6 characters; fix $STATE/subject.env"
   done
   PAT="$(re_escape "$EMAIL")|$(re_escape "$SUB")|$(re_escape "$SUBJECT_USERNAME")|$(re_escape "$IDP_ID")"
+  # Name matching needs both names: an empty one would turn the pattern into "match everything".
+  local g f
+  NAME_PAT=""; ERASE_PAT="$PAT"   # ERASE_PAT: the lines left out of archive copies
+  if [ "${#GIVEN}" -ge 2 ] && [ "${#FAMILY}" -ge 2 ]; then
+    g="$(re_escape "$GIVEN")"; f="$(re_escape "$FAMILY")"
+    NAME_PAT="$g.{0,3}$f|$f.{0,3}$g"
+    ERASE_PAT="$PAT|$NAME_PAT"
+  fi
 }
 
 # Escape regex characters so an email like a.b+c@x.org matches only itself.
@@ -183,8 +192,8 @@ cmd_cw_search() {
   load; need aws jq
   local out regex label groups
   if [ "${1:-}" = "--names" ]; then
-    g="$(re_escape "$GIVEN")"; f="$(re_escape "$FAMILY")"
-    regex="$g.{0,3}$f|$f.{0,3}$g"; out="$STATE/name-streams.tsv"; label=names
+    [ -n "$NAME_PAT" ] || die "given or family name missing or shorter than 2 characters; search by name by hand"
+    regex="$NAME_PAT"; out="$STATE/name-streams.tsv"; label=names
   else
     regex="$PAT"; out="$STATE/streams.tsv"; label=ids
   fi
@@ -204,22 +213,124 @@ cmd_cw_search() {
   [ "$label" = ids ] || info "Name matches can be false positives. Review $out and append confirmed rows to $STATE/streams.tsv"
 }
 
+# download_stream <group> <stream> <out.jsonl>: every event, oldest first, as {timestamp, message}.
+download_stream() {
+  local token="" next page
+  : > "$3"
+  while :; do
+    if [ -n "$token" ]; then
+      page="$(aws logs get-log-events --log-group-name "$1" --log-stream-name "$2" --start-from-head --next-token "$token" --output json)"
+    else
+      page="$(aws logs get-log-events --log-group-name "$1" --log-stream-name "$2" --start-from-head --output json)"
+    fi
+    printf '%s' "$page" | jq -c '.events[] | {timestamp, message}' >> "$3"
+    next="$(printf '%s' "$page" | jq -r '.nextForwardToken')"
+    [ "$next" != "$token" ] || break   # the same token twice means the end of the stream
+    token="$next"
+  done
+}
+
+# archive_name <group> -> the archive group. An archive group archives into itself.
+archive_name() {
+  case "$1" in *-archive) echo "$1" ;; *) echo "$1-archive" ;; esac
+}
+
+# archive_stream <group> <stream>: copy the stream without the person's lines into the archive
+# group, check the copy, then delete the original. Writes a JSON summary to $STATE/archive-summary.json.
+# Call it directly, never inside $(...): bash 3.2 ignores set -e there, and a failed step must stop
+# the script before the original stream is deleted.
+archive_stream() {
+  local g="$1" s="$2" ag as raw kept total removed n t0 result
+  raw="$STATE/stream-raw.jsonl"; kept="$STATE/stream-kept.jsonl"
+  ag="$(archive_name "$g")"; as="$s"
+  [ "$ag" != "$g" ] || as="$s~$(date -u +%Y%m%dT%H%M%SZ)"
+
+  download_stream "$g" "$s" "$raw"
+  jq -c --arg re "$ERASE_PAT" 'select(.message | test($re; "i") | not)' "$raw" > "$kept"
+  total="$(wc -l < "$raw" | tr -d ' ')"; n="$(wc -l < "$kept" | tr -d ' ')"; removed=$((total - n))
+  # Check the filtered copy before writing anything.
+  if jq -e --arg re "$ERASE_PAT" 'select(.message | test($re; "i"))' "$kept" >/dev/null; then
+    rm -f "$raw" "$kept"; die "filtered copy of $g $s still matches the person; nothing changed"
+  fi
+
+  if [ "$n" -gt 0 ]; then
+    aws logs create-log-group --log-group-name "$ag" 2>/dev/null || true
+    aws logs create-log-stream --log-group-name "$ag" --log-stream-name "$as" ||
+      { rm -f "$raw" "$kept"; die "could not create archive stream $ag $as (does it already exist?)"; }
+    # From here on, a failure removes the half-written archive stream. The original stays.
+    abort_archive() {
+      aws logs delete-log-stream --log-group-name "$ag" --log-stream-name "$as" 2>/dev/null || true
+      rm -f "$raw" "$kept" "$STATE/batches.jsonl" "$STATE/batch.json" "$STATE/stream-check.jsonl"
+      die "$1; original stream kept, partial archive removed"
+    }
+    # CloudWatch rejects events older than 14 days, so each event gets the upload time,
+    # one millisecond apart to keep the original order. The real time leads the message.
+    t0="$(( $(date +%s) * 1000 ))"
+    jq -cs --argjson t0 "$t0" '
+      [ to_entries[] | {
+          timestamp: ($t0 + .key),
+          message: ("[" + (.value.timestamp / 1000 | floor | todate | sub("Z$"; ""))
+                    + "." + ((.value.timestamp % 1000) + 1000 | tostring | .[1:]) + "Z] " + .value.message) } ]
+      | reduce .[] as $e ({done: [], cur: [], size: 0};
+          ($e.message | utf8bytelength + 26) as $b
+          | if (.cur | length) == 10000 or .size + $b > 1000000
+            then .done += [.cur] | .cur = [$e] | .size = $b
+            else .cur += [$e] | .size += $b end)
+      | (.done + [.cur])[] | select(length > 0)' "$kept" > "$STATE/batches.jsonl"
+    while read -r batch; do
+      printf '%s' "$batch" | jq --arg g "$ag" --arg s "$as" '{logGroupName: $g, logStreamName: $s, logEvents: .}' \
+        > "$STATE/batch.json"
+      result="$(aws logs put-log-events --cli-input-json "file://$STATE/batch.json" --output json)" ||
+        abort_archive "upload to $ag $as failed"
+      printf '%s' "$result" | jq -e '.rejectedLogEventsInfo == null' >/dev/null ||
+        abort_archive "CloudWatch rejected events for $ag $as: $result"
+    done < "$STATE/batches.jsonl"
+    rm -f "$STATE/batch.json" "$STATE/batches.jsonl"
+    # Read the archive back. Events can take a few seconds to become readable.
+    local tries=0 got=0
+    while :; do
+      download_stream "$ag" "$as" "$STATE/stream-check.jsonl"
+      got="$(wc -l < "$STATE/stream-check.jsonl" | tr -d ' ')"
+      [ "$got" -lt "$n" ] && [ "$tries" -lt 12 ] || break
+      tries=$((tries + 1)); sleep 5
+    done
+    if [ "$got" -ne "$n" ] || jq -e --arg re "$ERASE_PAT" 'select(.message | test($re; "i"))' "$STATE/stream-check.jsonl" >/dev/null; then
+      abort_archive "archive check failed for $ag $as ($got of $n lines, or a match)"
+    fi
+    rm -f "$STATE/stream-check.jsonl"
+  fi
+
+  aws logs delete-log-stream --log-group-name "$g" --log-stream-name "$s"
+  jq -cn --arg g "$g" --arg s "$s" --arg ag "$ag" --arg as "$as" \
+    --argjson t "$total" --argjson r "$removed" --argjson n "$n" \
+    --arg h "$(jq -r .message "$kept" | shasum -a 256 | cut -d' ' -f1)" \
+    '{group: $g, stream: $s, archive_group: (if $n > 0 then $ag else null end), archive_stream: (if $n > 0 then $as else null end),
+      lines_total: $t, lines_removed: $r, lines_archived: $n, archived_messages_sha256: $h, result: "archived_and_deleted"}' \
+    > "$STATE/archive-summary.json"
+  rm -f "$raw" "$kept"
+}
+
 cmd_cw_delete() {
-  load; need aws
-  local list="$STATE/streams.tsv"
+  load; need aws jq shasum
+  local list="$STATE/streams.tsv" summary
   [ -s "$list" ] || die "nothing to delete; run cw-search first"
   if ! require_yes "$@"; then
-    info "Dry run. These streams would be deleted (whole streams; other lines in them go too):"
+    info "Dry run. Each stream below would be copied, without the person's lines, to <group>-archive"
+    info "under the same stream name, checked, and then deleted:"
     cut -f1,2 "$list" | sort -u
-    info "Run again with --yes to delete."
+    info "Run again with --yes to archive and delete."
     return
   fi
   require_legal_clearance
-  cut -f1,2 "$list" | sort -u | while IFS="$(printf '\t')" read -r g s; do
-    if aws logs delete-log-stream --log-group-name "$g" --log-stream-name "$s" 2>/dev/null; then r=deleted; else r=failed; fi
-    evidence cloudwatch_delete_stream "$(jq -cn --arg g "$g" --arg s "$s" --arg r "$r" '{group: $g, stream: $s, result: $r}')"
-    echo "$r $g $s"
-  done
+  cut -f1,2 "$list" | sort -u > "$STATE/streams-todo.tsv"
+  # Read the list on fd 3 so nothing inside the loop can consume it from stdin.
+  while IFS="$(printf '\t')" read -r g s <&3; do
+    archive_stream "$g" "$s"
+    summary="$(cat "$STATE/archive-summary.json")"
+    evidence cloudwatch_archive_and_delete "$summary"
+    printf '%s' "$summary" | jq -r '"\(.result)\t\(.group) \(.stream)\tremoved \(.lines_removed) of \(.lines_total) lines"'
+  done 3< "$STATE/streams-todo.tsv"
+  rm -f "$STATE/streams-todo.tsv"
 }
 
 # ---------- Loki ----------
