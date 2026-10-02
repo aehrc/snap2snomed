@@ -98,7 +98,17 @@ require_legal_clearance() {
 cmd_init() {
   [ $# -ge 2 ] || die "usage: erasure.sh init <request-ref> <email>"
   need aws jq shasum
-  REF="$1"; EMAIL="$2"
+  REF="$1"
+  # Clean the email: pasted values often carry spaces, a carriage return or a mailto: prefix,
+  # which make Cognito reject the filter or find nobody.
+  EMAIL="$(printf '%s' "$2" | tr -d '\r\n' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+  case "$EMAIL" in [Mm][Aa][Ii][Ll][Tt][Oo]:*) EMAIL="${EMAIL#*:}" ;; esac
+  [ -n "$EMAIL" ] || die "the email is empty; is \$EMAIL set in this shell?"
+  case "$EMAIL" in
+    *[[:space:]\"\']*) die "the email contains a space or a quote (${#EMAIL} characters); check it" ;;
+    ?*@?*.?*) ;;
+    *) die "'$EMAIL' does not look like an email address" ;;
+  esac
   case "$REF" in *[!A-Za-z0-9._-]*) die "request-ref may use letters, digits, . _ - only" ;; esac
   STATE="$STATE_ROOT/$REF"; EVIDENCE="$EVIDENCE_ROOT/$REF"
   mkdir -p "$STATE" "$EVIDENCE"; chmod 700 "$STATE_ROOT" "$STATE"
