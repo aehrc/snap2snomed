@@ -45,6 +45,7 @@ load() {
   EVIDENCE="$EVIDENCE_ROOT/$REF"
   mkdir -p "$EVIDENCE"
   [ -f "$STATE/subject.env" ] || die "missing $STATE/subject.env; run init again"
+  MIDDLE=""   # subject.env files from before middle names were captured don't set it
   # shellcheck disable=SC1091
   . "$STATE/subject.env"
   # A short identifier matches unrelated log lines, and cw-delete would then delete the wrong streams.
@@ -52,14 +53,62 @@ load() {
     [ "${#v}" -ge 6 ] || die "identifier '$v' is shorter than 6 characters; fix $STATE/subject.env"
   done
   PAT="$(re_escape "$EMAIL")|$(re_escape "$SUB")|$(re_escape "$SUBJECT_USERNAME")|$(re_escape "$IDP_ID")"
-  # Name matching needs both names: an empty one would turn the pattern into "match everything".
-  local g f
-  NAME_PAT=""; ERASE_PAT="$PAT"   # ERASE_PAT: the lines left out of archive copies
-  if [ "${#GIVEN}" -ge 2 ] && [ "${#FAMILY}" -ge 2 ]; then
-    g="$(re_escape "$GIVEN")"; f="$(re_escape "$FAMILY")"
-    NAME_PAT="$g.{0,3}$f|$f.{0,3}$g"
-    ERASE_PAT="$PAT|$NAME_PAT"
+  # Extra identifiers: login names found in Dex logs, and any added with add-id. They can be short,
+  # so they only match as whole words.
+  local x
+  if [ -f "$STATE/extra-ids.txt" ]; then
+    while IFS= read -r x; do
+      [ -n "$x" ] || continue
+      PAT="$PAT|$(bounded "$(re_escape "$x")")"
+    done < "$STATE/extra-ids.txt"
   fi
+  name_patterns
+  ERASE_PAT="$PAT"   # the lines left out of archive copies
+  [ -z "$NAME_PAT" ] || ERASE_PAT="$PAT|$NAME_PAT"
+  ERASE_SHA="$(printf '%s' "$ERASE_PAT" | shasum -a 256 | cut -c1-16)"
+}
+
+# bounded <regex> -> the regex matched only as a whole word.
+bounded() { printf '(^|[^A-Za-z0-9_])%s([^A-Za-z0-9_]|$)' "$1"; }
+
+# fold <text> -> the text without accents, e.g. "Kovács" -> "Kovacs".
+fold() { printf '%s' "$1" | perl -CS -MUnicode::Normalize -ne 'print NFD($_) =~ s/\pM//gr'; }
+
+# name_words <names...> -> each word of the names, plus its accent-free spelling, one per line.
+name_words() {
+  local n w words
+  for n in "$@"; do
+    read -r -a words <<< "$n" || true
+    for w in ${words[@]+"${words[@]}"}; do
+      printf '%s\n' "$w"
+      [ "$(fold "$w")" = "$w" ] || printf '%s\n' "$(fold "$w")"
+    done
+  done | awk 'NF && !seen[tolower($0)]++'
+}
+
+# name_patterns: sets NAME_PAT and NAMEPART_PAT from the given, middle and family names.
+# Cognito's family_name can hold middle and last names together, so every word is used.
+#   NAME_PAT      a given-name word next to a family-name word, in either order. Removed from archives.
+#   NAMEPART_PAT  any single name word, for review only, because a single name also matches other
+#                 people. Words of 4 or more letters match anywhere, so a login name built from a
+#                 surname (akovacs) is caught. 3-letter words must stand alone.
+name_patterns() {
+  local g f gw fw
+  NAME_PAT=""; NAMEPART_PAT=""
+  gw="$(name_words "$GIVEN")"; fw="$(name_words "$MIDDLE" "$FAMILY")"
+  for g in $gw; do
+    [ "${#g}" -ge 2 ] || continue
+    for f in $fw; do
+      [ "${#f}" -ge 2 ] || continue
+      NAME_PAT="${NAME_PAT:+$NAME_PAT|}$(re_escape "$g").{0,3}$(re_escape "$f")|$(re_escape "$f").{0,3}$(re_escape "$g")"
+    done
+  done
+  for g in $gw $fw; do
+    if [ "${#g}" -ge 4 ]; then f="$(re_escape "$g")"
+    elif [ "${#g}" -eq 3 ]; then f="$(bounded "$(re_escape "$g")")"
+    else continue; fi
+    NAMEPART_PAT="${NAMEPART_PAT:+$NAMEPART_PAT|}$f"
+  done
 }
 
 # Escape regex characters so an email like a.b+c@x.org matches only itself.
@@ -97,7 +146,7 @@ require_legal_clearance() {
 
 cmd_init() {
   [ $# -ge 2 ] || die "usage: erasure.sh init <request-ref> <email>"
-  need aws jq shasum
+  need aws jq shasum perl
   REF="$1"
   # Clean the email: pasted values often carry spaces, a carriage return or a mailto: prefix,
   # which make Cognito reject the filter or find nobody.
@@ -137,14 +186,14 @@ cmd_init() {
   SUB="$(attr sub)"
   SUBJECT_USERNAME="$(jq -r '.Users[0].Username' "$STATE/subject.json")"
   IDP_ID="$(attr identities | jq -r '.[0].userId // empty' 2>/dev/null || true)"
-  GIVEN="$(attr given_name)"; FAMILY="$(attr family_name)"
+  GIVEN="$(attr given_name)"; MIDDLE="$(attr middle_name)"; FAMILY="$(attr family_name)"
   [ -n "$SUB" ] && [ -n "$SUBJECT_USERNAME" ] || die "account has no sub or username"
   [ -n "$IDP_ID" ] || IDP_ID="$SUB"   # native accounts have no SSO ID
   SUBJECT_REF="$(sha "$SUB")"
 
   {
-    printf 'EMAIL=%q\nSUB=%q\nSUBJECT_USERNAME=%q\nIDP_ID=%q\nGIVEN=%q\nFAMILY=%q\nSUBJECT_REF=%q\nPOOL=%q\n' \
-      "$EMAIL" "$SUB" "$SUBJECT_USERNAME" "$IDP_ID" "$GIVEN" "$FAMILY" "$SUBJECT_REF" "$pool"
+    printf 'EMAIL=%q\nSUB=%q\nSUBJECT_USERNAME=%q\nIDP_ID=%q\nGIVEN=%q\nMIDDLE=%q\nFAMILY=%q\nSUBJECT_REF=%q\nPOOL=%q\n' \
+      "$EMAIL" "$SUB" "$SUBJECT_USERNAME" "$IDP_ID" "$GIVEN" "$MIDDLE" "$FAMILY" "$SUBJECT_REF" "$pool"
   } > "$STATE/subject.env"
   chmod 600 "$STATE/subject.env" "$STATE/subject.json"
   echo "$REF" > "$STATE_ROOT/current"
@@ -183,44 +232,128 @@ log_groups() {
     --query 'logGroups[].logGroupName' --output text | tr '\t' '\n'
 }
 
-# insights <group> <regex>  -> TSV: group, stream, hits
-insights() {
+# insights_raw <group> <query> -> the query's results as JSON.
+insights_raw() {
   local id status
   id="$(aws logs start-query --log-group-name "$1" --start-time "$LOGS_START" --end-time "$(date +%s)" \
-    --query-string "filter @message like /(?i)($2)/ | stats count() as hits by @logStream | limit 10000" \
-    --query queryId --output text)"
+    --query-string "$2" --query queryId --output text)"
   while :; do
     status="$(aws logs get-query-results --query-id "$id" --query status --output text)"
     case "$status" in Complete) break ;; Failed|Cancelled|Timeout) die "query on $1 ended: $status" ;; esac
     sleep 10
   done
-  aws logs get-query-results --query-id "$id" --output json |
-    jq -r --arg g "$1" '.results[] | map({(.field): .value}) | add | [$g, .["@logStream"], .hits] | @tsv'
+  aws logs get-query-results --query-id "$id" --output json
+}
+
+# insights <group> <regex>  -> TSV: group, stream, hits
+insights() {
+  insights_raw "$1" "filter @message like /(?i)($2)/ | stats count() as hits by @logStream | limit 10000" > "$STATE/insights.json"
+  jq -r --arg g "$1" '.results[] | map({(.field): .value}) | add | [$g, .["@logStream"], .hits] | @tsv' "$STATE/insights.json"
+  rm -f "$STATE/insights.json"
+}
+
+# discover_ids <groups>: find login names that Dex logged next to the individual's IDs, such as
+#   login successful: connector "si", username="<login>", ... email="<email>"
+# and add new ones to extra-ids.txt. Later lines such as "Finalising login for <login>" carry only
+# the login name, so without this they would stay in the archives. Sets DISCOVERED to the count added.
+discover_ids() {
+  local g v known
+  DISCOVERED=0
+  touch "$STATE/extra-ids.txt"; chmod 600 "$STATE/extra-ids.txt"
+  : > "$STATE/discovered.txt"
+  for g in $1; do
+    insights_raw "$g" "fields @message | filter @message like /(?i)($PAT)/ and @message like /username=/ | limit 10000" \
+      > "$STATE/insights.json"
+    jq -r '.results[][] | select(.field == "@message") | .value' "$STATE/insights.json" |
+      { grep -oE 'username=\\?"[^"\\]+' || true; } | sed -E 's/^username=\\?"//' >> "$STATE/discovered.txt"
+  done
+  rm -f "$STATE/insights.json"
+  known="$(printf '%s\n%s\n%s\n%s\n' "$EMAIL" "$SUB" "$SUBJECT_USERNAME" "$IDP_ID"; cat "$STATE/extra-ids.txt")"
+  while IFS= read -r v; do
+    [ "${#v}" -ge 3 ] || continue
+    printf '%s\n' "$known" | grep -qixF -- "$v" && continue
+    printf '%s\n' "$v" >> "$STATE/extra-ids.txt"
+    known="$known
+$v"
+    DISCOVERED=$((DISCOVERED + 1))
+  done < <(sort -u "$STATE/discovered.txt")
+  rm -f "$STATE/discovered.txt"
+}
+
+# all_streams -> "group<TAB>stream" for every stream any cw-search has found, or add-stream added.
+# The list only grows: a stream found once stays in scope even if a later search misses it.
+all_streams() {
+  { for f in streams.tsv streams-history.tsv streams-manual.tsv; do cut -f1,2 "$STATE/$f" 2>/dev/null || true; done; } |
+    awk 'NF' | sort -u
 }
 
 cmd_cw_search() {
   load; need aws jq
-  local out regex label groups
-  if [ "${1:-}" = "--names" ]; then
-    [ -n "$NAME_PAT" ] || die "given or family name missing or shorter than 2 characters; search by name by hand"
-    regex="$NAME_PAT"; out="$STATE/name-streams.tsv"; label=names
-  else
-    regex="$PAT"; out="$STATE/streams.tsv"; label=ids
-  fi
-  : > "$out"
+  local groups round=1 summary
   # Capture lists before looping: a failed AWS call then stops the script instead of looking like "no matches".
   groups="$(log_groups)"
   [ -n "$groups" ] || die "no log groups match $APP in $REGION"
-  for g in $groups; do
-    info "searching $g"
-    insights "$g" "$regex" >> "$out"
+
+  if [ "${1:-}" = "--names" ]; then
+    [ -n "$NAMEPART_PAT" ] || die "no given, middle or family name of 3 or more letters; search by name by hand"
+    : > "$STATE/name-streams.tsv"
+    for g in $groups; do info "searching $g"; insights "$g" "$NAMEPART_PAT" >> "$STATE/name-streams.tsv"; done
+    summary="$(jq -Rn '[inputs | split("\t") | {group: .[0], stream: .[1], hits: (.[2]|tonumber)}]
+      | group_by(.group) | map({group: .[0].group, streams: length, hits: (map(.hits)|add)})' < "$STATE/name-streams.tsv")"
+    cut -f1,2 "$STATE/name-streams.tsv" > "$EVIDENCE/cloudwatch-names-streams-$(date -u +%Y%m%dT%H%M%SZ).tsv"
+    evidence cloudwatch_search_names "$(jq -cn --argjson s "$summary" '{results: $s}')"
+    all_streams > "$STATE/known.tsv"
+    info "Streams with any single name word (given, middle or family). Single names can be other people:"
+    while IFS="$(printf '\t')" read -r g s n; do
+      if grep -qxF "$(printf '%s\t%s' "$g" "$s")" "$STATE/known.tsv"; then k="already listed"; else k="NEW: review"; fi
+      printf '%s\t%s %s\t%s lines\n' "$k" "$g" "$s" "$n"
+    done < "$STATE/name-streams.tsv"
+    rm -f "$STATE/known.tsv"
+    info "For a NEW stream that does hold the individual, run: erasure.sh add-stream <group> <stream>"
+    info "If you find another identifier (a login name, a misspelling), run: erasure.sh add-id <value>"
+    return
+  fi
+
+  # Search by ID, find login names logged next to those IDs, and search again with them.
+  while :; do
+    [ ! -s "$STATE/streams.tsv" ] || cat "$STATE/streams.tsv" >> "$STATE/streams-history.tsv"
+    : > "$STATE/streams.tsv"
+    for g in $groups; do info "searching $g"; insights "$g" "$PAT" >> "$STATE/streams.tsv"; done
+    discover_ids "$groups"
+    [ "$DISCOVERED" -gt 0 ] && [ "$round" -lt 3 ] || break
+    info "Found $DISCOVERED new login name(s) next to the individual's IDs. Searching again with them."
+    evidence identifiers_discovered "$(jq -cn --argjson n "$DISCOVERED" --argjson r "$round" '{login_names_added: $n, round: $r}')"
+    load; round=$((round + 1))
   done
+  [ "$DISCOVERED" -eq 0 ] || info "warning: still finding new login names after $round rounds; run cw-search again"
   summary="$(jq -Rn '[inputs | split("\t") | {group: .[0], stream: .[1], hits: (.[2]|tonumber)}]
-    | group_by(.group) | map({group: .[0].group, streams: length, hits: (map(.hits)|add)})' < "$out")"
-  cut -f1,2 "$out" > "$EVIDENCE/cloudwatch-$label-streams-$(date -u +%Y%m%dT%H%M%SZ).tsv"
-  evidence "cloudwatch_search_$label" "$(jq -cn --argjson s "$summary" '{results: $s}')"
+    | group_by(.group) | map({group: .[0].group, streams: length, hits: (map(.hits)|add)})' < "$STATE/streams.tsv")"
+  cut -f1,2 "$STATE/streams.tsv" > "$EVIDENCE/cloudwatch-ids-streams-$(date -u +%Y%m%dT%H%M%SZ).tsv"
+  evidence cloudwatch_search_ids "$(jq -cn --argjson s "$summary" --argjson x "$(grep -c . "$STATE/extra-ids.txt" || true)" \
+    '{results: $s, extra_identifiers: $x}')"
   echo "$summary" | jq -r '.[] | "\(.group)\t\(.streams) streams\t\(.hits) lines"'
-  [ "$label" = ids ] || info "Name matches can be false positives. Review $out and append confirmed rows to $STATE/streams.tsv"
+  info "Identifiers in use: 4 from Cognito, $(grep -c . "$STATE/extra-ids.txt" || true) extra (login names and add-id)."
+}
+
+cmd_add_id() {
+  [ $# -ge 1 ] || die "usage: erasure.sh add-id <value>"
+  load
+  local v; v="$(printf '%s' "$1" | tr -d '\r\n' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+  [ "${#v}" -ge 3 ] || die "an identifier needs 3 or more characters"
+  touch "$STATE/extra-ids.txt"; chmod 600 "$STATE/extra-ids.txt"
+  if grep -qixF -- "$v" "$STATE/extra-ids.txt"; then info "already listed"; return; fi
+  printf '%s\n' "$v" >> "$STATE/extra-ids.txt"
+  evidence identifier_added "$(jq -cn --arg h "$(sha "$v")" --argjson l "${#v}" '{identifier_sha256_16: $h, length: $l}')"
+  info "Added. Run cw-search again to find the streams that hold it."
+}
+
+cmd_add_stream() {
+  [ $# -ge 2 ] || die "usage: erasure.sh add-stream <group> <stream>"
+  load; need aws
+  [ "$(last_ingestion "$1" "$2")" != missing ] || die "no stream $2 in $1"
+  printf '%s\t%s\tmanual\n' "$1" "$2" >> "$STATE/streams-manual.tsv"
+  evidence stream_added "$(jq -cn --arg g "$1" --arg s "$2" '{group: $g, stream: $s}')"
+  info "Added. cw-archive and cw-delete will include it."
 }
 
 # download_stream <group> <stream> <out.jsonl>: every event, oldest first, as {timestamp, message}.
@@ -289,6 +422,24 @@ archive_stream() {
   if jq -e --arg re "$ERASE_PAT" 'select(.message | test($re; "i"))' "$kept" >/dev/null; then
     rm -f "$raw" "$kept"; die "filtered copy of $g $s still matches the person; nothing changed"
   fi
+  # Kept lines that still contain a single name word may identify the individual, for example a
+  # login name built from their surname. Stop for review unless the run accepts them.
+  local review=0
+  if [ -n "$NAMEPART_PAT" ]; then
+    jq -r --arg re "$NAMEPART_PAT" 'select(.message | test($re; "i")) | .message' "$kept" > "$STATE/review-lines.txt"
+    review="$(grep -c . "$STATE/review-lines.txt" || true)"
+    if [ "$review" -gt 0 ]; then
+      { printf '== %s %s: %s kept lines contain a name word\n' "$g" "$s" "$review"; cat "$STATE/review-lines.txt"; } \
+        >> "$STATE/name-review.txt"
+      if [ "$ACCEPT_NAMES" != 1 ]; then
+        rm -f "$raw" "$kept" "$STATE/review-lines.txt"
+        die "$review kept lines in $g $s still contain a name word; nothing written. Read $STATE/name-review.txt.
+  If a line identifies the individual, run: erasure.sh add-id <value>, then cw-search and cw-archive again.
+  If none do, run: erasure.sh cw-archive --yes --accept-name-matches"
+      fi
+    fi
+    rm -f "$STATE/review-lines.txt"
+  fi
 
   if [ "$n" -gt 0 ]; then
     aws logs create-log-group --log-group-name "$ag" 2>/dev/null || true
@@ -340,29 +491,43 @@ archive_stream() {
   # The hash of every source message lets cw-delete prove the stream hasn't changed since.
   jq -cn --arg g "$g" --arg s "$s" --arg ag "$ag" --arg as "$as" --arg src "$(messages_sha "$raw")" \
     --argjson t "$total" --argjson r "$removed" --argjson n "$n" --arg at "$(date -u +%FT%TZ)" \
-    --arg h "$(messages_sha "$kept")" \
+    --arg h "$(messages_sha "$kept")" --arg p "$ERASE_SHA" --argjson rv "$review" --argjson acc "$ACCEPT_NAMES" \
     '{group: $g, stream: $s, archive_group: (if $n > 0 then $ag else null end), archive_stream: (if $n > 0 then $as else null end),
       lines_total: $t, lines_removed: $r, lines_archived: $n, archived_messages_sha256: $h,
-      source_messages_sha256: $src, archived_at: $at}' \
+      source_messages_sha256: $src, erase_pattern_sha256_16: $p,
+      name_word_lines_kept: $rv, name_word_lines_accepted: ($acc == 1 and $rv > 0), archived_at: $at}' \
     > "$STATE/archive-summary.json"
   rm -f "$raw" "$kept"
 }
 
 cmd_cw_archive() {
   load; need aws jq shasum
-  local list="$STATE/streams.tsv" rec summary
-  [ -s "$list" ] || die "nothing to archive; run cw-search first"
+  local rec summary old_as
+  ACCEPT_NAMES=0
+  case " $* " in *" --accept-name-matches "*) ACCEPT_NAMES=1 ;; esac
+  all_streams > "$STATE/streams-todo.tsv"
+  [ -s "$STATE/streams-todo.tsv" ] || die "nothing to archive; run cw-search first"
   if ! require_yes "$@"; then
-    info "Dry run. Each stream below would be copied, without the person's lines, to <group>-archive"
+    info "Dry run. Each stream below would be copied, without the individual's lines, to <group>-archive"
     info "under the same stream name, and checked. Nothing is deleted:"
-    cut -f1,2 "$list" | sort -u
+    cat "$STATE/streams-todo.tsv"
     info "Run again with --yes to archive. Then run cw-delete."
     return
   fi
-  cut -f1,2 "$list" | sort -u > "$STATE/streams-todo.tsv"
+  : > "$STATE/name-review.txt"; chmod 600 "$STATE/name-review.txt"
   # Read the list on fd 3 so nothing inside the loop can consume it from stdin.
   while IFS="$(printf '\t')" read -r g s <&3; do
     rec="$(archive_record "$g" "$s")"
+    if [ -n "$rec" ] && [ "$(printf '%s' "$rec" | jq -r '.erase_pattern_sha256_16 // ""')" != "$ERASE_SHA" ]; then
+      # Made before identifiers were added: it may hold lines that now count as the individual's.
+      old_as="$(printf '%s' "$rec" | jq -r '.archive_stream // ""')"
+      [ -z "$old_as" ] || aws logs delete-log-stream --log-group-name "$(archive_name "$g")" --log-stream-name "$old_as" 2>/dev/null || true
+      jq -c --arg g "$g" --arg s "$s" 'select(.group != $g or .stream != $s)' "$STATE/archives.jsonl" > "$STATE/archives.tmp"
+      mv "$STATE/archives.tmp" "$STATE/archives.jsonl"
+      evidence cloudwatch_archive_replaced "$(jq -cn --arg g "$g" --arg s "$s" '{group: $g, stream: $s, reason: "identifiers changed"}')"
+      info "rebuilding the archive of $g $s, because the identifiers have changed since it was made"
+      rec=""
+    fi
     if [ -n "$rec" ]; then
       if [ "$(source_sha "$g" "$s")" = "$(printf '%s' "$rec" | jq -r .source_messages_sha256)" ]; then
         printf 'already archived\t%s %s\n' "$g" "$s"; continue
@@ -373,9 +538,10 @@ cmd_cw_archive() {
     summary="$(cat "$STATE/archive-summary.json")"
     printf '%s\n' "$summary" >> "$STATE/archives.jsonl"
     evidence cloudwatch_archive "$summary"
-    printf '%s' "$summary" | jq -r '"archived\t\(.group) \(.stream)\tremoved \(.lines_removed) of \(.lines_total) lines, kept \(.lines_archived)"'
+    printf '%s' "$summary" | jq -r '"archived\t\(.group) \(.stream)\tremoved \(.lines_removed) of \(.lines_total) lines, kept \(.lines_archived)" + (if .name_word_lines_kept > 0 then ", \(.name_word_lines_kept) kept lines with a name word accepted" else "" end)'
   done 3< "$STATE/streams-todo.tsv"
   rm -f "$STATE/streams-todo.tsv" "$STATE/archive-summary.json"
+  [ -s "$STATE/name-review.txt" ] || rm -f "$STATE/name-review.txt"
 }
 
 # check_archive <group> <stream> -> "ok" or the reason the stream may not be deleted.
@@ -384,6 +550,8 @@ check_archive() {
   rec="$(archive_record "$1" "$2")"
   [ -n "$rec" ] || { echo "no archive; run cw-archive"; return 0; }
   [ "$(last_ingestion "$1" "$2")" != missing ] || { echo "already deleted"; return 0; }
+  [ "$(printf '%s' "$rec" | jq -r '.erase_pattern_sha256_16 // ""')" = "$ERASE_SHA" ] ||
+    { echo "archive was made before the identifiers changed; run cw-archive again"; return 0; }
   [ "$(source_sha "$1" "$2")" = "$(printf '%s' "$rec" | jq -r .source_messages_sha256)" ] ||
     { echo "stream has changed since it was archived; run cw-archive again"; return 0; }
   n="$(printf '%s' "$rec" | jq -r .lines_archived)"
@@ -394,16 +562,16 @@ check_archive() {
   got="$(wc -l < "$STATE/stream-check.jsonl" | tr -d ' ')"
   if [ "$got" -ne "$n" ]; then echo "archive has $got lines, expected $n"
   elif jq -e --arg re "$ERASE_PAT" 'select(.message | test($re; "i"))' "$STATE/stream-check.jsonl" >/dev/null; then
-    echo "archive still matches the person"
+    echo "archive still matches the individual"
   else echo ok; fi
   rm -f "$STATE/stream-check.jsonl"
 }
 
 cmd_cw_delete() {
   load; need aws jq
-  local list="$STATE/streams.tsv" status bad=0
-  [ -s "$list" ] || die "nothing to delete; run cw-search first"
-  cut -f1,2 "$list" | sort -u > "$STATE/streams-todo.tsv"
+  local status bad=0
+  all_streams > "$STATE/streams-todo.tsv"
+  [ -s "$STATE/streams-todo.tsv" ] || die "nothing to delete; run cw-search first"
   # Check every stream first. If any check fails, nothing is deleted.
   : > "$STATE/delete-check.tsv"
   while IFS="$(printf '\t')" read -r g s <&3; do
@@ -597,8 +765,13 @@ cmd_help() {
 Commands, in the order you normally run them:
   init <request-ref> <email>        capture identifiers from Cognito (or the newest export)
   legal-hold cleared|hold "<ref>"   record the legal-hold answer; deletes need "cleared"
-  cw-search [--names]               find CloudWatch streams that hold the person's IDs (or names)
-  cw-archive [--yes]                copy those streams, without the person's lines, to <group>-archive
+  cw-search                         find CloudWatch streams with the individual's IDs, including
+                                    login names Dex logged next to them
+  cw-search --names                 list streams with any single name word, for review
+  add-id <value>                    add an identifier you found by hand (a login name, a misspelling)
+  add-stream <group> <stream>       add a stream you confirmed by hand
+  cw-archive [--yes] [--accept-name-matches]
+                                    copy those streams, without the individual's lines, to <group>-archive
   cw-delete [--yes]                 delete the originals; refuses unless every stream has a checked archive
   loki-search                       count Loki lines that hold the person's IDs
   loki-delete [--yes]               file a Loki delete request
@@ -618,6 +791,8 @@ main() {
     init) cmd_init "$@" ;;
     legal-hold) cmd_legal_hold "$@" ;;
     cw-search) cmd_cw_search "$@" ;;
+    add-id) cmd_add_id "$@" ;;
+    add-stream) cmd_add_stream "$@" ;;
     cw-archive) cmd_cw_archive "$@" ;;
     cw-delete) cmd_cw_delete "$@" ;;
     loki-search) cmd_loki_search "$@" ;;
