@@ -235,16 +235,43 @@ archive_name() {
   case "$1" in *-archive) echo "$1" ;; *) echo "$1-archive" ;; esac
 }
 
+# last_ingestion <group> <stream> -> when the stream last received an event (epoch ms), or "missing".
+# CloudWatch updates this time late, so use it only to test whether a stream exists.
+last_ingestion() {
+  aws logs describe-log-streams --log-group-name "$1" --log-stream-name-prefix "$2" --output json |
+    jq -r --arg s "$2" '[.logStreams[] | select(.logStreamName == $s)] | if length == 0 then "missing" else (.[0].lastIngestionTime // 0 | tostring) end'
+}
+
+# messages_sha <events.jsonl> -> SHA-256 of all messages, in order.
+messages_sha() { jq -r .message "$1" | shasum -a 256 | cut -d' ' -f1; }
+
+# source_sha <group> <stream> -> SHA-256 of the stream's messages as they are now.
+# It runs inside $(...), where bash 3.2 ignores set -e. A failed download then gives a wrong hash,
+# which only ever blocks a delete or an archive skip, so it fails safe.
+source_sha() {
+  download_stream "$1" "$2" "$STATE/stream-now.jsonl"
+  messages_sha "$STATE/stream-now.jsonl"
+  rm -f "$STATE/stream-now.jsonl"
+}
+
+# archive_record <group> <stream> -> the newest archive record for the stream, or nothing.
+archive_record() {
+  [ -f "$STATE/archives.jsonl" ] || return 0
+  jq -c --arg g "$1" --arg s "$2" 'select(.group == $g and .stream == $s)' "$STATE/archives.jsonl" | tail -1
+}
+
 # archive_stream <group> <stream>: copy the stream without the person's lines into the archive
-# group, check the copy, then delete the original. Writes a JSON summary to $STATE/archive-summary.json.
+# group and check the copy. It never deletes the original. Writes a JSON record to
+# $STATE/archive-summary.json.
 # Call it directly, never inside $(...): bash 3.2 ignores set -e there, and a failed step must stop
-# the script before the original stream is deleted.
+# the script.
 archive_stream() {
   local g="$1" s="$2" ag as raw kept total removed n t0 result
   raw="$STATE/stream-raw.jsonl"; kept="$STATE/stream-kept.jsonl"
   ag="$(archive_name "$g")"; as="$s"
   [ "$ag" != "$g" ] || as="$s~$(date -u +%Y%m%dT%H%M%SZ)"
 
+  [ "$(last_ingestion "$g" "$s")" != missing ] || die "stream $g $s no longer exists"
   download_stream "$g" "$s" "$raw"
   jq -c --arg re "$ERASE_PAT" 'select(.message | test($re; "i") | not)' "$raw" > "$kept"
   total="$(wc -l < "$raw" | tr -d ' ')"; n="$(wc -l < "$kept" | tr -d ' ')"; removed=$((total - n))
@@ -261,7 +288,7 @@ archive_stream() {
     abort_archive() {
       aws logs delete-log-stream --log-group-name "$ag" --log-stream-name "$as" 2>/dev/null || true
       rm -f "$raw" "$kept" "$STATE/batches.jsonl" "$STATE/batch.json" "$STATE/stream-check.jsonl"
-      die "$1; original stream kept, partial archive removed"
+      die "$1; partial archive removed, original untouched"
     }
     # CloudWatch rejects events older than 14 days, so each event gets the upload time,
     # one millisecond apart to keep the original order. The real time leads the message.
@@ -300,37 +327,96 @@ archive_stream() {
     rm -f "$STATE/stream-check.jsonl"
   fi
 
-  aws logs delete-log-stream --log-group-name "$g" --log-stream-name "$s"
-  jq -cn --arg g "$g" --arg s "$s" --arg ag "$ag" --arg as "$as" \
-    --argjson t "$total" --argjson r "$removed" --argjson n "$n" \
-    --arg h "$(jq -r .message "$kept" | shasum -a 256 | cut -d' ' -f1)" \
+  # The hash of every source message lets cw-delete prove the stream hasn't changed since.
+  jq -cn --arg g "$g" --arg s "$s" --arg ag "$ag" --arg as "$as" --arg src "$(messages_sha "$raw")" \
+    --argjson t "$total" --argjson r "$removed" --argjson n "$n" --arg at "$(date -u +%FT%TZ)" \
+    --arg h "$(messages_sha "$kept")" \
     '{group: $g, stream: $s, archive_group: (if $n > 0 then $ag else null end), archive_stream: (if $n > 0 then $as else null end),
-      lines_total: $t, lines_removed: $r, lines_archived: $n, archived_messages_sha256: $h, result: "archived_and_deleted"}' \
+      lines_total: $t, lines_removed: $r, lines_archived: $n, archived_messages_sha256: $h,
+      source_messages_sha256: $src, archived_at: $at}' \
     > "$STATE/archive-summary.json"
   rm -f "$raw" "$kept"
 }
 
-cmd_cw_delete() {
+cmd_cw_archive() {
   load; need aws jq shasum
-  local list="$STATE/streams.tsv" summary
-  [ -s "$list" ] || die "nothing to delete; run cw-search first"
+  local list="$STATE/streams.tsv" rec summary
+  [ -s "$list" ] || die "nothing to archive; run cw-search first"
   if ! require_yes "$@"; then
     info "Dry run. Each stream below would be copied, without the person's lines, to <group>-archive"
-    info "under the same stream name, checked, and then deleted:"
+    info "under the same stream name, and checked. Nothing is deleted:"
     cut -f1,2 "$list" | sort -u
-    info "Run again with --yes to archive and delete."
+    info "Run again with --yes to archive. Then run cw-delete."
     return
   fi
-  require_legal_clearance
   cut -f1,2 "$list" | sort -u > "$STATE/streams-todo.tsv"
   # Read the list on fd 3 so nothing inside the loop can consume it from stdin.
   while IFS="$(printf '\t')" read -r g s <&3; do
+    rec="$(archive_record "$g" "$s")"
+    if [ -n "$rec" ]; then
+      if [ "$(source_sha "$g" "$s")" = "$(printf '%s' "$rec" | jq -r .source_messages_sha256)" ]; then
+        printf 'already archived\t%s %s\n' "$g" "$s"; continue
+      fi
+      die "$g $s has changed since it was archived; delete its archive stream and its line in $STATE/archives.jsonl, then run cw-archive again"
+    fi
     archive_stream "$g" "$s"
     summary="$(cat "$STATE/archive-summary.json")"
-    evidence cloudwatch_archive_and_delete "$summary"
-    printf '%s' "$summary" | jq -r '"\(.result)\t\(.group) \(.stream)\tremoved \(.lines_removed) of \(.lines_total) lines"'
+    printf '%s\n' "$summary" >> "$STATE/archives.jsonl"
+    evidence cloudwatch_archive "$summary"
+    printf '%s' "$summary" | jq -r '"archived\t\(.group) \(.stream)\tremoved \(.lines_removed) of \(.lines_total) lines, kept \(.lines_archived)"'
   done 3< "$STATE/streams-todo.tsv"
-  rm -f "$STATE/streams-todo.tsv"
+  rm -f "$STATE/streams-todo.tsv" "$STATE/archive-summary.json"
+}
+
+# check_archive <group> <stream> -> "ok" or the reason the stream may not be deleted.
+check_archive() {
+  local rec n ag as got
+  rec="$(archive_record "$1" "$2")"
+  [ -n "$rec" ] || { echo "no archive; run cw-archive"; return 0; }
+  [ "$(last_ingestion "$1" "$2")" != missing ] || { echo "already deleted"; return 0; }
+  [ "$(source_sha "$1" "$2")" = "$(printf '%s' "$rec" | jq -r .source_messages_sha256)" ] ||
+    { echo "stream has changed since it was archived; run cw-archive again"; return 0; }
+  n="$(printf '%s' "$rec" | jq -r .lines_archived)"
+  [ "$n" -gt 0 ] || { echo ok; return 0; }
+  ag="$(printf '%s' "$rec" | jq -r .archive_group)"; as="$(printf '%s' "$rec" | jq -r .archive_stream)"
+  [ "$(last_ingestion "$ag" "$as")" != missing ] || { echo "archive stream $ag $as is missing"; return 0; }
+  download_stream "$ag" "$as" "$STATE/stream-check.jsonl"
+  got="$(wc -l < "$STATE/stream-check.jsonl" | tr -d ' ')"
+  if [ "$got" -ne "$n" ]; then echo "archive has $got lines, expected $n"
+  elif jq -e --arg re "$ERASE_PAT" 'select(.message | test($re; "i"))' "$STATE/stream-check.jsonl" >/dev/null; then
+    echo "archive still matches the person"
+  else echo ok; fi
+  rm -f "$STATE/stream-check.jsonl"
+}
+
+cmd_cw_delete() {
+  load; need aws jq
+  local list="$STATE/streams.tsv" status bad=0
+  [ -s "$list" ] || die "nothing to delete; run cw-search first"
+  cut -f1,2 "$list" | sort -u > "$STATE/streams-todo.tsv"
+  # Check every stream first. If any check fails, nothing is deleted.
+  : > "$STATE/delete-check.tsv"
+  while IFS="$(printf '\t')" read -r g s <&3; do
+    check_archive "$g" "$s" > "$STATE/check.txt"
+    status="$(cat "$STATE/check.txt")"
+    printf '%s\t%s\t%s\n' "$g" "$s" "$status" >> "$STATE/delete-check.tsv"
+    case "$status" in ok|"already deleted") ;; *) bad=$((bad + 1)) ;; esac
+  done 3< "$STATE/streams-todo.tsv"
+  rm -f "$STATE/check.txt"
+  awk -F'\t' '{print $3 "\t" $1 " " $2}' "$STATE/delete-check.tsv"
+  [ "$bad" -eq 0 ] || die "$bad streams failed the archive check; nothing deleted"
+  if ! require_yes "$@"; then
+    info "Dry run. Every stream has a checked archive. Run again with --yes to delete the originals."
+    return
+  fi
+  require_legal_clearance
+  while IFS="$(printf '\t')" read -r g s status <&3; do
+    [ "$status" = ok ] || continue
+    aws logs delete-log-stream --log-group-name "$g" --log-stream-name "$s"
+    evidence cloudwatch_delete_stream "$(archive_record "$g" "$s" | jq -c '{group, stream, archive_group, archive_stream, lines_archived, result: "deleted"}')"
+    printf 'deleted\t%s %s\n' "$g" "$s"
+  done 3< "$STATE/delete-check.tsv"
+  rm -f "$STATE/streams-todo.tsv" "$STATE/delete-check.tsv"
 }
 
 # ---------- Loki ----------
@@ -502,7 +588,8 @@ Commands, in the order you normally run them:
   init <request-ref> <email>        capture identifiers from Cognito (or the newest export)
   legal-hold cleared|hold "<ref>"   record the legal-hold answer; deletes need "cleared"
   cw-search [--names]               find CloudWatch streams that hold the person's IDs (or names)
-  cw-delete [--yes]                 delete those streams
+  cw-archive [--yes]                copy those streams, without the person's lines, to <group>-archive
+  cw-delete [--yes]                 delete the originals; refuses unless every stream has a checked archive
   loki-search                       count Loki lines that hold the person's IDs
   loki-delete [--yes]               file a Loki delete request
   s3-scan                           find user-pool exports that contain the person
@@ -521,6 +608,7 @@ main() {
     init) cmd_init "$@" ;;
     legal-hold) cmd_legal_hold "$@" ;;
     cw-search) cmd_cw_search "$@" ;;
+    cw-archive) cmd_cw_archive "$@" ;;
     cw-delete) cmd_cw_delete "$@" ;;
     loki-search) cmd_loki_search "$@" ;;
     loki-delete) cmd_loki_delete "$@" ;;
